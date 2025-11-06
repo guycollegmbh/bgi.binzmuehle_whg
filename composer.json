@@ -18,8 +18,7 @@
         "doctrine/dbal": "^3.3 || ^4.0"
     },
     "require-dev": {
-        "contao/manager-plugin": "^2.0",
-        "phpunit/phpunit": "^10.0 || ^11.0"
+        "contao/manager-plugin": "^2.0"
     },
     "conflict": {
         "contao/manager-plugin": "<2.0 || >=3.0"
@@ -27,11 +26,6 @@
     "autoload": {
         "psr-4": {
             "Guycollegmbh\\ApartmentsBundle\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Guycollegmbh\\ApartmentsBundle\\Tests\\": "tests/"
         }
     },
     "config": {
