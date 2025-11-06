@@ -18,12 +18,12 @@
  use Contao\System;
 
 /**
- * Services DCA
+ * Apartments DCA
  *
  * @author GUYCOLLE GMBH / Patrick Grob
  */
 
-$GLOBALS['TL_DCA']['tl_services'] = [
+$GLOBALS['TL_DCA']['tl_apartments'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
         'enableVersioning' => true,

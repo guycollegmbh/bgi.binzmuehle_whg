@@ -4,16 +4,16 @@ services:
         autoconfigure: true
         public: false
 
-    guycollegmbh\ServicesBundle\:
+    Guycollegmbh\ApartmentsBundle\:
         resource: '../../'
-        exclude: '../../{DependencyInjection,Model,Resources}'
+        exclude: '../../{DependencyInjection,Resources}'
 
-    guycollegmbh\ServicesBundle\Module\ServicesModule:
-        public: true
-        shared: false
-        arguments: ['@contao.framework', null]  # Changed from !abstract data to null
+    Guycollegmbh\ApartmentsBundle\Module\ApartmentsModule:
+        arguments:
+            $connection: '@database_connection'
+            $scopeMatcher: '@contao.routing.scope_matcher'
+            $requestStack: '@request_stack'
         tags:
             - name: 'contao.frontend_module'
               category: 'miscellaneous'
-              template: 'mod_services'
-              type: 'services'
+              type: 'apartments'

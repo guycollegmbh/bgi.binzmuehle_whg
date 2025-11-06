@@ -2,23 +2,47 @@
 
 declare(strict_types=1);
 
-namespace guycollegmbh\ServicesBundle\Module;
+/*
+ * This file is part of Apartments Bundle.
+ *
+ * (c) GUYCOLLE GMBH / Patrick Grob
+ *
+ * @license LGPL-3.0-or-later
+ */
 
-use Contao\Module; // Add this import
+namespace Guycollegmbh\ApartmentsBundle\Module;
+
 use Contao\BackendTemplate;
-use Contao\FrontendTemplate;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\Module;
 use Contao\System;
-use Contao\StringUtil;
+use Doctrine\DBAL\Connection;
+use Symfony\Component\HttpFoundation\RequestStack;
 
-class ServicesModule extends Module
+#[AsContentElement(category: 'miscellaneous', type: 'apartments')]
+class ApartmentsModule extends Module
 {
-    protected $strTemplate = 'mod_services';
+    protected $strTemplate = 'mod_apartments';
 
-    public function generate()
+    private Connection $connection;
+    private ScopeMatcher $scopeMatcher;
+    private RequestStack $requestStack;
+
+    public function __construct(Connection $connection, ScopeMatcher $scopeMatcher, RequestStack $requestStack)
     {
-        if (System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(System::getContainer()->get('request_stack')->getCurrentRequest())) {
+        $this->connection = $connection;
+        $this->scopeMatcher = $scopeMatcher;
+        $this->requestStack = $requestStack;
+    }
+
+    public function generate(): string
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        if ($request && $this->scopeMatcher->isBackendRequest($request)) {
             $template = new BackendTemplate('be_wildcard');
-            $template->wildcard = '### LERNWERK ANGEBOTE ###';
+            $template->wildcard = '### APARTMENTS MODULE ###';
             $template->title = $this->headline;
             $template->id = $this->id;
             $template->link = $this->name;
@@ -30,9 +54,14 @@ class ServicesModule extends Module
         return parent::generate();
     }
 
-    protected function compile()
+    protected function compile(): void
     {
-        $objData = $this->Database->prepare("SELECT * FROM tl_services")->execute();
-        $this->Template->services = $objData->fetchAllAssoc();
+        // Modern Doctrine DBAL query
+        $apartments = $this->connection->fetchAllAssociative(
+            'SELECT * FROM tl_apartments WHERE published = :published ORDER BY sorting',
+            ['published' => 1]
+        );
+
+        $this->Template->apartments = $apartments;
     }
 }

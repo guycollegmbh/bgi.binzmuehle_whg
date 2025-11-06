@@ -1,10 +1,10 @@
 <?php
 
-$GLOBALS['BE_MOD']['content']['services'] = array(
+$GLOBALS['BE_MOD']['content']['apartments'] = array(
 	'tables' => array(
-		'tl_services'
+		'tl_apartments'
 	),
-	'icon' => 'bundles/tl_services/img/icon.png',
+	'icon' => 'bundles/tl_apartments/img/icon.png',
 );
 
 $GLOBALS['BE_MOD']['lernwerk']['zielgruppen'] = array(

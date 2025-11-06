@@ -1,8 +1,8 @@
 <?php
 
 //Module
-$GLOBALS['TL_LANG']['MOD']['services'][0] = 'Angebote';
-$GLOBALS['TL_LANG']['MOD']['services'][1] = 'Angebote';
+$GLOBALS['TL_LANG']['MOD']['apartments'][0] = 'Wohnungen';
+$GLOBALS['TL_LANG']['MOD']['apartments'][1] = 'Modul zur Verwaltung von Wohnungen';
 
 $GLOBALS['TL_LANG']['MOD']['zielgruppen'][0] = 'Zielgruppen';
 $GLOBALS['TL_LANG']['MOD']['zielgruppen'][1] = 'Hilfstabelle für Angebote';
