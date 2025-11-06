@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    guycollegmbh\ServicesBundle\:
+        resource: '../../'
+        exclude: '../../{DependencyInjection,Model,Resources}'
+
+    guycollegmbh\ServicesBundle\Module\ServicesModule:
+        public: true
+        shared: false
+        arguments: ['@contao.framework', null]  # Changed from !abstract data to null
+        tags:
+            - name: 'contao.frontend_module'
+              category: 'miscellaneous'
+              template: 'mod_services'
+              type: 'services'
