@@ -149,7 +149,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['flaeche'],
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50 m12', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'nettomietzins' => [
