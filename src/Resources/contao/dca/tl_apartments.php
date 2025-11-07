@@ -41,14 +41,13 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'format' => '%s, %s( %s | %s) %s, %s',
         ],
         'operations' => [
-            'edit',
+           'edit',
+            'children',
             'copy',
+            'cut',
             'delete',
+            'toggle',
             'show',
-            'toggle' => [
-                'href' => 'act=toggle&amp;field=published',
-                'icon' => 'visible.svg',
-            ],
         ],
     ],
     'palettes' => [
