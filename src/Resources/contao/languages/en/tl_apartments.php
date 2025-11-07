@@ -46,8 +46,5 @@ $GLOBALS['TL_LANG']['tl_apartments']['bruttomietzins'][1] = '';
 $GLOBALS['TL_LANG']['tl_apartments']['grundriss'][0] = 'Grundriss';
 $GLOBALS['TL_LANG']['tl_apartments']['grundriss'][1] = '';
 
-$GLOBALS['TL_LANG']['tl_apartments']['linktitel'][0] = 'Link Title-Tag';
-$GLOBALS['TL_LANG']['tl_apartments']['linktitel'][1] = '';
-
 $GLOBALS['TL_LANG']['tl_apartments']['published'][0] = 'Veröffentlichen';
 $GLOBALS['TL_LANG']['tl_apartments']['published'][1] = '';
