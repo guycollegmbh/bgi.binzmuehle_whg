@@ -84,7 +84,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             ],
             'sql' => [
                 'type' => 'string',
-                'length' => 2, // Must be large enough to store all possible values
+                'length' => 8, // Must be large enough to store all possible values
                 'default' => 'auto',
             ],
         ],
