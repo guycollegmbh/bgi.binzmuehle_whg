@@ -1,28 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 /*
- * Copyright GUYCOLLE GMBH
+ * This file is part of Apartments Bundle.
+ *
+ * (c) GUYCOLLE GMBH / Patrick Grob
+ *
+ * @license LGPL-3.0-or-later
  */
 
- use Contao\Backend;
- use Contao\BackendUser;
- use Contao\Config;
- use Contao\CoreBundle\Security\ContaoCorePermissions;
- use Contao\Database;
- use Contao\DataContainer;
- use Contao\Date;
- use Contao\DC_Table;
- use Contao\Input;
- use Contao\LayoutModel;
- use Contao\PageModel;
- use Contao\StringUtil;
- use Contao\System;
+use Contao\Config;
+use Contao\DataContainer;
+use Contao\DC_Table;
 
 /**
- * Apartments DCA
- *
- * @author GUYCOLLE GMBH / Patrick Grob
+ * Table tl_apartments
  */
-
 $GLOBALS['TL_DCA']['tl_apartments'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
@@ -35,15 +29,14 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             ],
         ],
     ],
-	'list' => [
+    'list' => [
         'sorting' => [
             'mode' => DataContainer::MODE_SORTED,
             'fields' => ['marketingtitel'],
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
-            'panelLayout' => 'search,limit'
+            'panelLayout' => 'search,limit',
         ],
         'label' => [
-            // Änderung gemäss E-Mail Rebecca 06012025
             'fields' => ['marketingtitel'],
             'format' => '%s',
         ],
@@ -52,37 +45,43 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'copy',
             'delete',
             'show',
-            'toggle'
+            'toggle' => [
+                'href' => 'act=toggle&amp;field=published',
+                'icon' => 'visible.svg',
+            ],
         ],
     ],
-	'fields' => [
+    'palettes' => [
+        'default' => '{beschreibung_legend},titel,marketingtitel,beschreibung,seitenbild;{zusaetlicheinformationen_legend},angebotstyp,zuweisendestelle,standort,zielgruppe;{detailseite_legend},detailseite,target;{links_legend},linkueberschrift,links;{published_legend},published',
+    ],
+    'fields' => [
         'id' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true],
         ],
         'tstamp' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0],
         ],
         'titel' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['titel'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['titel'],
             'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'marketingtitel' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['marketingtitel'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['marketingtitel'],
             'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'beschreibung' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['beschreibung'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['beschreibung'],
             'search' => true,
             'inputType' => 'textarea',
             'eval' => [
                 'rte' => 'tinyMCE',
-                'tl_class' => 'w100 clr'
+                'tl_class' => 'w100 clr',
             ],
             'sql' => [
                 'type' => 'text',
@@ -90,185 +89,189 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             ],
         ],
         'seitenbild' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['seitenbild'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['seitenbild'],
             'inputType' => 'fileTree',
             'eval' => [
-                'tl_class' => 'clr',
                 'fieldType' => 'radio',
                 'filesOnly' => true,
-                'extensions' => \Contao\Config::get('validImageTypes'),
+                'extensions' => Config::get('validImageTypes'),
                 'mandatory' => true,
-                'tl_class' => 'w50',
+                'tl_class' => 'w50 clr',
             ],
             'sql' => [
-                'type' => 'binary', 
-                'length' => 16, 
-                'notnull' => false, 
-                'fixed' => true
+                'type' => 'binary',
+                'length' => 16,
+                'notnull' => false,
+                'fixed' => true,
             ],
         ],
         'angebotstyp' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['angebotstyp'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['angebotstyp'],
             'search' => true,
             'inputType' => 'checkbox',
-            'eval' => ['mandatory'=>false,'fieldType'=>'checkbox','includeBlankOption'=>true,'tl_class'=>'w50 clr m12','multiple' => true],
-            'options_callback'=> array('tl_services_functions','getAngebotstypen'),
-            'sql' => "blob NULL"
+            'eval' => [
+                'mandatory' => false,
+                'fieldType' => 'checkbox',
+                'includeBlankOption' => true,
+                'tl_class' => 'w50 clr m12',
+                'multiple' => true,
+            ],
+            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
+            'sql' => 'blob NULL',
         ],
         'zuweisendestelle' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['zuweisendestelle'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zuweisendestelle'],
             'search' => true,
             'inputType' => 'checkbox',
-            'eval' => ['mandatory'=>false,'fieldType'=>'checkbox','includeBlankOption'=>true,'tl_class'=>'w50 clr m12','multiple' => true],
-            'options_callback'=> array('tl_services_functions','getZuweisendestellen'),
-            'sql' => "blob NULL"
+            'eval' => [
+                'mandatory' => false,
+                'fieldType' => 'checkbox',
+                'includeBlankOption' => true,
+                'tl_class' => 'w50 clr m12',
+                'multiple' => true,
+            ],
+            'options_callback' => ['tl_apartments', 'getZuweisendestellen'],
+            'sql' => 'blob NULL',
         ],
         'standort' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['standort'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['standort'],
             'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 clr', 'maxlength' => 255],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'zielgruppe' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['zielgruppe'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zielgruppe'],
             'search' => true,
             'inputType' => 'select',
-            'options_callback'=> array('tl_services_functions','getZielgruppen'),
-            'eval' => ['tl_class' => 'w50 clr', 'maxlength' => 255,'includeBlankOption' => true,],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+            'options_callback' => ['tl_apartments', 'getZielgruppen'],
+            'eval' => [
+                'tl_class' => 'w50 clr',
+                'maxlength' => 255,
+                'includeBlankOption' => true,
+            ],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'detailseite' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['detailseite'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['detailseite'],
             'search' => true,
-            'inputType'     => 'pageTree',
-            'rootNodes'     => array(9),
-			'eval'          => array('fieldType'=>'radio', 'tl_class'=>'clr'),
-			'sql'           => "blob NULL"
+            'inputType' => 'pageTree',
+            'foreignKey' => 'tl_page.title',
+            'eval' => [
+                'fieldType' => 'radio',
+                'tl_class' => 'clr',
+            ],
+            'sql' => 'int(10) unsigned NOT NULL default 0',
+            'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
         'target' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['target'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['target'],
             'inputType' => 'checkbox',
-            'toggle' => true,
-            'eval' => array('tl_class' => 'clr m12'),
+            'eval' => ['tl_class' => 'clr m12'],
             'sql' => [
-            'type' => 'boolean',
-            'default' => false,
+                'type' => 'boolean',
+                'default' => false,
             ],
         ],
         'linkueberschrift' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['linkueberschrift'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linkueberschrift'],
             'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'links' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_services']['links'],
-            'exclude'   => true,
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['links'],
+            'exclude' => true,
             'inputType' => 'multiColumnWizard',
-            'eval'      => [
+            'eval' => [
                 'columnFields' => [
-                    'linktext'      => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_services']['linktext'],
-                        'exclude'   => true,
+                    'linktext' => [
+                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linktext'],
+                        'exclude' => true,
                         'inputType' => 'text',
-                        'eval'      => [
+                        'eval' => [
                             'style' => 'width:400px',
                         ],
                     ],
-                    'linktitel'      => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_services']['linktitel'],
-                        'exclude'   => true,
+                    'linktitel' => [
+                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linktitel'],
+                        'exclude' => true,
                         'inputType' => 'text',
-                        'eval'      => [
-                            'style'  => 'width:400px',
+                        'eval' => [
+                            'style' => 'width:400px',
                         ],
                     ],
                     'linkurl' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_services']['linkurl'],
-                        'exclude'   => true,
-                        'eval' => array('dcaPicker' => true, 'style'  => 'width:400px'),
+                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linkurl'],
+                        'exclude' => true,
+                        'eval' => [
+                            'dcaPicker' => true,
+                            'style' => 'width:400px',
+                        ],
                         'inputType' => 'text',
                     ],
                     'linkblank' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_services']['linkblank'],
-                        'label' => array('In neuem Fenster öffnen', ''),
-                        'eval' => array('style'  => 'width:100px'),
+                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linkblank'],
+                        'eval' => ['style' => 'width:100px'],
                         'inputType' => 'checkbox',
                     ],
                 ],
                 'tl_class' => 'clr',
             ],
-            'sql'       => 'blob NULL',
+            'sql' => 'blob NULL',
         ],
         'published' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_services']['published'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['published'],
             'inputType' => 'checkbox',
             'toggle' => true,
-            'eval' => array('tl_class' => 'clr'),
+            'eval' => ['tl_class' => 'clr'],
             'sql' => [
-            'type' => 'boolean',
-            'default' => true,
+                'type' => 'boolean',
+                'default' => false,
             ],
         ],
     ],
-	'palettes' => [
-        'default' => '{beschreibung_legend},titel,marketingtitel,beschreibung,seitenbild;{zusaetlicheinformationen_legend},angebotstyp,zuweisendestelle,standort,zielgruppe;{detailseite_legend},detailseite,target;{links_legend},linkueberschrift,links;{published_legend},published'
-    ],
 ];
 
-
-
-class tl_services_functions extends Backend
+/**
+ * Provide miscellaneous methods that are used by the data configuration array.
+ */
+class tl_apartments
 {
+    public function getZielgruppen(): array
+    {
+        $return = [];
+        $result = \Contao\Database::getInstance()->execute('SELECT * FROM tl_zielgruppen ORDER BY zielgruppe');
 
-    public function getZielgruppen($dc)
-	{
-		$return = array();
-		$objZielgruppen = Database::getInstance()->execute('SELECT DISTINCT * FROM tl_zielgruppen');
+        while ($result->next()) {
+            $return[$result->id] = $result->zielgruppe;
+        }
 
-		if ($objZielgruppen->numRows < 1)
-		{
-			return array();
-		}
-		while ($objZielgruppen->next())
-		{
-			$return[$objZielgruppen->id] = $objZielgruppen->zielgruppe;
-		}
-		return $return;
-	}
+        return $return;
+    }
 
-    public function getZuweisendestellen($dc)
-	{
-		$return = array();
-		$objZuweisendestellen = Database::getInstance()->execute('SELECT DISTINCT * FROM tl_zuweisendestellen');
+    public function getZuweisendestellen(): array
+    {
+        $return = [];
+        $result = \Contao\Database::getInstance()->execute('SELECT * FROM tl_zuweisendestellen ORDER BY zuweisendestelle');
 
-		if ($objZuweisendestellen->numRows < 1)
-		{
-			return array();
-		}
-		while ($objZuweisendestellen->next())
-		{
-			$return[$objZuweisendestellen->id] = $objZuweisendestellen->zuweisendestelle;
-		}
-		return $return;
-	}
+        while ($result->next()) {
+            $return[$result->id] = $result->zuweisendestelle;
+        }
 
-    public function getAngebotstypen($dc)
-	{
-		$return = array();
-		$objAngebotstypen = Database::getInstance()->execute('SELECT DISTINCT * FROM tl_angebotstypen');
+        return $return;
+    }
 
-		if ($objAngebotstypen->numRows < 1)
-		{
-			return array();
-		}
-		while ($objAngebotstypen->next())
-		{
-			$return[$objAngebotstypen->id] = $objAngebotstypen->angebotstyp;
-		}
-		return $return;
-	}
+    public function getAngebotstypen(): array
+    {
+        $return = [];
+        $result = \Contao\Database::getInstance()->execute('SELECT * FROM tl_angebotstypen ORDER BY angebotstyp');
 
+        while ($result->next()) {
+            $return[$result->id] = $result->angebotstyp;
+        }
+
+        return $return;
+    }
 }
