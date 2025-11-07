@@ -30,26 +30,55 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
     ],
     'list' => [
-        'sorting' => [
-            'mode' => Contao\DataContainer::MODE_SORTED,
-            'fields' => ['objektnummer', 'bezeichnung', 'etage','zimmer', 'bauetappe','zeile'],
-            'flag' => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
-            'panelLayout' => 'search,limit,sort,filter',
+    'sorting' => [
+        'mode'        => Contao\DataContainer::MODE_SORTED,
+        'fields'      => ['objektnummer', 'bezeichnung', 'etage', 'zimmer', 'bauetappe', 'zeile'],
+        'flag'        => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
+        'panelLayout' => 'search,limit,sort,filter',
+    ],
+    'label' => [
+        'fields' => ['objektnummer', 'bezeichnung', 'etage', 'zimmer', 'bauetappe', 'zeile'],
+        'format' => '%s, %s (%s | %s) %s, %s',
+    ],
+    'operations' => [
+        'edit' => [
+            'href'  => 'act=edit',
+            'icon'  => 'edit.svg',
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['edit'],
         ],
-        'label' => [
-            'fields' => ['objektnummer', 'bezeichnung', 'etage','zimmer', 'bauetappe','zeile'],
-            'format' => '%s, %s( %s | %s) %s, %s',
+        'children' => [
+            'href'  => 'table=tl_child_table', // falls du Kindtabellen hast
+            'icon'  => 'children.svg',
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['children'],
         ],
-        'operations' => [
-           'edit',
-            'children',
-            'copy',
-            'cut',
-            'delete',
-            'toggle',
-            'show',
+        'copy' => [
+            'href'  => 'act=copy',
+            'icon'  => 'copy.svg',
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['copy'],
+        ],
+        'cut' => [
+            'href'  => 'act=cut',
+            'icon'  => 'cut.svg',
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['cut'],
+        ],
+        'delete' => [
+            'href'       => 'act=delete',
+            'icon'       => 'delete.svg',
+            'label'      => &$GLOBALS['TL_LANG']['tl_apartments']['delete'],
+            'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
+        ],
+        'toggle' => [
+            'icon'                => 'visible.svg',
+            'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+            'button_callback'     => ['tl_apartments', 'toggleIcon'], // eigene Toggle-Funktion
+        ],
+        'show' => [
+            'href'  => 'act=show',
+            'icon'  => 'show.svg',
+            'label' => &$GLOBALS['TL_LANG']['tl_deinetabelle']['show'],
         ],
     ],
+],
     'palettes' => [
         'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{files_legend},grundriss;{published_legend},published',
     ],
