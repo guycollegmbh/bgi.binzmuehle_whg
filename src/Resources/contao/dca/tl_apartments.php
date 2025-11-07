@@ -32,12 +32,12 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
     'list' => [
         'sorting' => [
             'mode' => DataContainer::MODE_SORTED,
-            'fields' => ['marketingtitel'],
+            'fields' => ['objektnummer'],
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'panelLayout' => 'search,limit',
         ],
         'label' => [
-            'fields' => ['marketingtitel'],
+            'fields' => ['objektnummer'],
             'format' => '%s',
         ],
         'operations' => [
@@ -52,7 +52,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{beschreibung_legend},titel,marketingtitel,beschreibung,seitenbild;{zusaetlicheinformationen_legend},angebotstyp,zuweisendestelle,standort,zielgruppe;{detailseite_legend},detailseite,target;{links_legend},linkueberschrift,links;{published_legend},published',
+        'default' => '{beschreibung_legend},objektnummer,bezeichnung,beschreibung,seitenbild;{zusaetlicheinformationen_legend},angebotstyp,zuweisendestelle,standort,zielgruppe;{detailseite_legend},detailseite,target;{links_legend},linkueberschrift,links;{published_legend},published',
     ],
     'fields' => [
         'id' => [
@@ -61,35 +61,120 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'tstamp' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0],
         ],
-        'titel' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['titel'],
+        'objektnummer' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['Objektnummer'],
             'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
-        'marketingtitel' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['marketingtitel'],
+        'bezeichnung' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['bezeichnung'],
             'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
-        'beschreibung' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['beschreibung'],
+        'bauetappe' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['bauetappe'],
             'search' => true,
-            'inputType' => 'textarea',
+            'inputType' => 'checkbox',
             'eval' => [
-                'rte' => 'tinyMCE',
-                'tl_class' => 'w100 clr',
+                'mandatory' => false,
+                'fieldType' => 'checkbox',
+                'includeBlankOption' => true,
+                'tl_class' => 'w50 clr m12',
+                'multiple' => true,
             ],
-            'sql' => [
-                'type' => 'text',
-                'notnull' => false,
-            ],
+            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
+            'sql' => 'blob NULL',
         ],
-        'seitenbild' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['seitenbild'],
+        'zeile' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zeile'],
+            'search' => true,
+            'inputType' => 'checkbox',
+            'eval' => [
+                'mandatory' => false,
+                'fieldType' => 'checkbox',
+                'includeBlankOption' => true,
+                'tl_class' => 'w50 clr m12',
+                'multiple' => true,
+            ],
+            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
+            'sql' => 'blob NULL',
+        ],
+        'adresse' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['adresse'],
+            'search' => true,
+            'inputType' => 'checkbox',
+            'eval' => [
+                'mandatory' => false,
+                'fieldType' => 'checkbox',
+                'includeBlankOption' => true,
+                'tl_class' => 'w50 clr m12',
+                'multiple' => true,
+            ],
+            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
+            'sql' => 'blob NULL',
+        ],
+        'etage' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['etage'],
+            'search' => true,
+            'inputType' => 'checkbox',
+            'eval' => [
+                'mandatory' => false,
+                'fieldType' => 'checkbox',
+                'includeBlankOption' => true,
+                'tl_class' => 'w50 clr m12',
+                'multiple' => true,
+            ],
+            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
+            'sql' => 'blob NULL',
+        ],
+        'zimmer' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zimmer'],
+            'search' => true,
+            'inputType' => 'checkbox',
+            'eval' => [
+                'mandatory' => false,
+                'fieldType' => 'checkbox',
+                'includeBlankOption' => true,
+                'tl_class' => 'w50 clr m12',
+                'multiple' => true,
+            ],
+            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
+            'sql' => 'blob NULL',
+        ],
+        'flaeche' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['flaeche'],
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
+        ],
+        'nettomietzins' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['nettomietzins'],
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
+        ],
+        'nebenkosten' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['nettomietzins'],
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
+        ],
+        'bruttomietzins' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['bruttomietzins'],
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
+        ],
+        'grundriss' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['grundriss'],
             'inputType' => 'fileTree',
             'eval' => [
                 'fieldType' => 'radio',
@@ -104,122 +189,6 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'notnull' => false,
                 'fixed' => true,
             ],
-        ],
-        'angebotstyp' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['angebotstyp'],
-            'search' => true,
-            'inputType' => 'checkbox',
-            'eval' => [
-                'mandatory' => false,
-                'fieldType' => 'checkbox',
-                'includeBlankOption' => true,
-                'tl_class' => 'w50 clr m12',
-                'multiple' => true,
-            ],
-            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
-            'sql' => 'blob NULL',
-        ],
-        'zuweisendestelle' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zuweisendestelle'],
-            'search' => true,
-            'inputType' => 'checkbox',
-            'eval' => [
-                'mandatory' => false,
-                'fieldType' => 'checkbox',
-                'includeBlankOption' => true,
-                'tl_class' => 'w50 clr m12',
-                'multiple' => true,
-            ],
-            'options_callback' => ['tl_apartments', 'getZuweisendestellen'],
-            'sql' => 'blob NULL',
-        ],
-        'standort' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['standort'],
-            'search' => true,
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50 clr', 'maxlength' => 255],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
-        ],
-        'zielgruppe' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zielgruppe'],
-            'search' => true,
-            'inputType' => 'select',
-            'options_callback' => ['tl_apartments', 'getZielgruppen'],
-            'eval' => [
-                'tl_class' => 'w50 clr',
-                'maxlength' => 255,
-                'includeBlankOption' => true,
-            ],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
-        ],
-        'detailseite' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['detailseite'],
-            'search' => true,
-            'inputType' => 'pageTree',
-            'foreignKey' => 'tl_page.title',
-            'eval' => [
-                'fieldType' => 'radio',
-                'tl_class' => 'clr',
-            ],
-            'sql' => 'int(10) unsigned NOT NULL default 0',
-            'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
-        ],
-        'target' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['target'],
-            'inputType' => 'checkbox',
-            'eval' => ['tl_class' => 'clr m12'],
-            'sql' => [
-                'type' => 'boolean',
-                'default' => false,
-            ],
-        ],
-        'linkueberschrift' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linkueberschrift'],
-            'search' => true,
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'maxlength' => 255],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
-        ],
-        'links' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['links'],
-            'exclude' => true,
-            'inputType' => 'multiColumnWizard',
-            'eval' => [
-                'columnFields' => [
-                    'linktext' => [
-                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linktext'],
-                        'exclude' => true,
-                        'inputType' => 'text',
-                        'eval' => [
-                            'style' => 'width:400px',
-                        ],
-                    ],
-                    'linktitel' => [
-                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linktitel'],
-                        'exclude' => true,
-                        'inputType' => 'text',
-                        'eval' => [
-                            'style' => 'width:400px',
-                        ],
-                    ],
-                    'linkurl' => [
-                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linkurl'],
-                        'exclude' => true,
-                        'eval' => [
-                            'dcaPicker' => true,
-                            'style' => 'width:400px',
-                        ],
-                        'inputType' => 'text',
-                    ],
-                    'linkblank' => [
-                        'label' => &$GLOBALS['TL_LANG']['tl_apartments']['linkblank'],
-                        'eval' => ['style' => 'width:100px'],
-                        'inputType' => 'checkbox',
-                    ],
-                ],
-                'tl_class' => 'clr',
-            ],
-            'sql' => 'blob NULL',
         ],
         'published' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['published'],
