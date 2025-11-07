@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'mode'        => Contao\DataContainer::MODE_SORTED,
         'fields'      => ['objektnummer', 'bezeichnung', 'etage', 'zimmer', 'bauetappe', 'zeile'],
         'flag'        => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
-        'panelLayout' => 'search,limit,sort,filter',
+        'panelLayout' => 'filter;search,limit;sorting'
     ],
     'label' => [
         'fields' => ['objektnummer', 'bezeichnung', 'etage', 'zimmer', 'bauetappe', 'zeile'],
@@ -182,8 +182,6 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'flaeche' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['flaeche'],
             'search' => true,
-            'sorting'  => true,
-            'filter'   => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 m12', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
