@@ -92,30 +92,30 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'zeile' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zeile'],
             'search' => true,
-            'inputType' => 'checkbox',
+                'inputType' => 'select',
+                'options' => ['Zeile 1', 'Zeile 2', 'Zeile 3'],
             'eval' => [
-                'mandatory' => false,
-                'fieldType' => 'checkbox',
-                'includeBlankOption' => true,
-                'tl_class' => 'w50 m12',
-                'multiple' => true,
+                'tl_class' => 'w50 clr m12',
             ],
-            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
-            'sql' => 'blob NULL',
+            'sql' => [
+                'type' => 'string',
+                'length' => 8, // Must be large enough to store all possible values
+                'default' => 'auto',
+            ],
         ],
         'adresse' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['adresse'],
-            'search' => true,
-            'inputType' => 'checkbox',
+             'search' => true,
+                'inputType' => 'select',
+                'options' => ['Binderweg 1', 'Binderweg 2', 'Binderweg 3', 'Binderweg 4', 'Binderweg 5', 'Binderweg 6', 'Binderweg 7', 'Binderweg 8', 'Binderweg 9', 'Binderweg 10', 'Zelghalde 30', 'Zelghalde 31', 'Zelghalde 32', 'Zelghalde 33', 'Zelghalde 34', 'Zelghalde 35', 'Zelghalde 36', 'Zelghalde 37', 'Zelghalde 38', 'Zelghalde 39', 'Kügeliloostrasse 67', 'Kügeliloostrasse 69', 'Kügeliloostrasse 65'],
             'eval' => [
-                'mandatory' => false,
-                'fieldType' => 'checkbox',
-                'includeBlankOption' => true,
                 'tl_class' => 'w50 clr m12',
-                'multiple' => true,
             ],
-            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
-            'sql' => 'blob NULL',
+            'sql' => [
+                'type' => 'string',
+                'length' => 8, // Must be large enough to store all possible values
+                'default' => 'auto',
+            ],
         ],
         'etage' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['etage'],
