@@ -37,7 +37,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'panelLayout' => 'search,limit',
         ],
         'label' => [
-            'fields' => ['objektnummer'],
+            'fields' => ['objektnummer,zeile,adresse,etage,zimmer'],
             'format' => '%s',
         ],
         'operations' => [
@@ -105,7 +105,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
         'adresse' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['adresse'],
-             'search' => true,
+            'search' => true,
                 'inputType' => 'select',
                 'options' => ['Binderweg 1', 'Binderweg 2', 'Binderweg 3', 'Binderweg 4', 'Binderweg 5', 'Binderweg 6', 'Binderweg 7', 'Binderweg 8', 'Binderweg 9', 'Binderweg 10', 'Zelghalde 30', 'Zelghalde 31', 'Zelghalde 32', 'Zelghalde 33', 'Zelghalde 34', 'Zelghalde 35', 'Zelghalde 36', 'Zelghalde 37', 'Zelghalde 38', 'Zelghalde 39', 'Kügeliloostrasse 67', 'Kügeliloostrasse 69', 'Kügeliloostrasse 65'],
             'eval' => [
@@ -119,7 +119,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
         'etage' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['etage'],
-             'search' => true,
+            'search' => true,
                 'inputType' => 'select',
                 'options' => ['EG', 'DG', '1. OG', '2. OG', '3. OG',],
             'eval' => [
@@ -133,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
         'zimmer' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zimmer'],
-             'search' => true,
+            'search' => true,
                 'inputType' => 'select',
                 'options' => ['2', '2.5', '3.5', '4.5', '5.5',],
             'eval' => [
@@ -156,21 +156,21 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['nettomietzins'],
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50 m12', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'nebenkosten' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['nettomietzins'],
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50 m12', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'bruttomietzins' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['bruttomietzins'],
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50 m12', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
         'grundriss' => [
