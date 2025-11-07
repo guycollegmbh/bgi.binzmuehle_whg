@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'mode' => DataContainer::MODE_SORTED,
             'fields' => ['objektnummer', 'bezeichnung', 'etage','zimmer', 'bauetappe','zeile'],
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
-            'panelLayout' => 'search,limit',
+            'panelLayout' => 'search,limit,sort',
         ],
         'label' => [
             'fields' => ['objektnummer', 'bezeichnung', 'etage','zimmer', 'bauetappe','zeile'],
