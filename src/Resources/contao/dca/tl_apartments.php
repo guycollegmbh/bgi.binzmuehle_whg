@@ -46,11 +46,6 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'icon'  => 'edit.svg',
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['edit'],
         ],
-        'children' => [
-            'href'  => 'table=tl_child_table', // falls du Kindtabellen hast
-            'icon'  => 'children.svg',
-            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['children'],
-        ],
         'copy' => [
             'href'  => 'act=copy',
             'icon'  => 'copy.svg',
@@ -70,7 +65,6 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'toggle' => [
             'icon'                => 'visible.svg',
             'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-           
         ],
         'show' => [
             'href'  => 'act=show',
@@ -92,6 +86,8 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'objektnummer' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['Objektnummer'],
             'search' => true,
+            'sorting'  => true,
+            'filter'   => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
@@ -106,6 +102,8 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'bauetappe' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['bauetappe'],
             'search' => true,
+            'sorting'  => true,
+            'filter'   => true,
             'inputType' => 'select',
             'options' => ['1', '2'],
             'eval' => [
@@ -120,10 +118,12 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'zeile' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zeile'],
             'search' => true,
-                'inputType' => 'select',
-                'options' => ['Zeile 1', 'Zeile 2', 'Zeile 3'],
+            'sorting'  => true,
+            'filter'   => true,
+            'inputType' => 'select',
+            'options' => ['Zeile 1', 'Zeile 2', 'Zeile 3'],
             'eval' => [
-                'tl_class' => 'w50 m12',
+                    'tl_class' => 'w50 m12',
             ],
             'sql' => [
                 'type' => 'string',
@@ -134,8 +134,10 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'adresse' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['adresse'],
             'search' => true,
-                'inputType' => 'select',
-                'options' => ['Binderweg 1', 'Binderweg 2', 'Binderweg 3', 'Binderweg 4', 'Binderweg 5', 'Binderweg 6', 'Binderweg 7', 'Binderweg 8', 'Binderweg 9', 'Binderweg 10', 'Zelghalde 30', 'Zelghalde 31', 'Zelghalde 32', 'Zelghalde 33', 'Zelghalde 34', 'Zelghalde 35', 'Zelghalde 36', 'Zelghalde 37', 'Zelghalde 38', 'Zelghalde 39', 'Kügeliloostrasse 67', 'Kügeliloostrasse 69', 'Kügeliloostrasse 65'],
+            'sorting'  => true,
+            'filter'   => true,
+            'inputType' => 'select',
+            'options' => ['Binderweg 1', 'Binderweg 2', 'Binderweg 3', 'Binderweg 4', 'Binderweg 5', 'Binderweg 6', 'Binderweg 7', 'Binderweg 8', 'Binderweg 9', 'Binderweg 10', 'Zelghalde 30', 'Zelghalde 31', 'Zelghalde 32', 'Zelghalde 33', 'Zelghalde 34', 'Zelghalde 35', 'Zelghalde 36', 'Zelghalde 37', 'Zelghalde 38', 'Zelghalde 39', 'Kügeliloostrasse 67', 'Kügeliloostrasse 69', 'Kügeliloostrasse 65'],
             'eval' => [
                 'tl_class' => 'w50 m12',
             ],
@@ -148,8 +150,10 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'etage' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['etage'],
             'search' => true,
-                'inputType' => 'select',
-                'options' => ['EG', 'DG', '1. OG', '2. OG', '3. OG',],
+            'sorting'  => true,
+            'filter'   => true,
+            'inputType' => 'select',
+            'options' => ['EG', 'DG', '1. OG', '2. OG', '3. OG',],
             'eval' => [
                 'tl_class' => 'w50 m12',
             ],
@@ -162,8 +166,10 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'zimmer' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zimmer'],
             'search' => true,
-                'inputType' => 'select',
-                'options' => ['2', '2.5', '3.5', '4.5', '5.5',],
+            'sorting'  => true,
+            'filter'   => true,
+            'inputType' => 'select',
+            'options' => ['2', '2.5', '3.5', '4.5', '5.5',],
             'eval' => [
                 'tl_class' => 'w50 m12',
             ],
@@ -176,6 +182,8 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'flaeche' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['flaeche'],
             'search' => true,
+            'sorting'  => true,
+            'filter'   => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 m12', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
