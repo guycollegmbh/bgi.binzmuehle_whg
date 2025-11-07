@@ -37,8 +37,8 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'panelLayout' => 'search,limit',
         ],
         'label' => [
-            'fields' => ['objektnummer', 'bezeichnung', 'bauetappe', 'zeile', 'etage', 'etage', 'zimmer'],
-            'format' => '%s, %s, %s, %s, %s, %s, %s',
+            'fields' => ['objektnummer', 'bezeichnung', 'etage','zimmer', 'bauetappe','zeile'],
+            'format' => '%s, %s( %s | %s | %s) %s, %s',
         ],
         'operations' => [
             'edit',
