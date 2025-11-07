@@ -13,7 +13,7 @@ declare(strict_types=1);
 use Guycollegmbh\ApartmentsBundle\Controller\ContentElement\ApartmentsController;
 
 // Backend modules
-$GLOBALS['BE_MOD']['wohnungen'] = [
+$GLOBALS['BE_MOD']['binzmuehle'] = [
     'apartments' => [
         'tables' => ['tl_apartments', 'tl_zielgruppen', 'tl_zuweisendestellen', 'tl_angebotstypen'],
     ],

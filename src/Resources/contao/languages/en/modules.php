@@ -1,4 +1,5 @@
 <?php
+$GLOBALS['TL_LANG']['MOD']['binzmuehle'] = 'Binzmühle';
 
 //Module
 $GLOBALS['TL_LANG']['MOD']['apartments'][0] = 'Wohnungen';
@@ -14,4 +15,3 @@ $GLOBALS['TL_LANG']['MOD']['angebotstypen'][0] = 'Angebotstypen';
 $GLOBALS['TL_LANG']['MOD']['angebotstypen'][1] = 'Hilfstabelle für Angebote';
 
 $GLOBALS['TL_LANG']['MOD']['wohnungen'] = 'Wohnungsverwaltung';
-$GLOBALS['TL_LANG']['MOD']['apartments'] = ['Wohnungen', 'Wohnungen verwalten'];
