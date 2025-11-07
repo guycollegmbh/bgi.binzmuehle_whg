@@ -1,10 +1,9 @@
 <?php
 
 //Legenden
-$GLOBALS['TL_LANG']['tl_apartments']['beschreibung_legend'] = 'Titel / Beschreibung / Bild';
-$GLOBALS['TL_LANG']['tl_apartments']['zusaetlicheinformationen_legend'] = 'Zusätzliche Informationen';
-$GLOBALS['TL_LANG']['tl_apartments']['detailseite_legend'] = 'Detailseite Angebot';
-$GLOBALS['TL_LANG']['tl_apartments']['links_legend'] = 'Links';
+$GLOBALS['TL_LANG']['tl_apartments']['allgemein_legend'] = 'Allgemeine Informationen';
+$GLOBALS['TL_LANG']['tl_apartments']['kosten_legend'] = 'Preis Informationen';
+$GLOBALS['TL_LANG']['tl_apartments']['files_legend'] = 'Dateien/Bilder';
 $GLOBALS['TL_LANG']['tl_apartments']['published_legend'] = 'Veröffentlichen';
 
 // Felder
