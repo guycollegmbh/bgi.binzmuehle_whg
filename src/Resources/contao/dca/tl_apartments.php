@@ -78,16 +78,16 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'bauetappe' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['bauetappe'],
             'search' => true,
-            'inputType' => 'checkbox',
+            'inputType' => 'select',
+            'options' => ['1', '2'],
             'eval' => [
-                'mandatory' => false,
-                'fieldType' => 'checkbox',
-                'includeBlankOption' => true,
                 'tl_class' => 'w50 clr m12',
-                'multiple' => true,
             ],
-            'options_callback' => ['tl_apartments', 'getAngebotstypen'],
-            'sql' => 'blob NULL',
+            'sql' => [
+                'type' => 'string',
+                'length' => 8, // Must be large enough to store all possible values
+                'default' => 'auto',
+            ],
         ],
         'zeile' => [
             'label' => &$GLOBALS['TL_LANG']['tl_apartments']['zeile'],
