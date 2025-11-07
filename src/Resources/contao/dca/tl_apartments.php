@@ -212,41 +212,18 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
 /**
  * Provide miscellaneous methods that are used by the data configuration array.
  */
-class tl_apartments
-{
-    public function getZielgruppen(): array
-    {
-        $return = [];
-        $result = \Contao\Database::getInstance()->execute('SELECT * FROM tl_zielgruppen ORDER BY zielgruppe');
 
-        while ($result->next()) {
-            $return[$result->id] = $result->zielgruppe;
-        }
+//class tl_apartments
+//{
+    //public function getZielgruppen(): array
+    //{
+        //$return = [];
+        //$result = \Contao\Database::getInstance()->execute('SELECT * FROM tl_zielgruppen ORDER BY zielgruppe');
 
-        return $return;
-    }
+        //while ($result->next()) {
+            //$return[$result->id] = $result->zielgruppe;
+        //}
 
-    public function getZuweisendestellen(): array
-    {
-        $return = [];
-        $result = \Contao\Database::getInstance()->execute('SELECT * FROM tl_zuweisendestellen ORDER BY zuweisendestelle');
-
-        while ($result->next()) {
-            $return[$result->id] = $result->zuweisendestelle;
-        }
-
-        return $return;
-    }
-
-    public function getAngebotstypen(): array
-    {
-        $return = [];
-        $result = \Contao\Database::getInstance()->execute('SELECT * FROM tl_angebotstypen ORDER BY angebotstyp');
-
-        while ($result->next()) {
-            $return[$result->id] = $result->angebotstyp;
-        }
-
-        return $return;
-    }
-}
+        //return $return;
+    //}
+//}
