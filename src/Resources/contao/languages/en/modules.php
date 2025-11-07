@@ -13,4 +13,5 @@ $GLOBALS['TL_LANG']['MOD']['zuweisendestellen'][1] = 'Hilfstabelle für Angebote
 $GLOBALS['TL_LANG']['MOD']['angebotstypen'][0] = 'Angebotstypen';
 $GLOBALS['TL_LANG']['MOD']['angebotstypen'][1] = 'Hilfstabelle für Angebote';
 
-$GLOBALS['TL_LANG']['MOD']['apartments'] = 'Binzmühle';  // Kategorie-Name
+$GLOBALS['TL_LANG']['MOD']['wohnungen'] = 'Wohnungsverwaltung';
+$GLOBALS['TL_LANG']['MOD']['apartments'] = ['Wohnungen', 'Wohnungen verwalten'];

@@ -1,10 +1,23 @@
 <?php
 
-$GLOBALS['BE_MOD']['apartments']['apartments'] = array(
-	'tables' => array(
-		'tl_apartments'
-	),
-	'icon' => 'bundles/tl_apartments/img/icon.png',
-);
+declare(strict_types=1);
 
-$GLOBALS['FE_MOD']['apartments']['apartments'] = 'guycollegmbh\ServicesBundle\Module\ServicesModule';
+/*
+ * This file is part of Apartments Bundle.
+ *
+ * (c) GUYCOLLE GMBH / Patrick Grob
+ *
+ * @license LGPL-3.0-or-later
+ */
+
+use Guycollegmbh\ApartmentsBundle\Controller\ContentElement\ApartmentsController;
+
+// Backend modules
+$GLOBALS['BE_MOD']['wohnungen'] = [
+    'apartments' => [
+        'tables' => ['tl_apartments', 'tl_zielgruppen', 'tl_zuweisendestellen', 'tl_angebotstypen'],
+    ],
+];
+
+// Frontend modules
+$GLOBALS['FE_MOD']['miscellaneous']['apartments'] = ApartmentsController::class;
