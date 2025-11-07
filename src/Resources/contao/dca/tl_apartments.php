@@ -70,12 +70,12 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         'toggle' => [
             'icon'                => 'visible.svg',
             'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-            'button_callback'     => ['tl_apartments', 'toggleIcon'], // eigene Toggle-Funktion
+           
         ],
         'show' => [
             'href'  => 'act=show',
             'icon'  => 'show.svg',
-            'label' => &$GLOBALS['TL_LANG']['tl_deinetabelle']['show'],
+            'label' => &$GLOBALS['TL_LANG']['tl_apartments']['show'],
         ],
     ],
 ],
