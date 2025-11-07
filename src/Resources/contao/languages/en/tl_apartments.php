@@ -34,9 +34,6 @@ $GLOBALS['TL_LANG']['tl_apartments']['zimmer'][1] = '';
 $GLOBALS['TL_LANG']['tl_apartments']['flaeche'][0] = 'Fläche (m²)';
 $GLOBALS['TL_LANG']['tl_apartments']['flaeche'][1] = '';
 
-$GLOBALS['TL_LANG']['tl_apartments']['adresse'][0] = 'Link in einem neuen Fenster öffnen';
-$GLOBALS['TL_LANG']['tl_apartments']['target'][1] = '';
-
 $GLOBALS['TL_LANG']['tl_apartments']['nettomietzins'][0] = 'Nettomietzins ';
 $GLOBALS['TL_LANG']['tl_apartments']['nettomietzins'][1] = '';
 
