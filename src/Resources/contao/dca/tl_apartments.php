@@ -74,7 +74,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{images_legend},imagegrundriss,imageetage;{files_legend}grundrisspdf;{published_legend},published',
+        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{images_legend},imagegrundriss,imageetage;{files_legend},grundrisspdf;{published_legend},published',
     ],
     'fields' => [
         'id' => [
