@@ -74,7 +74,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{files_legend},grundriss;{published_legend},published',
+        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{images_legend},imagegrundriss,imageetage;{files_legend}grundrisspdf;{published_legend},published',
     ],
     'fields' => [
         'id' => [
@@ -183,8 +183,40 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'eval'      => ['tl_class' => 'w50 m12', 'maxlength' => 255],
             'sql'       => ['type' => 'string', 'length' => 255, 'default' => ''],
         ],
-        'grundriss' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['grundriss'],
+        'imagegrundriss' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['imggrundriss'],
+            'inputType' => 'fileTree',
+            'eval'      => [
+                'fieldType'  => 'radio',
+                'filesOnly'  => true,
+                'extensions' => Config::get('validImageTypes'),
+                'tl_class'   => 'w100 clr',
+            ],
+            'sql' => [
+                'type'    => 'binary',
+                'length'  => 16,
+                'notnull' => false,
+                'fixed'   => true,
+            ],
+        ],
+         'imageetage' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['imageetage'],
+            'inputType' => 'fileTree',
+            'eval'      => [
+                'fieldType'  => 'radio',
+                'filesOnly'  => true,
+                'extensions' => Config::get('validImageTypes'),
+                'tl_class'   => 'w100 clr',
+            ],
+            'sql' => [
+                'type'    => 'binary',
+                'length'  => 16,
+                'notnull' => false,
+                'fixed'   => true,
+            ],
+        ],
+        'grundrisspdf' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['grundrisspdf'],
             'inputType' => 'fileTree',
             'eval'      => [
                 'fieldType'  => 'radio',
