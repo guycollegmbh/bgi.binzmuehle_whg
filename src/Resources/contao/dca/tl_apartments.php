@@ -190,7 +190,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'fieldType'  => 'radio',
                 'filesOnly'  => true,
                 'extensions' => Config::get('validImageTypes'),
-                'tl_class'   => 'w100 clr',
+                'tl_class'   => 'w50',
             ],
             'sql' => [
                 'type'    => 'binary',
@@ -206,7 +206,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'fieldType'  => 'radio',
                 'filesOnly'  => true,
                 'extensions' => Config::get('validImageTypes'),
-                'tl_class'   => 'w100 clr',
+                'tl_class'   => 'w50',
             ],
             'sql' => [
                 'type'    => 'binary',
