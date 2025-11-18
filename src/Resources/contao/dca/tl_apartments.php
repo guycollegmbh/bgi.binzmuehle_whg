@@ -126,11 +126,17 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'filter'    => true,
             'inputType' => 'select',
             'options'   => [
-                'Binderweg 1', 'Binderweg 2', 'Binderweg 3', 'Binderweg 4', 'Binderweg 5',
-                'Binderweg 6', 'Binderweg 7', 'Binderweg 8', 'Binderweg 9', 'Binderweg 10',
-                'Zelghalde 30', 'Zelghalde 31', 'Zelghalde 32', 'Zelghalde 33', 'Zelghalde 34',
-                'Zelghalde 35', 'Zelghalde 36', 'Zelghalde 37', 'Zelghalde 38', 'Zelghalde 39',
-                'Kügeliloostrasse 67', 'Kügeliloostrasse 69', 'Kügeliloostrasse 65',
+                'Binderweg' => [
+                    'Binderweg 1', 'Binderweg 2', 'Binderweg 3', 'Binderweg 4', 'Binderweg 5',
+                    'Binderweg 6', 'Binderweg 7', 'Binderweg 8', 'Binderweg 9', 'Binderweg 10',
+                ],
+                'Zelghalde' => [
+                    'Zelghalde 30', 'Zelghalde 31', 'Zelghalde 32', 'Zelghalde 33', 'Zelghalde 34',
+                    'Zelghalde 35', 'Zelghalde 36', 'Zelghalde 37', 'Zelghalde 38', 'Zelghalde 39',
+                ],
+                'Kügeliloostrasse' => [
+                    'Kügeliloostrasse 65', 'Kügeliloostrasse 67', 'Kügeliloostrasse 69',
+                ],
             ],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
             'sql'       => ['type' => 'string', 'length' => 32, 'default' => ''],
