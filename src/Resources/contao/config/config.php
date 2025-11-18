@@ -15,7 +15,7 @@ use Guycollegmbh\ApartmentsBundle\Controller\ContentElement\ApartmentsController
 // Backend modules
 $GLOBALS['BE_MOD']['binzmuehle'] = [
     'apartments' => [
-        'tables' => ['tl_apartments', 'tl_zielgruppen', 'tl_zuweisendestellen', 'tl_angebotstypen'],
+        'tables' => ['tl_apartments'],
     ],
 ];
 
