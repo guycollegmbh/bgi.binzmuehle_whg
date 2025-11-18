@@ -12,7 +12,12 @@ declare(strict_types=1);
 
 use Guycollegmbh\ApartmentsBundle\Controller\ContentElement\ApartmentsController;
 
-
+// Backend modules
+$GLOBALS['BE_MOD']['binzmuehle'] = [
+    'apartments' => [
+        'tables' => ['tl_apartments', 'tl_zielgruppen', 'tl_zuweisendestellen', 'tl_angebotstypen'],
+    ],
+];
 
 // Frontend modules
 $GLOBALS['FE_MOD']['miscellaneous']['apartments'] = ApartmentsController::class;
@@ -20,5 +25,5 @@ $GLOBALS['FE_MOD']['miscellaneous']['apartments'] = ApartmentsController::class;
 
 // Backend-Stylesheet einbinden
 if (defined('TL_MODE') && TL_MODE === 'BE') {
-    $GLOBALS['TL_CSS'][] = 'bundles/guycollegmbhapartments/css/backend.css|static';
+    $GLOBALS['TL_CSS'][] = 'bundles/bgizbinzmuehlewhobundle/css/backend.css';
 }
