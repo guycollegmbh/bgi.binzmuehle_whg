@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 use Guycollegmbh\ApartmentsBundle\Controller\ContentElement\ApartmentsController;
 
+// TEST - wird diese Datei überhaupt geladen?
+error_log('ApartmentsBundle config.php wurde geladen!');
+
 // Backend modules
 $GLOBALS['BE_MOD']['binzmuehle'] = [
     'apartments' => [
