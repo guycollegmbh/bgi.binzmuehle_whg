@@ -18,6 +18,6 @@ class ApartmentsBundle extends Bundle
 {
     public function getPath(): string
     {
-        return __DIR__;
+        return \dirname(__DIR__);
     }
 }
