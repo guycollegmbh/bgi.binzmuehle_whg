@@ -1,6 +1,13 @@
+/* Optgroup Labels fett machen */
 select optgroup {
-    font-weight: bold;
-    font-style: normal;
-    color: #333;
-    background-color: #f5f5f5;
+    font-weight: bold !important;
+    font-style: normal !important;
+    color: #000 !important;
+    background-color: #f0f0f0 !important;
+}
+
+/* Optionen innerhalb der Gruppe normal */
+select optgroup option {
+    font-weight: normal !important;
+    padding-left: 10px !important;
 }
