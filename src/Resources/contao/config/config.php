@@ -23,5 +23,5 @@ $GLOBALS['BE_MOD']['binzmuehle'] = [
 $GLOBALS['FE_MOD']['miscellaneous']['apartments'] = ApartmentsController::class;
 
 
-// Backend-Stylesheet einbinden (wird eh nur im BE geladen, aber zur Sicherheit)
-    $GLOBALS['TL_CSS']['apartments_backend'] = 'bundles/apartments/css/backend.css|static';
+// Backend-Stylesheet
+$GLOBALS['TL_CSS']['apartments_backend'] = 'bundles/apartments/css/backend.css|static';
