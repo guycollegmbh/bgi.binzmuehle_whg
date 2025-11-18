@@ -24,6 +24,4 @@ $GLOBALS['FE_MOD']['miscellaneous']['apartments'] = ApartmentsController::class;
 
 
 // Backend-Stylesheet einbinden
-if (defined('TL_MODE') && TL_MODE === 'BE') {
-    $GLOBALS['TL_CSS'][] = 'bundles/apartments/css/backend.css|static';
-}
+$GLOBALS['TL_CSS']['apartments_backend'] = 'bundles/apartments/css/backend.css|static';
