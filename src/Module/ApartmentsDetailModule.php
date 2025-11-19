@@ -24,7 +24,7 @@ class ApartmentsDetailModule extends Module
             return;
         }
 
-        // Hole ALLE veröffentlichten Wohnungen und vergleiche die bereinigte Version
+        // Hole ALLE veröffentlichten Wohnungen
         $apartments = Database::getInstance()
             ->prepare('SELECT * FROM tl_apartments WHERE published = ?')
             ->execute(1);
@@ -33,8 +33,13 @@ class ApartmentsDetailModule extends Module
         
         while ($apartments->next()) {
             $row = $apartments->row();
-            // Bereinigte Version der DB-Objektnummer
-            $cleanObjNr = preg_replace('/[^a-zA-Z0-9-]/', '', $row['objektnummer']);
+            
+            // HTML-Entities dekodieren
+            $objektnr = html_entity_decode($row['objektnummer'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            // Entferne alles in Klammern
+            $objektnr = preg_replace('/\s*\([^)]*\)/', '', $objektnr);
+            // Entferne Punkte und Leerzeichen, behalte nur Zahlen
+            $cleanObjNr = preg_replace('/[^0-9]/', '', $objektnr);
             
             if ($cleanObjNr === $objektnummerUrl) {
                 $apartmentData = $row;

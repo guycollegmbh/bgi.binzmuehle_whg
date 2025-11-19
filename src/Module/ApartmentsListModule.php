@@ -6,7 +6,7 @@ namespace Guycollegmbh\ApartmentsBundle\Module;
 
 use Contao\Database;
 use Contao\Module;
-use Contao\StringUtil;
+use Contao\Controller;
 
 class ApartmentsListModule extends Module
 {
@@ -22,8 +22,15 @@ class ApartmentsListModule extends Module
         $apartmentsList = [];
         while ($apartments->next()) {
             $data = $apartments->row();
-            // URL-sichere Objektnummer erstellen
-            $data['objektnummer_url'] = preg_replace('/[^a-zA-Z0-9-]/', '', $data['objektnummer']);
+            
+            // HTML-Entities dekodieren
+            $objektnr = html_entity_decode($data['objektnummer'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            // Entferne alles in Klammern
+            $objektnr = preg_replace('/\s*\([^)]*\)/', '', $objektnr);
+            // Entferne Punkte und Leerzeichen, behalte nur Zahlen
+            $objektnr = preg_replace('/[^0-9]/', '', $objektnr);
+            
+            $data['objektnummer_url'] = $objektnr;
             $apartmentsList[] = $data;
         }
 
