@@ -128,10 +128,12 @@
                     language: {
                         url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
                     },
-                    pageLength: 25,
+                    pageLength: 9999, // Alle anzeigen
+                    paging: false,    // Pagination deaktivieren
+                    info: false,      // Info deaktivieren
                     lengthChange: false,
                     searching: true,
-                    dom: 'rtip',
+                    dom: 'rt',        // Nur Table anzeigen
                     order: [[0, 'asc']]
                 });
 
