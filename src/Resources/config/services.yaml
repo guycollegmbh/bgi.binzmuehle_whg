@@ -6,4 +6,8 @@ services:
 
     Guycollegmbh\ApartmentsBundle\:
         resource: '../../'
-        exclude: '../../{DependencyInjection,Resources}'
+        exclude: '../../{DependencyInjection,Resources,Controller}'
+    
+    # Module explizit laden
+    Guycollegmbh\ApartmentsBundle\Module\:
+        resource: '../../Module'
