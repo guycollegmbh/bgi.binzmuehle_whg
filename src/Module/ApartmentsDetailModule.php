@@ -15,24 +15,30 @@ class ApartmentsDetailModule extends Module
 
     protected function compile(): void
     {
-        // Hole die ID aus der URL
-        $apartmentId = Input::get('id');
+        // Hole die Objektnummer aus der URL
+        $objektnummer = Input::get('id');
 
-        if (!$apartmentId) {
+        // DEBUG
+        \System::log('Gesuchte Objektnummer: ' . $objektnummer, __METHOD__, TL_GENERAL);
+
+        if (!$objektnummer) {
             $this->Template->apartment = null;
             $this->Template->error = 'Keine Wohnung ausgewählt.';
             return;
         }
 
-        // Hole die Wohnung aus der Datenbank
+        // Hole die Wohnung anhand der Objektnummer aus der Datenbank
         $apartment = Database::getInstance()
-            ->prepare('SELECT * FROM tl_apartments WHERE id = ? AND published = ?')
+            ->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ? AND published = ?')
             ->limit(1)
-            ->execute($apartmentId, 1);
+            ->execute($objektnummer, 1);
+
+        // DEBUG
+        \System::log('Gefundene Zeilen: ' . $apartment->numRows, __METHOD__, TL_GENERAL);
 
         if ($apartment->numRows < 1) {
             $this->Template->apartment = null;
-            $this->Template->error = 'Wohnung nicht gefunden.';
+            $this->Template->error = 'Wohnung nicht gefunden. Gesuchte Objektnummer: ' . $objektnummer;
             return;
         }
 
