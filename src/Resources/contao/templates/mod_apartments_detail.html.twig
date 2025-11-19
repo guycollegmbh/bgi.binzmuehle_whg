@@ -1,7 +1,7 @@
 <div class="mod_apartments_detail">
     {% if error %}
         <div class="alert alert-warning">{{ error }}</div>
-        <a href="{{ 'javascript:history.back()' }}" class="btn btn-back">Zurück zur Übersicht</a>
+        <a href="javascript:history.back()" class="btn btn-back">Zurück zur Übersicht</a>
     {% elseif apartment %}
         <div class="apartment-detail">
             <div class="detail-header">
@@ -71,13 +71,13 @@
                             {% if apartment.imagegrundriss %}
                                 <div class="image-item">
                                     <h3>Grundriss</h3>
-                                    {{ picture(apartment.imagegrundriss, [800, 600, 'proportional']) }}
+                                    {{ contao_figure(apartment.imagegrundriss, null, {'size': '_apartments_image'}) }}
                                 </div>
                             {% endif %}
                             {% if apartment.imageetage %}
                                 <div class="image-item">
                                     <h3>Etagenplan</h3>
-                                    {{ picture(apartment.imageetage, [800, 600, 'proportional']) }}
+                                    {{ contao_figure(apartment.imageetage, null, {'size': '_apartments_image'}) }}
                                 </div>
                             {% endif %}
                         </div>
@@ -87,9 +87,12 @@
                 {% if apartment.grundrisspdf %}
                     <div class="detail-section download-section">
                         <h2>Downloads</h2>
-                        <a href="{{ file(apartment.grundrisspdf) }}" class="btn btn-download" download>
-                            Grundriss als PDF herunterladen
-                        </a>
+                        {% set pdfFile = file_context(apartment.grundrisspdf) %}
+                        {% if pdfFile %}
+                            <a href="{{ pdfFile.path }}" class="btn btn-download" download>
+                                Grundriss als PDF herunterladen
+                            </a>
+                        {% endif %}
                     </div>
                 {% endif %}
 
@@ -103,7 +106,7 @@
             </div>
 
             <div class="detail-footer">
-                <a href="{{ 'javascript:history.back()' }}" class="btn btn-back">Zurück zur Übersicht</a>
+                <a href="javascript:history.back()" class="btn btn-back">Zurück zur Übersicht</a>
             </div>
         </div>
     {% endif %}
