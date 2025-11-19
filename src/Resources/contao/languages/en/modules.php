@@ -3,7 +3,7 @@ $GLOBALS['TL_LANG']['MOD']['binzmuehle'] = 'Binzmühle';
 
 //Module
 $GLOBALS['TL_LANG']['MOD']['apartments'][0] = 'Wohnungen';
-$GLOBALS['TL_LANG']['MOD']['apartments'][1] = 'Modul zur Verwaltung von Wohnungen'
+$GLOBALS['TL_LANG']['MOD']['apartments'][1] = 'Modul zur Verwaltung von Wohnungen';
 
 $GLOBALS['TL_LANG']['FMD']['apartments'] = 'Wohnungen';
 $GLOBALS['TL_LANG']['FMD']['apartments_list'] = ['Wohnungsliste', 'Zeigt eine Liste aller Wohnungen an'];
