@@ -2,6 +2,12 @@
     {% if apartments is empty %}
         <p class="no-apartments">Aktuell sind keine Wohnungen verfügbar.</p>
     {% else %}
+        <!-- Range-Filter VOR der Tabelle -->
+        <div class="range-filter">
+            <strong>Nettomiete filtern:</strong>
+            von <input type="number" id="min-nettomiete" placeholder="Min" style="width: 100px; padding: 8px; margin: 0 5px;"> CHF
+            bis <input type="number" id="max-nettomiete" placeholder="Max" style="width: 100px; padding: 8px; margin: 0 5px;"> CHF
+        </div>
         <div class="table-responsive">
             <table id="apartments-table" class="apartments-table display">
                 <thead>
