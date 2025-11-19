@@ -1,0 +1,110 @@
+<div class="mod_apartments_detail">
+    {% if error %}
+        <div class="alert alert-warning">{{ error }}</div>
+        <a href="{{ 'javascript:history.back()' }}" class="btn btn-back">Zurück zur Übersicht</a>
+    {% elseif apartment %}
+        <div class="apartment-detail">
+            <div class="detail-header">
+                {% if apartment.bezeichnung %}
+                    <h1>{{ apartment.bezeichnung }}</h1>
+                {% endif %}
+                {% if apartment.objektnummer %}
+                    <p class="objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</p>
+                {% endif %}
+            </div>
+
+            <div class="detail-content">
+                <div class="detail-section">
+                    <h2>Allgemeine Informationen</h2>
+                    <dl class="info-list">
+                        {% if apartment.adresse %}
+                            <dt>Adresse:</dt>
+                            <dd>{{ apartment.adresse }}</dd>
+                        {% endif %}
+                        {% if apartment.bauetappe %}
+                            <dt>Bauetappe:</dt>
+                            <dd>{{ apartment.bauetappe }}</dd>
+                        {% endif %}
+                        {% if apartment.zeile %}
+                            <dt>Zeile:</dt>
+                            <dd>{{ apartment.zeile }}</dd>
+                        {% endif %}
+                        {% if apartment.etage %}
+                            <dt>Etage:</dt>
+                            <dd>{{ apartment.etage }}</dd>
+                        {% endif %}
+                        {% if apartment.zimmer %}
+                            <dt>Zimmer:</dt>
+                            <dd>{{ apartment.zimmer }}</dd>
+                        {% endif %}
+                        {% if apartment.flaeche %}
+                            <dt>Wohnfläche:</dt>
+                            <dd>{{ apartment.flaeche }} m²</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+
+                {% if apartment.nettomietzins or apartment.nebenkosten or apartment.bruttomietzins %}
+                    <div class="detail-section costs-section">
+                        <h2>Kosten</h2>
+                        <dl class="costs-list">
+                            {% if apartment.nettomietzins %}
+                                <dt>Nettomiete:</dt>
+                                <dd>CHF {{ apartment.nettomietzins }}</dd>
+                            {% endif %}
+                            {% if apartment.nebenkosten %}
+                                <dt>Nebenkosten:</dt>
+                                <dd>CHF {{ apartment.nebenkosten }}</dd>
+                            {% endif %}
+                            {% if apartment.bruttomietzins %}
+                                <dt class="total">Bruttomiete:</dt>
+                                <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
+                            {% endif %}
+                        </dl>
+                    </div>
+                {% endif %}
+
+                {% if apartment.imagegrundriss or apartment.imageetage %}
+                    <div class="detail-section images-section">
+                        <h2>Pläne & Bilder</h2>
+                        <div class="images-grid">
+                            {% if apartment.imagegrundriss %}
+                                <div class="image-item">
+                                    <h3>Grundriss</h3>
+                                    {{ picture(apartment.imagegrundriss, [800, 600, 'proportional']) }}
+                                </div>
+                            {% endif %}
+                            {% if apartment.imageetage %}
+                                <div class="image-item">
+                                    <h3>Etagenplan</h3>
+                                    {{ picture(apartment.imageetage, [800, 600, 'proportional']) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if apartment.grundrisspdf %}
+                    <div class="detail-section download-section">
+                        <h2>Downloads</h2>
+                        <a href="{{ file(apartment.grundrisspdf) }}" class="btn btn-download" download>
+                            Grundriss als PDF herunterladen
+                        </a>
+                    </div>
+                {% endif %}
+
+                {% if apartment.status %}
+                    <div class="detail-section status-section">
+                        <div class="status-badge status-{{ apartment.status|lower }}">
+                            {{ apartment.status }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="detail-footer">
+                <a href="{{ 'javascript:history.back()' }}" class="btn btn-back">Zurück zur Übersicht</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
