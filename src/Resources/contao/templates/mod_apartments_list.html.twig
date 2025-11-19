@@ -1,76 +1,54 @@
-<?php
-
-declare(strict_types=1);
-
-namespace Guycollegmbh\ApartmentsBundle\Module;
-
-use Contao\Database;
-use Contao\FilesModel;
-use Contao\Module;
-use Contao\Input;
-
-class ApartmentsDetailModule extends Module
-{
-    protected $strTemplate = 'mod_apartments_detail';
-
-    protected function compile(): void
-    {
-        // Hole die bereinigte Objektnummer aus der URL
-        $objektnummerUrl = Input::get('id');
-
-        if (!$objektnummerUrl) {
-            $this->Template->apartment = null;
-            $this->Template->error = 'Keine Wohnung ausgewählt.';
-            return;
-        }
-
-        // Hole ALLE veröffentlichten Wohnungen
-        $apartments = Database::getInstance()
-            ->prepare('SELECT * FROM tl_apartments WHERE published = ?')
-            ->execute(1);
-
-        $apartmentData = null;
-        
-        while ($apartments->next()) {
-            $row = $apartments->row();
-            
-            // HTML-Entities dekodieren
-            $objektnr = html_entity_decode($row['objektnummer'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            // Entferne alles in Klammern
-            $objektnr = preg_replace('/\s*\([^)]*\)/', '', $objektnr);
-            // Entferne Punkte und Leerzeichen, behalte nur Zahlen
-            $cleanObjNr = preg_replace('/[^0-9]/', '', $objektnr);
-            
-            if ($cleanObjNr === $objektnummerUrl) {
-                $apartmentData = $row;
-                break;
-            }
-        }
-
-        if (!$apartmentData) {
-            $this->Template->apartment = null;
-            $this->Template->error = 'Wohnung nicht gefunden.';
-            return;
-        }
-
-        // Bilder vorbereiten
-        if ($apartmentData['imagegrundriss']) {
-            $file = FilesModel::findByUuid($apartmentData['imagegrundriss']);
-            $apartmentData['imagegrundriss_path'] = $file ? $file->path : null;
-        }
-
-        if ($apartmentData['imageetage']) {
-            $file = FilesModel::findByUuid($apartmentData['imageetage']);
-            $apartmentData['imageetage_path'] = $file ? $file->path : null;
-        }
-
-        if ($apartmentData['grundrisspdf']) {
-            $file = FilesModel::findByUuid($apartmentData['grundrisspdf']);
-            $apartmentData['grundrisspdf_path'] = $file ? $file->path : null;
-            $apartmentData['grundrisspdf_name'] = $file ? $file->name : 'Grundriss';
-        }
-
-        $this->Template->apartment = $apartmentData;
-        $this->Template->error = null;
-    }
-}
+<div class="mod_apartments_list">
+    {% if apartments is empty %}
+        <p class="no-apartments">Aktuell sind keine Wohnungen verfügbar.</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="apartments-table">
+                <thead>
+                    <tr>
+                        <th>Objekt-Nr.</th>
+                        <th>Bezeichnung</th>
+                        <th>Adresse</th>
+                        <th>Bauetappe</th>
+                        <th>Zeile</th>
+                        <th>Etage</th>
+                        <th>Zimmer</th>
+                        <th>Fläche</th>
+                        <th>Nettomiete</th>
+                        <th>Nebenkosten</th>
+                        <th>Bruttomiete</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for apartment in apartments %}
+                        <tr class="{% if apartment.status %}status-{{ apartment.status|lower }}{% endif %}">
+                            <td>{{ apartment.objektnummer|default('-') }}</td>
+                            <td>{{ apartment.bezeichnung|default('-') }}</td>
+                            <td>{{ apartment.adresse|default('-') }}</td>
+                            <td>{{ apartment.bauetappe|default('-') }}</td>
+                            <td>{{ apartment.zeile|default('-') }}</td>
+                            <td>{{ apartment.etage|default('-') }}</td>
+                            <td>{{ apartment.zimmer|default('-') }}</td>
+                            <td>{{ apartment.flaeche ? apartment.flaeche ~ ' m²' : '-' }}</td>
+                            <td>{{ apartment.nettomietzins ? 'CHF ' ~ apartment.nettomietzins : '-' }}</td>
+                            <td>{{ apartment.nebenkosten ? 'CHF ' ~ apartment.nebenkosten : '-' }}</td>
+                            <td>{{ apartment.bruttomietzins ? 'CHF ' ~ apartment.bruttomietzins : '-' }}</td>
+                            <td>
+                                {% if apartment.status %}
+                                    <span class="badge status-{{ apartment.status|lower }}">{{ apartment.status }}</span>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="detail?id={{ apartment.objektnummer_url }}" class="btn btn-details">Details</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
