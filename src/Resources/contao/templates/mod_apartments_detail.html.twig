@@ -1,4 +1,4 @@
-<div class="mod_apartments_detail">
+ <div class="mod_apartments_detail">
     {% if error %}
         <div class="alert alert-warning">{{ error }}</div>
         <a href="javascript:history.back()" class="btn btn-back">Zurück zur Übersicht</a>
@@ -10,6 +10,11 @@
                 {% endif %}
                 {% if apartment.objektnummer %}
                     <p class="objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</p>
+                {% endif %}
+                {% if apartment.status %}
+                    <div class="status-badge status-{{ apartment.status|lower }}">
+                        {{ apartment.status }}
+                    </div>
                 {% endif %}
             </div>
 
@@ -34,7 +39,7 @@
                             <dd>{{ apartment.etage }}</dd>
                         {% endif %}
                         {% if apartment.zimmer %}
-                            <dt>Zimmer:</dt>
+                            <dt>Anzahl Zimmer:</dt>
                             <dd>{{ apartment.zimmer }}</dd>
                         {% endif %}
                         {% if apartment.flaeche %}
@@ -46,7 +51,7 @@
 
                 {% if apartment.nettomietzins or apartment.nebenkosten or apartment.bruttomietzins %}
                     <div class="detail-section costs-section">
-                        <h2>Kosten</h2>
+                        <h2>Mietkosten</h2>
                         <dl class="costs-list">
                             {% if apartment.nettomietzins %}
                                 <dt>Nettomiete:</dt>
@@ -57,8 +62,8 @@
                                 <dd>CHF {{ apartment.nebenkosten }}</dd>
                             {% endif %}
                             {% if apartment.bruttomietzins %}
-                                <dt class="total">Bruttomiete:</dt>
-                                <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
+                                <dt class="total">Bruttomiete (inkl. NK):</dt>
+                                <dd class="total"><strong>CHF {{ apartment.bruttomietzins }}</strong></dd>
                             {% endif %}
                         </dl>
                     </div>
@@ -66,18 +71,18 @@
 
                 {% if apartment.imagegrundriss_path or apartment.imageetage_path %}
                     <div class="detail-section images-section">
-                        <h2>Pläne & Bilder</h2>
+                        <h2>Pläne & Ansichten</h2>
                         <div class="images-grid">
                             {% if apartment.imagegrundriss_path %}
                                 <div class="image-item">
                                     <h3>Grundriss</h3>
-                                    <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss">
+                                    <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss {{ apartment.bezeichnung }}">
                                 </div>
                             {% endif %}
                             {% if apartment.imageetage_path %}
                                 <div class="image-item">
                                     <h3>Etagenplan</h3>
-                                    <img src="{{ apartment.imageetage_path }}" alt="Etagenplan">
+                                    <img src="{{ apartment.imageetage_path }}" alt="Etagenplan {{ apartment.bezeichnung }}">
                                 </div>
                             {% endif %}
                         </div>
@@ -88,22 +93,18 @@
                     <div class="detail-section download-section">
                         <h2>Downloads</h2>
                         <a href="{{ apartment.grundrisspdf_path }}" class="btn btn-download" download>
-                            {{ apartment.grundrisspdf_name }} herunterladen
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            {{ apartment.grundrisspdf_name|default('Grundriss') }} herunterladen
                         </a>
-                    </div>
-                {% endif %}
-
-                {% if apartment.status %}
-                    <div class="detail-section status-section">
-                        <div class="status-badge status-{{ apartment.status|lower }}">
-                            {{ apartment.status }}
-                        </div>
                     </div>
                 {% endif %}
             </div>
 
             <div class="detail-footer">
-                <a href="javascript:history.back()" class="btn btn-back">Zurück zur Übersicht</a>
+                <a href="javascript:history.back()" class="btn btn-back">← Zurück zur Übersicht</a>
             </div>
         </div>
     {% endif %}
