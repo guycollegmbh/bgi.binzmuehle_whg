@@ -74,24 +74,20 @@
         <!-- noUiSlider JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
-        <script>
+       <script>
         $(document).ready(function() {
             console.log('Script startet...');
             
-            // Feste Min/Max Werte zum Testen
             var minPrice = 0;
             var maxPrice = 5000;
 
-            // Slider Element prüfen
             var sliderElement = document.getElementById('nettomiete-slider');
-            console.log('Slider Element gefunden:', sliderElement);
 
             if (!sliderElement) {
                 console.error('Slider Element nicht gefunden!');
                 return;
             }
 
-            // noUiSlider prüfen
             if (typeof noUiSlider === 'undefined') {
                 console.error('noUiSlider nicht geladen!');
                 return;
@@ -99,7 +95,6 @@
 
             console.log('noUiSlider verfügbar, erstelle Slider...');
 
-            // Slider erstellen
             try {
                 noUiSlider.create(sliderElement, {
                     start: [minPrice, maxPrice],
@@ -113,7 +108,6 @@
                 
                 console.log('Slider erstellt!');
                 
-                // Werte anzeigen
                 sliderElement.noUiSlider.on('update', function(values, handle) {
                     document.getElementById('min-value').textContent = Math.round(values[0]);
                     document.getElementById('max-value').textContent = Math.round(values[1]);
@@ -162,21 +156,39 @@
                         var select = $('<select class="dt-filter"><option value="">Alle</option></select>')
                             .appendTo($(column.header()))
                             .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                var val = $(this).val();
+                                if (val) {
+                                    column.search('^' + $.fn.dataTable.util.escapeRegex(val) + '$', true, false).draw();
+                                } else {
+                                    column.search('').draw();
+                                }
                             });
 
-                        column.data().unique().sort().each(function (d, j) {
-                            var text = $(d).text() || d;
-                            if (text && text !== '-') {
-                                select.append('<option value="' + text + '">' + text + '</option>');
+                        // Sammle unique Werte
+                        var uniqueValues = [];
+                        column.data().unique().each(function (d, j) {
+                            var text;
+                            if (typeof d === 'string' && d.indexOf('<') !== -1) {
+                                var tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = d;
+                                text = (tempDiv.textContent || tempDiv.innerText || '').trim();
+                            } else {
+                                text = (d || '').toString().trim();
                             }
+                            
+                            if (text && text !== '-' && uniqueValues.indexOf(text) === -1) {
+                                uniqueValues.push(text);
+                            }
+                        });
+                        
+                        uniqueValues.sort().forEach(function(text) {
+                            select.append('<option value="' + text.replace(/"/g, '&quot;') + '">' + text + '</option>');
                         });
                     });
                 }
             });
 
-            // Slider Event - Tabelle neu filtern
+            // Slider Event
             if (sliderElement.noUiSlider) {
                 sliderElement.noUiSlider.on('change', function() {
                     console.log('Slider geändert:', sliderElement.noUiSlider.get());
