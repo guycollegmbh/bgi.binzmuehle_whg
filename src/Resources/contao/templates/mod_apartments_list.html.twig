@@ -5,45 +5,67 @@
         {% else %}
             <div class="apartments-grid">
                 {% for apartment in apartments %}
-                    <div class="apartment-item status-{{ apartment.status|lower }}">
+                    <div class="apartment-item{% if apartment.status %} status-{{ apartment.status|lower }}{% endif %}">
                         <div class="apartment-header">
-                            <h3>{{ apartment.bezeichnung }}</h3>
-                            <span class="apartment-number">{{ apartment.objektnummer }}</span>
+                            {% if apartment.bezeichnung %}
+                                <h3>{{ apartment.bezeichnung }}</h3>
+                            {% endif %}
+                            {% if apartment.objektnummer %}
+                                <span class="apartment-number">{{ apartment.objektnummer }}</span>
+                            {% endif %}
                         </div>
                         
                         <div class="apartment-details">
-                            <div class="detail-row">
-                                <strong>Adresse:</strong> {{ apartment.adresse }}
-                            </div>
-                            <div class="detail-row">
-                                <strong>Etage:</strong> {{ apartment.etage }}
-                            </div>
-                            <div class="detail-row">
-                                <strong>Zimmer:</strong> {{ apartment.zimmer }}
-                            </div>
-                            <div class="detail-row">
-                                <strong>Fläche:</strong> {{ apartment.flaeche }} m²
-                            </div>
+                            {% if apartment.adresse %}
+                                <div class="detail-row">
+                                    <strong>Adresse:</strong> {{ apartment.adresse }}
+                                </div>
+                            {% endif %}
+                            {% if apartment.etage %}
+                                <div class="detail-row">
+                                    <strong>Etage:</strong> {{ apartment.etage }}
+                                </div>
+                            {% endif %}
+                            {% if apartment.zimmer %}
+                                <div class="detail-row">
+                                    <strong>Zimmer:</strong> {{ apartment.zimmer }}
+                                </div>
+                            {% endif %}
+                            {% if apartment.flaeche %}
+                                <div class="detail-row">
+                                    <strong>Fläche:</strong> {{ apartment.flaeche }} m²
+                                </div>
+                            {% endif %}
                         </div>
 
-                        <div class="apartment-costs">
-                            <div class="cost-item">
-                                <span class="cost-label">Nettomiete:</span>
-                                <span class="cost-value">CHF {{ apartment.nettomietzins }}</span>
+                        {% if apartment.nettomietzins or apartment.nebenkosten or apartment.bruttomietzins %}
+                            <div class="apartment-costs">
+                                {% if apartment.nettomietzins %}
+                                    <div class="cost-item">
+                                        <span class="cost-label">Nettomiete:</span>
+                                        <span class="cost-value">CHF {{ apartment.nettomietzins }}</span>
+                                    </div>
+                                {% endif %}
+                                {% if apartment.nebenkosten %}
+                                    <div class="cost-item">
+                                        <span class="cost-label">Nebenkosten:</span>
+                                        <span class="cost-value">CHF {{ apartment.nebenkosten }}</span>
+                                    </div>
+                                {% endif %}
+                                {% if apartment.bruttomietzins %}
+                                    <div class="cost-item total">
+                                        <span class="cost-label">Bruttomiete:</span>
+                                        <span class="cost-value">CHF {{ apartment.bruttomietzins }}</span>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <div class="cost-item">
-                                <span class="cost-label">Nebenkosten:</span>
-                                <span class="cost-value">CHF {{ apartment.nebenkosten }}</span>
-                            </div>
-                            <div class="cost-item total">
-                                <span class="cost-label">Bruttomiete:</span>
-                                <span class="cost-value">CHF {{ apartment.bruttomietzins }}</span>
-                            </div>
-                        </div>
+                        {% endif %}
 
-                        <div class="apartment-status status-{{ apartment.status|lower }}">
-                            {{ apartment.status }}
-                        </div>
+                        {% if apartment.status %}
+                            <div class="apartment-status status-{{ apartment.status|lower }}">
+                                {{ apartment.status }}
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
