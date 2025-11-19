@@ -20,7 +20,7 @@ $GLOBALS['BE_MOD']['binzmuehle'] = [
 ];
 
 // Frontend modules
-$GLOBALS['FE_MOD']['miscellaneous']['apartments'] = ApartmentsController::class;
+$GLOBALS['TL_CTE']['apartments']['apartments_list'] = \Guycollegmbh\ApartmentsBundle\Controller\ContentElement\ApartmentsListController::class;
 
 
 // Backend-Stylesheet
