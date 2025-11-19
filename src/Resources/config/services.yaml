@@ -6,9 +6,8 @@ services:
 
     Guycollegmbh\ApartmentsBundle\:
         resource: '../../'
-        exclude: '../../{DependencyInjection,Resources}'
+        exclude: '../../{DependencyInjection,Resources,Controller}'
 
-    # Frontend Module Controllers
-    Guycollegmbh\ApartmentsBundle\Controller\:
-        resource: '../../Controller'
-        tags: ['controller.service_arguments']
+    Guycollegmbh\ApartmentsBundle\Controller\FrontendModule\ApartmentsListController:
+        tags:
+            - { name: 'contao.frontend_module', category: 'apartments', type: 'apartments_list' }
