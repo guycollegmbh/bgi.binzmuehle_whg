@@ -76,62 +76,64 @@
 
         <script>
         $(document).ready(function() {
+            console.log('Script startet...');
+            
+            // Feste Min/Max Werte zum Testen
             var minPrice = 0;
             var maxPrice = 5000;
-            
-            // Finde Min/Max aus den Daten
-            {% if apartments %}
-                var prices = [
-                    {% for apartment in apartments %}
-                        {% if apartment.nettomietzins %}
-                            {{ apartment.nettomietzins|replace({'CHF ': '', ',': '', '.': ''})|trim }},
-                        {% endif %}
-                    {% endfor %}
-                ];
-                if (prices.length > 0) {
-                    minPrice = Math.floor(Math.min(...prices) / 100) * 100; // Runde auf 100er
-                    maxPrice = Math.ceil(Math.max(...prices) / 100) * 100;
-                }
-            {% endif %}
 
-            // noUiSlider initialisieren
-            var slider = document.getElementById('nettomiete-slider');
-            noUiSlider.create(slider, {
-                start: [minPrice, maxPrice],
-                connect: true,
-                step: 50,
-                range: {
-                    'min': minPrice,
-                    'max': maxPrice
-                },
-                format: {
-                    to: function(value) {
-                        return Math.round(value);
-                    },
-                    from: function(value) {
-                        return Number(value);
+            // Slider Element prüfen
+            var sliderElement = document.getElementById('nettomiete-slider');
+            console.log('Slider Element gefunden:', sliderElement);
+
+            if (!sliderElement) {
+                console.error('Slider Element nicht gefunden!');
+                return;
+            }
+
+            // noUiSlider prüfen
+            if (typeof noUiSlider === 'undefined') {
+                console.error('noUiSlider nicht geladen!');
+                return;
+            }
+
+            console.log('noUiSlider verfügbar, erstelle Slider...');
+
+            // Slider erstellen
+            try {
+                noUiSlider.create(sliderElement, {
+                    start: [minPrice, maxPrice],
+                    connect: true,
+                    step: 50,
+                    range: {
+                        'min': minPrice,
+                        'max': maxPrice
                     }
-                }
-            });
+                });
+                
+                console.log('Slider erstellt!');
+                
+                // Werte anzeigen
+                sliderElement.noUiSlider.on('update', function(values, handle) {
+                    document.getElementById('min-value').textContent = Math.round(values[0]);
+                    document.getElementById('max-value').textContent = Math.round(values[1]);
+                });
+                
+            } catch(error) {
+                console.error('Fehler beim Erstellen des Sliders:', error);
+            }
 
-            // Werte anzeigen
-            slider.noUiSlider.on('update', function(values, handle) {
-                document.getElementById('min-value').textContent = values[0];
-                document.getElementById('max-value').textContent = values[1];
-            });
-
-            // DataTables Custom Filter für Slider
+            // DataTables Filter
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    var sliderValues = slider.noUiSlider.get();
+                    if (!sliderElement.noUiSlider) return true;
+                    
+                    var sliderValues = sliderElement.noUiSlider.get();
                     var min = parseFloat(sliderValues[0]);
                     var max = parseFloat(sliderValues[1]);
                     var nettomiete = parseFloat(data[7].replace(/[^0-9.-]+/g,"")) || 0;
 
-                    if (nettomiete >= min && nettomiete <= max) {
-                        return true;
-                    }
-                    return false;
+                    return (nettomiete >= min && nettomiete <= max);
                 }
             );
 
@@ -152,7 +154,9 @@
                     }
                 ],
                 initComplete: function () {
-                    // Filter für Select-Spalten
+                    console.log('DataTables initialisiert');
+                    
+                    // Filter für Select-Spalten: Adresse(2), Zeile(3), Etage(4), Status(10)
                     this.api().columns([2, 3, 4, 10]).every(function () {
                         var column = this;
                         var select = $('<select class="dt-filter"><option value="">Alle</option></select>')
@@ -173,9 +177,12 @@
             });
 
             // Slider Event - Tabelle neu filtern
-            slider.noUiSlider.on('change', function() {
-                table.draw();
-            });
+            if (sliderElement.noUiSlider) {
+                sliderElement.noUiSlider.on('change', function() {
+                    console.log('Slider geändert:', sliderElement.noUiSlider.get());
+                    table.draw();
+                });
+            }
         });
         </script>
     {% endif %}
