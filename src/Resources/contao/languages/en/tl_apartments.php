@@ -5,6 +5,7 @@ $GLOBALS['TL_LANG']['tl_apartments']['allgemein_legend'] = 'Wohnungsdaten';
 $GLOBALS['TL_LANG']['tl_apartments']['kosten_legend'] = 'Brutto- / Nettomietzins & Nebenkosten';
 $GLOBALS['TL_LANG']['tl_apartments']['images_legend'] = 'Visualisierungen';
 $GLOBALS['TL_LANG']['tl_apartments']['files_legend'] = 'Grundriss/Datenblatt';
+$GLOBALS['TL_LANG']['tl_apartments']['status_legend'] = 'Status';
 $GLOBALS['TL_LANG']['tl_apartments']['published_legend'] = 'Veröffentlichen';
 
 // Felder
@@ -49,6 +50,9 @@ $GLOBALS['TL_LANG']['tl_apartments']['imageetage'][1] = '';
 
 $GLOBALS['TL_LANG']['tl_apartments']['grundrisspdf'][0] = 'Grundriss PDF';
 $GLOBALS['TL_LANG']['tl_apartments']['grundrisspdf'][1] = '';
+
+$GLOBALS['TL_LANG']['tl_apartments']['status'][0] = 'Status';
+$GLOBALS['TL_LANG']['tl_apartments']['status'][1] = 'Status der Wohnung auswählen.';
 
 $GLOBALS['TL_LANG']['tl_apartments']['published'][0] = 'Veröffentlichen';
 $GLOBALS['TL_LANG']['tl_apartments']['published'][1] = 'Wohnung Veröffentlichen';

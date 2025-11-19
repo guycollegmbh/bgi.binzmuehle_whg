@@ -74,7 +74,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{images_legend},imagegrundriss,imageetage;{files_legend},grundrisspdf;{published_legend},published',
+        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{images_legend},imagegrundriss,imageetage;{files_legend},grundrisspdf;{status_legend},status;{published_legend},published',
     ],
     'fields' => [
         'id' => [
@@ -236,6 +236,16 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'notnull' => false,
                 'fixed'   => true,
             ],
+        ],
+         'status' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['status'],
+            'search'    => true,
+            'sorting'   => true,
+            'filter'    => true,
+            'inputType' => 'select',
+            'options'   => ['Frei', 'Vermietet', 'Reserviert'],
+            'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
+            'sql'       => ['type' => 'string', 'length' => 8, 'default' => ''],
         ],
         'published' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['published'],
