@@ -2,16 +2,60 @@
     {% if apartments is empty %}
         <p class="no-apartments">Aktuell sind keine Wohnungen verfügbar.</p>
     {% else %}
-        <!-- Range-Slider für Nettomiete -->
-        <div class="range-filter-slider">
-            <h3>Nettomiete filtern</h3>
-            <div id="nettomiete-slider"></div>
-            <div class="slider-values">
-                <span>von <strong id="min-value">0</strong> CHF</span>
-                <span>bis <strong id="max-value">5000</strong> CHF</span>
+        <!-- Filter-Bereich oberhalb der Tabelle -->
+        <div class="apartments-filters">
+            <h3>Filter</h3>
+            
+            <div class="filter-grid">
+                <!-- Adresse Filter -->
+                <div class="filter-item">
+                    <label for="filter-adresse">Adresse</label>
+                    <select id="filter-adresse" class="filter-select">
+                        <option value="">Alle</option>
+                    </select>
+                </div>
+
+                <!-- Zeile Filter -->
+                <div class="filter-item">
+                    <label for="filter-zeile">Zeile</label>
+                    <select id="filter-zeile" class="filter-select">
+                        <option value="">Alle</option>
+                    </select>
+                </div>
+
+                <!-- Etage Filter -->
+                <div class="filter-item">
+                    <label for="filter-etage">Etage</label>
+                    <select id="filter-etage" class="filter-select">
+                        <option value="">Alle</option>
+                    </select>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="filter-item">
+                    <label for="filter-status">Status</label>
+                    <select id="filter-status" class="filter-select">
+                        <option value="">Alle</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Nettomiete Range Slider -->
+            <div class="filter-item-full">
+                <label>Nettomiete: <span id="min-display">0</span> CHF - <span id="max-display">5000</span> CHF</label>
+                <div class="range-slider-container">
+                    <input type="range" id="min-price" min="0" max="5000" step="50" value="0" class="range-input">
+                    <input type="range" id="max-price" min="0" max="5000" step="50" value="5000" class="range-input">
+                </div>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="filter-actions">
+                <button id="reset-filters" class="btn-reset">Alle Filter zurücksetzen</button>
             </div>
         </div>
 
+        <!-- Tabelle -->
         <div class="table-responsive">
             <table id="apartments-table" class="apartments-table display">
                 <thead>
@@ -32,7 +76,7 @@
                 </thead>
                 <tbody>
                     {% for apartment in apartments %}
-                        <tr class="{% if apartment.status %}status-{{ apartment.status|lower }}{% endif %}">
+                        <tr>
                             <td>{{ apartment.objektnummer|default('-') }}</td>
                             <td>{{ apartment.bezeichnung|default('-') }}</td>
                             <td>{{ apartment.adresse|default('-') }}</td>
@@ -61,75 +105,19 @@
 
         <!-- DataTables CSS -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-        
-        <!-- noUiSlider CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         
         <!-- DataTables JS -->
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-        
-        <!-- noUiSlider JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
-       <script>
+        <script>
         $(document).ready(function() {
-            console.log('Script startet...');
-            
-            var minPrice = 0;
-            var maxPrice = 5000;
-
-            var sliderElement = document.getElementById('nettomiete-slider');
-
-            if (!sliderElement) {
-                console.error('Slider Element nicht gefunden!');
-                return;
-            }
-
-            if (typeof noUiSlider === 'undefined') {
-                console.error('noUiSlider nicht geladen!');
-                return;
-            }
-
-            console.log('noUiSlider verfügbar, erstelle Slider...');
-
-            try {
-                noUiSlider.create(sliderElement, {
-                    start: [minPrice, maxPrice],
-                    connect: true,
-                    step: 50,
-                    range: {
-                        'min': minPrice,
-                        'max': maxPrice
-                    }
-                });
-                
-                console.log('Slider erstellt!');
-                
-                sliderElement.noUiSlider.on('update', function(values, handle) {
-                    document.getElementById('min-value').textContent = Math.round(values[0]);
-                    document.getElementById('max-value').textContent = Math.round(values[1]);
-                });
-                
-            } catch(error) {
-                console.error('Fehler beim Erstellen des Sliders:', error);
-            }
-
-            // DataTables Filter
-            $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    if (!sliderElement.noUiSlider) return true;
-                    
-                    var sliderValues = sliderElement.noUiSlider.get();
-                    var min = parseFloat(sliderValues[0]);
-                    var max = parseFloat(sliderValues[1]);
-                    var nettomiete = parseFloat(data[7].replace(/[^0-9.-]+/g,"")) || 0;
-
-                    return (nettomiete >= min && nettomiete <= max);
-                }
-            );
+            var minPriceInput = document.getElementById('min-price');
+            var maxPriceInput = document.getElementById('max-price');
+            var minDisplay = document.getElementById('min-display');
+            var maxDisplay = document.getElementById('max-display');
 
             // DataTables initialisieren
             var table = $('#apartments-table').DataTable({
@@ -138,63 +126,106 @@
                 },
                 pageLength: 25,
                 lengthChange: false,
-                searching: false,
-                order: [[0, 'asc']],
-                columnDefs: [
-                    {
-                        targets: [11],
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                initComplete: function () {
-                    console.log('DataTables initialisiert');
-                    
-                    // Filter für Select-Spalten: Adresse(2), Zeile(3), Etage(4), Status(10)
-                    this.api().columns([2, 3, 4, 10]).every(function () {
-                        var column = this;
-                        var select = $('<select class="dt-filter"><option value="">Alle</option></select>')
-                            .appendTo($(column.header()))
-                            .on('change', function () {
-                                var val = $(this).val();
-                                if (val) {
-                                    column.search('^' + $.fn.dataTable.util.escapeRegex(val) + '$', true, false).draw();
-                                } else {
-                                    column.search('').draw();
-                                }
-                            });
-
-                        // Sammle unique Werte
-                        var uniqueValues = [];
-                        column.data().unique().each(function (d, j) {
-                            var text;
-                            if (typeof d === 'string' && d.indexOf('<') !== -1) {
-                                var tempDiv = document.createElement('div');
-                                tempDiv.innerHTML = d;
-                                text = (tempDiv.textContent || tempDiv.innerText || '').trim();
-                            } else {
-                                text = (d || '').toString().trim();
-                            }
-                            
-                            if (text && text !== '-' && uniqueValues.indexOf(text) === -1) {
-                                uniqueValues.push(text);
-                            }
-                        });
-                        
-                        uniqueValues.sort().forEach(function(text) {
-                            select.append('<option value="' + text.replace(/"/g, '&quot;') + '">' + text + '</option>');
-                        });
-                    });
-                }
+                searching: true,
+                dom: 'rtip',
+                order: [[0, 'asc']]
             });
 
-            // Slider Event
-            if (sliderElement.noUiSlider) {
-                sliderElement.noUiSlider.on('change', function() {
-                    console.log('Slider geändert:', sliderElement.noUiSlider.get());
+            // Funktion: Unique Werte extrahieren
+            function getUniqueValues(columnIndex) {
+                var uniqueValues = [];
+                table.column(columnIndex).data().unique().each(function(d) {
+                    var text;
+                    if (typeof d === 'string' && d.indexOf('<') !== -1) {
+                        var tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = d;
+                        text = (tempDiv.textContent || tempDiv.innerText || '').trim();
+                    } else {
+                        text = (d || '').toString().trim();
+                    }
+                    
+                    if (text && text !== '-' && uniqueValues.indexOf(text) === -1) {
+                        uniqueValues.push(text);
+                    }
+                });
+                return uniqueValues.sort();
+            }
+
+            // Filter-Dropdowns befüllen
+            var filters = [
+                { id: 'filter-adresse', column: 2 },
+                { id: 'filter-zeile', column: 3 },
+                { id: 'filter-etage', column: 4 },
+                { id: 'filter-status', column: 10 }
+            ];
+
+            filters.forEach(function(filter) {
+                var select = $('#' + filter.id);
+                var values = getUniqueValues(filter.column);
+                
+                values.forEach(function(value) {
+                    select.append('<option value="' + value + '">' + value + '</option>');
+                });
+
+                select.on('change', function() {
+                    var val = $(this).val();
+                    if (val) {
+                        table.column(filter.column).search('^' + $.fn.dataTable.util.escapeRegex(val) + '$', true, false);
+                    } else {
+                        table.column(filter.column).search('');
+                    }
                     table.draw();
                 });
+            });
+
+            // Range Slider für Nettomiete
+            function updateRangeValues() {
+                var minVal = parseInt(minPriceInput.value);
+                var maxVal = parseInt(maxPriceInput.value);
+
+                // Sicherstellen, dass min nicht größer als max ist
+                if (minVal > maxVal) {
+                    minPriceInput.value = maxVal;
+                    minVal = maxVal;
+                }
+
+                minDisplay.textContent = minVal;
+                maxDisplay.textContent = maxVal;
             }
+
+            // Custom Search für Nettomiete
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var min = parseInt(minPriceInput.value);
+                    var max = parseInt(maxPriceInput.value);
+                    var nettomiete = parseFloat(data[7].replace(/[^0-9.-]+/g,"")) || 0;
+
+                    return (nettomiete >= min && nettomiete <= max);
+                }
+            );
+
+            // Range Input Events
+            minPriceInput.addEventListener('input', function() {
+                updateRangeValues();
+                table.draw();
+            });
+
+            maxPriceInput.addEventListener('input', function() {
+                updateRangeValues();
+                table.draw();
+            });
+
+            // Initial update
+            updateRangeValues();
+
+            // Reset Button
+            $('#reset-filters').on('click', function() {
+                $('.filter-select').val('').trigger('change');
+                minPriceInput.value = 0;
+                maxPriceInput.value = 5000;
+                updateRangeValues();
+                table.search('').columns().search('').draw();
+            });
         });
         </script>
     {% endif %}
