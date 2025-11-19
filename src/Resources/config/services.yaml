@@ -8,12 +8,7 @@ services:
         resource: '../../'
         exclude: '../../{DependencyInjection,Resources}'
 
-    Guycollegmbh\ApartmentsBundle\Module\ApartmentsModule:
-        arguments:
-            $connection: '@database_connection'
-            $scopeMatcher: '@contao.routing.scope_matcher'
-            $requestStack: '@request_stack'
-        tags:
-            - name: 'contao.frontend_module'
-              category: 'miscellaneous'
-              type: 'apartments'
+    # Frontend Module Controllers
+    Guycollegmbh\ApartmentsBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
