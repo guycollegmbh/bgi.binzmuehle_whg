@@ -6,14 +6,12 @@
             <div class="apartments-grid">
                 {% for apartment in apartments %}
                     <div class="apartment-item{% if apartment.status %} status-{{ apartment.status|lower }}{% endif %}">
-                        <div class="apartment-header">
-                            {% if apartment.bezeichnung %}
-                                <h3>{{ apartment.bezeichnung }}</h3>
-                            {% endif %}
-                            {% if apartment.objektnummer %}
-                                <span class="apartment-number">{{ apartment.objektnummer }}</span>
-                            {% endif %}
-                        </div>
+                        {% if apartment.bezeichnung %}
+                            <h3>{{ apartment.bezeichnung }}</h3>
+                        {% endif %}
+                        {% if apartment.objektnummer %}
+                            <span class="apartment-number">{{ apartment.objektnummer }}</span>
+                        {% endif %}
                         
                         <div class="apartment-details">
                             {% if apartment.adresse %}
