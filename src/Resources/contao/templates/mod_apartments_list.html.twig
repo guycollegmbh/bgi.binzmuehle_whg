@@ -60,8 +60,6 @@
 
         <script>
         $(document).ready(function() {
-            console.log('DataTables wird initialisiert...');
-            
             // Eigene Range-Filter-Funktion für Nettomiete
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
@@ -84,6 +82,8 @@
                     url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
                 },
                 pageLength: 25,
+                lengthChange: false,  // "Zeilen anzeigen" ausblenden
+                searching: false,     // Suchfeld ausblenden
                 order: [[0, 'asc']],
                 columnDefs: [
                     {
@@ -93,8 +93,6 @@
                     }
                 ],
                 initComplete: function () {
-                    console.log('DataTables initialisiert');
-                    
                     // Filter für Select-Spalten
                     this.api().columns([2, 3, 4, 10]).every(function () {
                         var column = this;
@@ -113,19 +111,8 @@
                         });
                     });
 
-                    // Range-Filter für Nettomiete
-                    var rangeFilter = '<div class="range-filter" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 5px;">' +
-                        '<strong>Nettomiete filtern:</strong> ' +
-                        'von <input type="number" id="min-nettomiete" placeholder="Min" style="width: 100px; padding: 5px; margin: 0 5px;"> CHF ' +
-                        'bis <input type="number" id="max-nettomiete" placeholder="Max" style="width: 100px; padding: 5px; margin: 0 5px;"> CHF' +
-                    '</div>';
-                    
-                    $(rangeFilter).insertBefore('#apartments-table_wrapper .dataTables_filter');
-                    
-                    console.log('Range-Filter eingefügt');
-
+                    // Range-Filter Event Handler
                     $('#min-nettomiete, #max-nettomiete').on('keyup change', function() {
-                        console.log('Filter geändert:', $('#min-nettomiete').val(), $('#max-nettomiete').val());
                         table.draw();
                     });
                 }
