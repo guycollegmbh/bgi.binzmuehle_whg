@@ -2,12 +2,16 @@
     {% if apartments is empty %}
         <p class="no-apartments">Aktuell sind keine Wohnungen verfügbar.</p>
     {% else %}
-        <!-- Range-Filter VOR der Tabelle -->
-        <div class="range-filter">
-            <strong>Nettomiete filtern:</strong>
-            von <input type="number" id="min-nettomiete" placeholder="Min" style="width: 100px; padding: 8px; margin: 0 5px;"> CHF
-            bis <input type="number" id="max-nettomiete" placeholder="Max" style="width: 100px; padding: 8px; margin: 0 5px;"> CHF
+        <!-- Range-Slider für Nettomiete -->
+        <div class="range-filter-slider">
+            <h3>Nettomiete filtern</h3>
+            <div id="nettomiete-slider"></div>
+            <div class="slider-values">
+                <span>von <strong id="min-value">0</strong> CHF</span>
+                <span>bis <strong id="max-value">5000</strong> CHF</span>
+            </div>
         </div>
+
         <div class="table-responsive">
             <table id="apartments-table" class="apartments-table display">
                 <thead>
@@ -57,39 +61,88 @@
 
         <!-- DataTables CSS -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+        
+        <!-- noUiSlider CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
 
-        <!-- jQuery (erforderlich für DataTables) -->
+        <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         
         <!-- DataTables JS -->
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+        
+        <!-- noUiSlider JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
         <script>
         $(document).ready(function() {
-            // Eigene Range-Filter-Funktion für Nettomiete
+            var minPrice = 0;
+            var maxPrice = 5000;
+            
+            // Finde Min/Max aus den Daten
+            {% if apartments %}
+                var prices = [
+                    {% for apartment in apartments %}
+                        {% if apartment.nettomietzins %}
+                            {{ apartment.nettomietzins|replace({'CHF ': '', ',': '', '.': ''})|trim }},
+                        {% endif %}
+                    {% endfor %}
+                ];
+                if (prices.length > 0) {
+                    minPrice = Math.floor(Math.min(...prices) / 100) * 100; // Runde auf 100er
+                    maxPrice = Math.ceil(Math.max(...prices) / 100) * 100;
+                }
+            {% endif %}
+
+            // noUiSlider initialisieren
+            var slider = document.getElementById('nettomiete-slider');
+            noUiSlider.create(slider, {
+                start: [minPrice, maxPrice],
+                connect: true,
+                step: 50,
+                range: {
+                    'min': minPrice,
+                    'max': maxPrice
+                },
+                format: {
+                    to: function(value) {
+                        return Math.round(value);
+                    },
+                    from: function(value) {
+                        return Number(value);
+                    }
+                }
+            });
+
+            // Werte anzeigen
+            slider.noUiSlider.on('update', function(values, handle) {
+                document.getElementById('min-value').textContent = values[0];
+                document.getElementById('max-value').textContent = values[1];
+            });
+
+            // DataTables Custom Filter für Slider
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    var min = parseInt($('#min-nettomiete').val(), 10);
-                    var max = parseInt($('#max-nettomiete').val(), 10);
+                    var sliderValues = slider.noUiSlider.get();
+                    var min = parseFloat(sliderValues[0]);
+                    var max = parseFloat(sliderValues[1]);
                     var nettomiete = parseFloat(data[7].replace(/[^0-9.-]+/g,"")) || 0;
 
-                    if ((isNaN(min) && isNaN(max)) ||
-                        (isNaN(min) && nettomiete <= max) ||
-                        (min <= nettomiete && isNaN(max)) ||
-                        (min <= nettomiete && nettomiete <= max)) {
+                    if (nettomiete >= min && nettomiete <= max) {
                         return true;
                     }
                     return false;
                 }
             );
 
+            // DataTables initialisieren
             var table = $('#apartments-table').DataTable({
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
                 },
                 pageLength: 25,
-                lengthChange: false,  // "Zeilen anzeigen" ausblenden
-                searching: false,     // Suchfeld ausblenden
+                lengthChange: false,
+                searching: false,
                 order: [[0, 'asc']],
                 columnDefs: [
                     {
@@ -116,12 +169,12 @@
                             }
                         });
                     });
-
-                    // Range-Filter Event Handler
-                    $('#min-nettomiete, #max-nettomiete').on('keyup change', function() {
-                        table.draw();
-                    });
                 }
+            });
+
+            // Slider Event - Tabelle neu filtern
+            slider.noUiSlider.on('change', function() {
+                table.draw();
             });
         });
         </script>
