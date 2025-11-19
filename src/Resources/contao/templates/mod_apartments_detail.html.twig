@@ -64,35 +64,32 @@
                     </div>
                 {% endif %}
 
-                {% if apartment.imagegrundriss or apartment.imageetage %}
+                {% if apartment.imagegrundriss_path or apartment.imageetage_path %}
                     <div class="detail-section images-section">
                         <h2>Pläne & Bilder</h2>
                         <div class="images-grid">
-                            {% if apartment.imagegrundriss %}
+                            {% if apartment.imagegrundriss_path %}
                                 <div class="image-item">
                                     <h3>Grundriss</h3>
-                                    {{ contao_figure(apartment.imagegrundriss, null, {'size': '_apartments_image'}) }}
+                                    <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss">
                                 </div>
                             {% endif %}
-                            {% if apartment.imageetage %}
+                            {% if apartment.imageetage_path %}
                                 <div class="image-item">
                                     <h3>Etagenplan</h3>
-                                    {{ contao_figure(apartment.imageetage, null, {'size': '_apartments_image'}) }}
+                                    <img src="{{ apartment.imageetage_path }}" alt="Etagenplan">
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                 {% endif %}
 
-                {% if apartment.grundrisspdf %}
+                {% if apartment.grundrisspdf_path %}
                     <div class="detail-section download-section">
                         <h2>Downloads</h2>
-                        {% set pdfFile = file_context(apartment.grundrisspdf) %}
-                        {% if pdfFile %}
-                            <a href="{{ pdfFile.path }}" class="btn btn-download" download>
-                                Grundriss als PDF herunterladen
-                            </a>
-                        {% endif %}
+                        <a href="{{ apartment.grundrisspdf_path }}" class="btn btn-download" download>
+                            {{ apartment.grundrisspdf_name }} herunterladen
+                        </a>
                     </div>
                 {% endif %}
 
