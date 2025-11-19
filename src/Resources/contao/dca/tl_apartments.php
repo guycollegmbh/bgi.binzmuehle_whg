@@ -245,7 +245,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'inputType' => 'select',
             'options'   => ['Frei', 'Vermietet', 'Reserviert'],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
-            'sql'       => ['type' => 'string', 'length' => 8, 'default' => ''],
+            'sql'       => ['type' => 'string', 'length' => 64, 'default' => ''],
         ],
         'published' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['published'],
