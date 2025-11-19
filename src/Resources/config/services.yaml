@@ -8,7 +8,12 @@ services:
         resource: '../../'
         exclude: '../../{DependencyInjection,Resources}'
 
-    # Frontend Module Controllers werden automatisch erkannt durch #[AsFrontendModule]
-    Guycollegmbh\ApartmentsBundle\Controller\FrontendModule\:
-        resource: '../../Controller/FrontendModule'
-        tags: ['controller.service_arguments']
+    Guycollegmbh\ApartmentsBundle\Module\ApartmentsModule:
+        arguments:
+            $connection: '@database_connection'
+            $scopeMatcher: '@contao.routing.scope_matcher'
+            $requestStack: '@request_stack'
+        tags:
+            - name: 'contao.frontend_module'
+              category: 'miscellaneous'
+              type: 'apartments'
