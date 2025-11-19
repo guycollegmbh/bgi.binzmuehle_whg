@@ -9,7 +9,7 @@ use Contao\Module;
 
 class ApartmentsListModule extends Module
 {
-    protected $strTemplate = 'mod_apartments_list';
+    protected $strTemplate = 'mod_apartments_list'; // Twig sucht automatisch nach .html.twig
 
     protected function compile(): void
     {
