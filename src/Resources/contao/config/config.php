@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Guycollegmbh\ApartmentsBundle\Controller\FrontendModule\ApartmentsListController;
+use Guycollegmbh\ApartmentsBundle\Module\ApartmentsListModule;
 
 // Backend modules
 $GLOBALS['BE_MOD']['binzmuehle'] = [
@@ -11,8 +11,8 @@ $GLOBALS['BE_MOD']['binzmuehle'] = [
     ],
 ];
 
-// Frontend modules
-$GLOBALS['FE_MOD']['apartments']['apartments_list'] = ApartmentsListController::class;
+// Frontend modules - Legacy Style
+$GLOBALS['FE_MOD']['apartments']['apartments_list'] = ApartmentsListModule::class;
 
 // Backend-Stylesheet einbinden
-$GLOBALS['TL_CSS']['apartments_backend'] = 'bundles/apartments/css/static';
+$GLOBALS['TL_CSS']['apartments_backend'] = 'bundles/apartments/css/backend.css|static';
