@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Guycollegmbh\ApartmentsBundle\Controller\ApartmentsListController;
+use Guycollegmbh\ApartmentsBundle\Controller\FrontendModule\ApartmentsListController;
 
 // Backend modules
 $GLOBALS['BE_MOD']['binzmuehle'] = [
@@ -11,8 +11,8 @@ $GLOBALS['BE_MOD']['binzmuehle'] = [
     ],
 ];
 
-// Content Elements (nicht Frontend Module!)
-$GLOBALS['TL_CTE']['apartments']['apartments_list'] = ApartmentsListController::class;
+// Frontend modules
+$GLOBALS['FE_MOD']['apartments']['apartments_list'] = ApartmentsListController::class;
 
 // Backend-Stylesheet einbinden
-$GLOBALS['TL_CSS']['apartments_backend'] = 'bundles/apartments/css/backend.css|static';
+$GLOBALS['TL_CSS']['apartments_backend'] = 'bundles/apartments/css/static';

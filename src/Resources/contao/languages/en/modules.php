@@ -15,3 +15,8 @@ $GLOBALS['TL_LANG']['MOD']['angebotstypen'][0] = 'Angebotstypen';
 $GLOBALS['TL_LANG']['MOD']['angebotstypen'][1] = 'Hilfstabelle für Angebote';
 
 $GLOBALS['TL_LANG']['MOD']['wohnungen'] = 'Wohnungsverwaltung';
+
+
+
+$GLOBALS['TL_LANG']['FMD']['apartments'] = 'Wohnungen';
+$GLOBALS['TL_LANG']['FMD']['apartments_list'] = ['Wohnungsliste', 'Zeigt eine Liste aller Wohnungen an'];

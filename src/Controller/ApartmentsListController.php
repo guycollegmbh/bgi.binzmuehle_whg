@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Guycollegmbh\ApartmentsBundle\Controller;
+namespace Guycollegmbh\ApartmentsBundle\Controller\FrontendModule;
 
-use Contao\ContentModel;
-use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
-use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\Database;
+use Contao\ModuleModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AsContentElement(category: 'apartments', template: 'ce_apartments_list')]
-class ApartmentsListController extends AbstractContentElementController
+#[AsFrontendModule(category: 'apartments', template: 'mod_apartments_list')]
+class ApartmentsListController extends AbstractFrontendModuleController
 {
-    protected function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
+    protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
         // Hole alle veröffentlichten Apartments
         $apartments = Database::getInstance()
