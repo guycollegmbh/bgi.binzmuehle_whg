@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Guycollegmbh\ApartmentsBundle\Module;
 
-use Contao\BackendTemplate;
 use Contao\Database;
 use Contao\Module;
-use Contao\System;
 
 class ApartmentsListModule extends Module
 {
