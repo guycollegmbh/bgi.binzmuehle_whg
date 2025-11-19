@@ -15,34 +15,38 @@ class ApartmentsDetailModule extends Module
 
     protected function compile(): void
     {
-        // Hole die Objektnummer aus der URL
-        $objektnummer = Input::get('id');
+        // Hole die bereinigte Objektnummer aus der URL
+        $objektnummerUrl = Input::get('id');
 
-        // DEBUG
-        \System::log('Gesuchte Objektnummer: ' . $objektnummer, __METHOD__, TL_GENERAL);
-
-        if (!$objektnummer) {
+        if (!$objektnummerUrl) {
             $this->Template->apartment = null;
             $this->Template->error = 'Keine Wohnung ausgewählt.';
             return;
         }
 
-        // Hole die Wohnung anhand der Objektnummer aus der Datenbank
-        $apartment = Database::getInstance()
-            ->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ? AND published = ?')
-            ->limit(1)
-            ->execute($objektnummer, 1);
+        // Hole ALLE veröffentlichten Wohnungen und vergleiche die bereinigte Version
+        $apartments = Database::getInstance()
+            ->prepare('SELECT * FROM tl_apartments WHERE published = ?')
+            ->execute(1);
 
-        // DEBUG
-        \System::log('Gefundene Zeilen: ' . $apartment->numRows, __METHOD__, TL_GENERAL);
-
-        if ($apartment->numRows < 1) {
-            $this->Template->apartment = null;
-            $this->Template->error = 'Wohnung nicht gefunden. Gesuchte Objektnummer: ' . $objektnummer;
-            return;
+        $apartmentData = null;
+        
+        while ($apartments->next()) {
+            $row = $apartments->row();
+            // Bereinigte Version der DB-Objektnummer
+            $cleanObjNr = preg_replace('/[^a-zA-Z0-9-]/', '', $row['objektnummer']);
+            
+            if ($cleanObjNr === $objektnummerUrl) {
+                $apartmentData = $row;
+                break;
+            }
         }
 
-        $apartmentData = $apartment->row();
+        if (!$apartmentData) {
+            $this->Template->apartment = null;
+            $this->Template->error = 'Wohnung nicht gefunden.';
+            return;
+        }
 
         // Bilder vorbereiten
         if ($apartmentData['imagegrundriss']) {
