@@ -3,7 +3,7 @@
         <p class="no-apartments">Aktuell sind keine Wohnungen verfügbar.</p>
     {% else %}
         <div class="table-responsive">
-            <table class="apartments-table">
+            <table id="apartments-table" class="apartments-table display">
                 <thead>
                     <tr>
                         <th>Objekt-Nr.</th>
@@ -28,11 +28,11 @@
                             <td>{{ apartment.adresse|default('-') }}</td>
                             <td>{{ apartment.zeile|default('-') }}</td>
                             <td>{{ apartment.etage|default('-') }}</td>
-                            <td>{{ apartment.zimmer|default('-') }}</td>
-                            <td>{{ apartment.flaeche ? apartment.flaeche ~ ' m²' : '-' }}</td>
-                            <td>{{ apartment.nettomietzins ? 'CHF ' ~ apartment.nettomietzins : '-' }}</td>
-                            <td>{{ apartment.nebenkosten ? 'CHF ' ~ apartment.nebenkosten : '-' }}</td>
-                            <td>{{ apartment.bruttomietzins ? 'CHF ' ~ apartment.bruttomietzins : '-' }}</td>
+                            <td data-order="{{ apartment.zimmer|default('0') }}">{{ apartment.zimmer|default('-') }}</td>
+                            <td data-order="{{ apartment.flaeche|default('0') }}">{{ apartment.flaeche ? apartment.flaeche ~ ' m²' : '-' }}</td>
+                            <td data-order="{{ apartment.nettomietzins|default('0')|replace({'CHF ': '', ',': '', '.': ''}) }}">{{ apartment.nettomietzins ? 'CHF ' ~ apartment.nettomietzins : '-' }}</td>
+                            <td data-order="{{ apartment.nebenkosten|default('0')|replace({'CHF ': '', ',': '', '.': ''}) }}">{{ apartment.nebenkosten ? 'CHF ' ~ apartment.nebenkosten : '-' }}</td>
+                            <td data-order="{{ apartment.bruttomietzins|default('0')|replace({'CHF ': '', ',': '', '.': ''}) }}">{{ apartment.bruttomietzins ? 'CHF ' ~ apartment.bruttomietzins : '-' }}</td>
                             <td>
                                 {% if apartment.status %}
                                     <span class="badge status-{{ apartment.status|lower }}">{{ apartment.status }}</span>
@@ -41,12 +41,90 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="wohnungen/details?id={{ apartment.objektnummer_url }}" class="btn btn-details">Details</a>
+                                <a href="detail?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
+        <!-- jQuery (erforderlich für DataTables) -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+        <script>
+        $(document).ready(function() {
+            // Eigene Range-Filter-Funktion für Nettomiete
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var min = parseInt($('#min-nettomiete').val(), 10);
+                    var max = parseInt($('#max-nettomiete').val(), 10);
+                    var nettomiete = parseFloat(data[7].replace(/[^0-9.-]+/g,"")) || 0;
+
+                    if ((isNaN(min) && isNaN(max)) ||
+                        (isNaN(min) && nettomiete <= max) ||
+                        (min <= nettomiete && isNaN(max)) ||
+                        (min <= nettomiete && nettomiete <= max)) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            var table = $('#apartments-table').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
+                },
+                pageLength: 25,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    {
+                        targets: [11], // Details-Spalte
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                initComplete: function () {
+                    // Filter für Select-Spalten: Adresse, Zeile, Etage, Status (Index: 2, 3, 4, 10)
+                    this.api().columns([2, 3, 4, 10]).every(function () {
+                        var column = this;
+                        var select = $('<select class="dt-filter"><option value="">Alle</option></select>')
+                            .appendTo($(column.header()))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            var text = $(d).text() || d;
+                            if (text && text !== '-') {
+                                select.append('<option value="' + text + '">' + text + '</option>');
+                            }
+                        });
+                    });
+
+                    // Range-Filter für Nettomiete unter der Tabelle
+                    $('#apartments-table_wrapper').prepend(
+                        '<div class="range-filter">' +
+                            '<label>Nettomiete: ' +
+                                'von <input type="number" id="min-nettomiete" placeholder="Min" style="width: 80px;"> ' +
+                                'bis <input type="number" id="max-nettomiete" placeholder="Max" style="width: 80px;">' +
+                            '</label>' +
+                        '</div>'
+                    );
+
+                    $('#min-nettomiete, #max-nettomiete').on('keyup change', function() {
+                        table.draw();
+                    });
+                }
+            });
+        });
+        </script>
     {% endif %}
 </div>
