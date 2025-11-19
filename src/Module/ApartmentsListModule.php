@@ -6,10 +6,11 @@ namespace Guycollegmbh\ApartmentsBundle\Module;
 
 use Contao\Database;
 use Contao\Module;
+use Contao\StringUtil;
 
 class ApartmentsListModule extends Module
 {
-    protected $strTemplate = 'mod_apartments_list'; // Twig sucht automatisch nach .html.twig
+    protected $strTemplate = 'mod_apartments_list';
 
     protected function compile(): void
     {
@@ -20,7 +21,10 @@ class ApartmentsListModule extends Module
 
         $apartmentsList = [];
         while ($apartments->next()) {
-            $apartmentsList[] = $apartments->row();
+            $data = $apartments->row();
+            // URL-sichere Objektnummer erstellen
+            $data['objektnummer_url'] = preg_replace('/[^a-zA-Z0-9-]/', '', $data['objektnummer']);
+            $apartmentsList[] = $data;
         }
 
         $this->Template->apartments = $apartmentsList;
