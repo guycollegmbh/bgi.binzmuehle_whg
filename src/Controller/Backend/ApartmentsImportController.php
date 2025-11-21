@@ -12,7 +12,7 @@ use Contao\Input;
 use Contao\Message;
 use Contao\System;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class ApartmentsImportController extends Backend
 {
@@ -118,7 +118,12 @@ class ApartmentsImportController extends Backend
             
         } catch (\Exception $e) {
             Message::addError('Fehler beim Import: ' . $e->getMessage());
-            System::log('Apartments Import Error: ' . $e->getMessage(), __METHOD__, TL_ERROR);
+            
+            // Logger für Contao 5
+            $logger = System::getContainer()->get('monolog.logger.contao');
+            if ($logger instanceof LoggerInterface) {
+                $logger->error('Apartments Import Error: ' . $e->getMessage(), ['exception' => $e]);
+            }
         }
     }
 }
