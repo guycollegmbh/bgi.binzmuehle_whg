@@ -6,11 +6,9 @@ use Guycollegmbh\ApartmentsBundle\Module\ApartmentsListModule;
 use Guycollegmbh\ApartmentsBundle\Module\ApartmentsDetailModule;
 
 // Backend modules
-$GLOBALS['BE_MOD']['binzmuehle'] = [
-    'apartments' => [
-        'tables' => ['tl_apartments', 'tl_zielgruppen', 'tl_zuweisendestellen', 'tl_angebotstypen'],
-        'import' => ['Guycollegmbh\ApartmentsBundle\Controller\Backend\ApartmentsImportController', 'importApartments'],
-    ],
+$GLOBALS['BE_MOD']['binzmuehle']['apartments'] = [
+    'tables' => ['tl_apartments'],
+    'import' => ['Guycollegmbh\ApartmentsBundle\Controller\Backend\ApartmentsImportController', 'importApartments'],
 ];
 
 // Frontend modules

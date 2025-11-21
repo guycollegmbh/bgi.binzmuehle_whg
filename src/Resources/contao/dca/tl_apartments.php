@@ -40,6 +40,18 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'fields' => ['objektnummer', 'bezeichnung', 'etage', 'zimmer', 'bauetappe', 'zeile', 'status'],
             'format' => '<strong>%s</strong> - %s <span style="color:#999;">(%s | %s Zi. | Bauetappe: %s | %s  | %s)</span>',
         ],
+        'global_operations' => [
+            'import' => [
+                'href'  => 'key=import',
+                'class' => 'header_import',
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
+            ],
+            'all' => [
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
+            ],
+        ],
         'operations' => [
             'edit' => [
                 'href'  => 'act=edit',
