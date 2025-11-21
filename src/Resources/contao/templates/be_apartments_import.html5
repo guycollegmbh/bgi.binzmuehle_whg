@@ -1,48 +1,59 @@
-<?php $this->extend('be_main'); ?>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Wohnungen importieren</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/contao/css/main.min.css">
+</head>
+<body class="__ua__ __os__ popup">
 
-<?php $this->block('main'); ?>
+<div id="container">
+    <main id="main">
+        <div id="tl_buttons">
+            <a href="<?= $this->href ?>" class="header_back" title="<?= $this->title ?>"><?= $this->title ?></a>
+        </div>
 
-<div id="tl_buttons">
-    <a href="<?= $this->href ?>" class="header_back" title="<?= $this->title ?>"><?= $this->title ?></a>
+        <h2 class="sub_headline">Wohnungen importieren</h2>
+
+        <div class="tl_formbody_edit">
+            <div class="tl_tbox">
+                <h3>Excel-Datei hochladen</h3>
+                <p>Laden Sie eine Excel-Datei mit folgender Struktur hoch:</p>
+                <ul>
+                    <li><strong>Spalte A:</strong> Objektnummer (Pflicht)</li>
+                    <li><strong>Spalte B:</strong> Bezeichnung</li>
+                    <li><strong>Spalte C:</strong> Bauetappe</li>
+                    <li><strong>Spalte D:</strong> Zeile</li>
+                    <li><strong>Spalte E:</strong> Adresse</li>
+                    <li><strong>Spalte F:</strong> Etage</li>
+                    <li><strong>Spalte G:</strong> Zimmer</li>
+                    <li><strong>Spalte H:</strong> Fläche</li>
+                    <li><strong>Spalte I:</strong> Nettomiete</li>
+                    <li><strong>Spalte J:</strong> Nebenkosten</li>
+                    <li><strong>Spalte K:</strong> Bruttomiete</li>
+                    <li><strong>Spalte L:</strong> Status</li>
+                </ul>
+                
+                <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird übersprungen. Bestehende Wohnungen (gleiche Objektnummer) werden aktualisiert.</p>
+                
+                <form action="<?= $this->action ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import">
+                    <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
+                    
+                    <div class="widget">
+                        <h3><label for="import_file">Excel-Datei (.xlsx oder .xls)</label></h3>
+                        <input type="file" name="import_file" id="import_file" accept=".xlsx,.xls" required class="tl_text">
+                    </div>
+                    
+                    <div class="tl_submit_container">
+                        <button type="submit" name="save" class="tl_submit">Importieren</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
 </div>
 
-<h2 class="sub_headline">Wohnungen importieren</h2>
-
-<div class="tl_formbody_edit">
-    <div class="tl_tbox">
-        <h3>Excel-Datei hochladen</h3>
-        <p>Laden Sie eine Excel-Datei mit folgender Struktur hoch:</p>
-        <ul>
-            <li><strong>Spalte A:</strong> Objektnummer (Pflicht)</li>
-            <li><strong>Spalte B:</strong> Bezeichnung</li>
-            <li><strong>Spalte C:</strong> Bauetappe</li>
-            <li><strong>Spalte D:</strong> Zeile</li>
-            <li><strong>Spalte E:</strong> Adresse</li>
-            <li><strong>Spalte F:</strong> Etage</li>
-            <li><strong>Spalte G:</strong> Zimmer</li>
-            <li><strong>Spalte H:</strong> Fläche</li>
-            <li><strong>Spalte I:</strong> Nettomiete</li>
-            <li><strong>Spalte J:</strong> Nebenkosten</li>
-            <li><strong>Spalte K:</strong> Bruttomiete</li>
-            <li><strong>Spalte L:</strong> Status</li>
-        </ul>
-        
-        <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird übersprungen. Bestehende Wohnungen (gleiche Objektnummer) werden aktualisiert.</p>
-        
-        <form action="<?= $this->action ?>" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import">
-            <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
-            
-            <div class="widget">
-                <h3><label for="import_file">Excel-Datei</label></h3>
-                <input type="file" name="import_file" id="import_file" accept=".xlsx,.xls" required>
-            </div>
-            
-            <div class="tl_submit_container">
-                <button type="submit" name="save" class="tl_submit">Importieren</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<?php $this->endblock(); ?>
+</body>
+</html>
