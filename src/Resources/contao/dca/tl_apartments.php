@@ -45,7 +45,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'label' => &$GLOBALS['TL_LANG']['tl_apartments']['import'],
                 'href'  => 'key=import',
                 'class' => 'header_new',
-                'icon'  => 'upload.svg',
+                'icon'  => 'new.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
             ],
             'all' => [
