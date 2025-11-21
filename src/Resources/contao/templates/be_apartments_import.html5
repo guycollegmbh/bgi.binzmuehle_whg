@@ -33,6 +33,7 @@
             color: #333;
             font-size: 24px;
             font-weight: 600;
+            text-align:left;
         }
         
         .import-instructions {
@@ -56,8 +57,8 @@
         }
         
         .column-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 8px;
             margin-top: 15px;
         }
@@ -65,10 +66,10 @@
         .column-item {
             display: flex;
             align-items: center;
-            padding: 10px 12px;
+            padding: 8px 12px;
             background: white;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 13px;
         }
         
         .column-letter {
@@ -395,8 +396,8 @@
 <div class="import-container">
     <div class="import-card">
         <div class="import-header">
-            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;">← <?= $this->title ?></a>
-            <h2>📥 Wohnungen importieren</h2>
+            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;"><?= $this->title ?></a>
+            <h2>📥 Elemente importieren</h2>
         </div>
 
         <?php if ($this->preview): ?>
@@ -404,7 +405,7 @@
             
             <div class="summary-stats">
                 <div class="stat-card new">
-                    <div class="stat-label">Neue Wohnungen</div>
+                    <div class="stat-label">Neue Elemente</div>
                     <div class="stat-number"><?= count($this->preview['new']) ?></div>
                 </div>
                 <div class="stat-card update">
@@ -419,7 +420,7 @@
             
             <?php if (!empty($this->preview['new'])): ?>
                 <div class="preview-section">
-                    <h3><span class="status-badge status-new">✓ Neue Wohnungen (<?= count($this->preview['new']) ?>)</span></h3>
+                    <h3><span class="status-badge status-new">✓ Neue Elemente (<?= count($this->preview['new']) ?>)</span></h3>
                     <table class="preview-table">
                         <thead>
                             <tr>
