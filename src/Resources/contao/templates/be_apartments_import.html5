@@ -11,7 +11,7 @@
         }
         
         .import-container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
         }
@@ -33,6 +33,7 @@
             color: #333;
             font-size: 24px;
             font-weight: 600;
+            text-align: left;
         }
         
         .import-instructions {
@@ -399,8 +400,8 @@
 <div class="import-container">
     <div class="import-card">
         <div class="import-header">
-            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;">← <?= $this->title ?></a>
-            <h2>📥 Wohnungen importieren</h2>
+            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;"><?= $this->title ?></a>
+            <h2>Elemente importieren</h2>
         </div>
 
         <?php if ($this->preview): ?>
@@ -408,7 +409,7 @@
             
             <div class="summary-stats">
                 <div class="stat-card new">
-                    <div class="stat-label">Neue Wohnungen</div>
+                    <div class="stat-label">Neue Elemente</div>
                     <div class="stat-number"><?= count($this->preview['new']) ?></div>
                 </div>
                 <div class="stat-card update">
@@ -423,7 +424,7 @@
             
             <?php if (!empty($this->preview['new'])): ?>
                 <div class="preview-section">
-                    <h3><span class="status-badge status-new">✓ Neue Wohnungen (<?= count($this->preview['new']) ?>)</span></h3>
+                    <h3><span class="status-badge status-new">✓ Neue Elemente (<?= count($this->preview['new']) ?>)</span></h3>
                     <table class="preview-table">
                         <thead>
                             <tr>
