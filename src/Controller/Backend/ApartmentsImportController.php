@@ -81,7 +81,7 @@ class ApartmentsImportController extends Backend
                     $data[] = $cell->getValue();
                 }
                 
-                $objektnummer = trim($data[0] ?? '');
+                $objektnummer = trim((string)($data[0] ?? ''));
                 
                 if (empty($objektnummer)) {
                     $preview['skip'][] = [
@@ -92,18 +92,18 @@ class ApartmentsImportController extends Backend
                 }
                 
                 $apartmentData = [
-                    'objektnummer' => trim($objektnummer),
-                    'bezeichnung' => trim($data[1] ?? ''),
-                    'bauetappe' => trim($data[2] ?? ''),
-                    'zeile' => trim($data[3] ?? ''),
-                    'adresse' => trim($data[4] ?? ''),
-                    'etage' => trim($data[5] ?? ''),
-                    'zimmer' => trim($data[6] ?? ''),
-                    'flaeche' => trim($data[7] ?? ''),
-                    'nettomietzins' => trim($data[8] ?? ''),
-                    'nebenkosten' => trim($data[9] ?? ''),
-                    'bruttomietzins' => trim($data[10] ?? ''),
-                    'status' => trim($data[11] ?? '') ?: 'Frei',
+                    'objektnummer' => trim((string)$objektnummer),
+                    'bezeichnung' => trim((string)($data[1] ?? '')),
+                    'bauetappe' => trim((string)($data[2] ?? '')),
+                    'zeile' => trim((string)($data[3] ?? '')),
+                    'adresse' => trim((string)($data[4] ?? '')),
+                    'etage' => trim((string)($data[5] ?? '')),
+                    'zimmer' => trim((string)($data[6] ?? '')),
+                    'flaeche' => trim((string)($data[7] ?? '')),
+                    'nettomietzins' => trim((string)($data[8] ?? '')),
+                    'nebenkosten' => trim((string)($data[9] ?? '')),
+                    'bruttomietzins' => trim((string)($data[10] ?? '')),
+                    'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
                 ];
                 
                 // Prüfen ob Wohnung bereits existiert
@@ -242,18 +242,18 @@ class ApartmentsImportController extends Backend
                 
                 $apartmentData = [
                     'tstamp' => time(),
-                    'objektnummer' => trim($objektnummer),
-                    'bezeichnung' => trim($data[1] ?? ''),
-                    'bauetappe' => trim($data[2] ?? ''),
-                    'zeile' => trim($data[3] ?? ''),
-                    'adresse' => trim($data[4] ?? ''),
-                    'etage' => trim($data[5] ?? ''),
-                    'zimmer' => trim($data[6] ?? ''),
-                    'flaeche' => trim($data[7] ?? ''),
-                    'nettomietzins' => trim($data[8] ?? ''),
-                    'nebenkosten' => trim($data[9] ?? ''),
-                    'bruttomietzins' => trim($data[10] ?? ''),
-                    'status' => trim($data[11] ?? '') ?: 'Frei',
+                    'objektnummer' => trim((string)$objektnummer),
+                    'bezeichnung' => trim((string)($data[1] ?? '')),
+                    'bauetappe' => trim((string)($data[2] ?? '')),
+                    'zeile' => trim((string)($data[3] ?? '')),
+                    'adresse' => trim((string)($data[4] ?? '')),
+                    'etage' => trim((string)($data[5] ?? '')),
+                    'zimmer' => trim((string)($data[6] ?? '')),
+                    'flaeche' => trim((string)($data[7] ?? '')),
+                    'nettomietzins' => trim((string)($data[8] ?? '')),
+                    'nebenkosten' => trim((string)($data[9] ?? '')),
+                    'bruttomietzins' => trim((string)($data[10] ?? '')),
+                    'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
                     'published' => true,
                 ];
                 
