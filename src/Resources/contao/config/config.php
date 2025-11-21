@@ -12,6 +12,13 @@ $GLOBALS['BE_MOD']['binzmuehle'] = [
     ],
 ];
 
+$GLOBALS['BE_MOD']['binzmuehle'] = [
+    'apartments' => [
+        'tables' => ['tl_apartments', 'tl_zielgruppen', 'tl_zuweisendestellen', 'tl_angebotstypen'],
+        'import' => ['Guycollegmbh\ApartmentsBundle\Controller\Backend\ApartmentsImportController', 'importApartments'],
+    ],
+];
+
 // Frontend modules
 $GLOBALS['FE_MOD']['apartments']['apartments_list'] = ApartmentsListModule::class;
 $GLOBALS['FE_MOD']['apartments']['apartments_detail'] = ApartmentsDetailModule::class;

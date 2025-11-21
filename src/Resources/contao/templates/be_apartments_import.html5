@@ -1,0 +1,48 @@
+<?php $this->extend('be_main'); ?>
+
+<?php $this->block('main'); ?>
+
+<div id="tl_buttons">
+    <a href="<?= $this->href ?>" class="header_back" title="<?= $this->title ?>"><?= $this->title ?></a>
+</div>
+
+<h2 class="sub_headline">Wohnungen importieren</h2>
+
+<div class="tl_formbody_edit">
+    <div class="tl_tbox">
+        <h3>Excel-Datei hochladen</h3>
+        <p>Laden Sie eine Excel-Datei mit folgender Struktur hoch:</p>
+        <ul>
+            <li><strong>Spalte A:</strong> Objektnummer (Pflicht)</li>
+            <li><strong>Spalte B:</strong> Bezeichnung</li>
+            <li><strong>Spalte C:</strong> Bauetappe</li>
+            <li><strong>Spalte D:</strong> Zeile</li>
+            <li><strong>Spalte E:</strong> Adresse</li>
+            <li><strong>Spalte F:</strong> Etage</li>
+            <li><strong>Spalte G:</strong> Zimmer</li>
+            <li><strong>Spalte H:</strong> Fläche</li>
+            <li><strong>Spalte I:</strong> Nettomiete</li>
+            <li><strong>Spalte J:</strong> Nebenkosten</li>
+            <li><strong>Spalte K:</strong> Bruttomiete</li>
+            <li><strong>Spalte L:</strong> Status</li>
+        </ul>
+        
+        <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird übersprungen. Bestehende Wohnungen (gleiche Objektnummer) werden aktualisiert.</p>
+        
+        <form action="<?= $this->action ?>" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import">
+            <input type="hidden" name="REQUEST_TOKEN" value="<?= REQUEST_TOKEN ?>">
+            
+            <div class="widget">
+                <h3><label for="import_file">Excel-Datei</label></h3>
+                <input type="file" name="import_file" id="import_file" accept=".xlsx,.xls" required>
+            </div>
+            
+            <div class="tl_submit_container">
+                <button type="submit" name="save" class="tl_submit">Importieren</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php $this->endblock(); ?>
