@@ -44,6 +44,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'import' => [
                 'href'  => 'key=import',
                 'class' => 'header_import',
+                'icon'  => 'bundles/contaocore/images/upload.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
             ],
             'all' => [
