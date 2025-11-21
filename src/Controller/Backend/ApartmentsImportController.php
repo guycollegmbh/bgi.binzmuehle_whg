@@ -82,10 +82,19 @@ class ApartmentsImportController extends Backend
                 }
                 
                 $objektnummer = trim((string)($data[0] ?? ''));
-                
+
                 if (empty($objektnummer)) {
+                    // Prüfe ob die Zeile komplett leer ist
+                    $hasData = false;
+                    foreach ($data as $cell) {
+                        if (!empty(trim((string)$cell))) {
+                            $hasData = true;
+                            break;
+                        }
+                    }
+                    
                     $preview['skip'][] = [
-                        'reason' => 'Keine Objektnummer',
+                        'reason' => $hasData ? 'Keine Objektnummer vorhanden' : 'Leere Zeile',
                         'data' => $data,
                     ];
                     continue;

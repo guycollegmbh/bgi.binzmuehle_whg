@@ -341,10 +341,6 @@
             <h2>📥 Wohnungen importieren</h2>
         </div>
 
-        <?php if ($this->messages): ?>
-            <?= $this->messages ?>
-        <?php endif; ?>
-
         <?php if ($this->preview): ?>
             <!-- Vorschau anzeigen -->
             <h3>📊 Import-Vorschau</h3>
@@ -434,11 +430,42 @@
             <?php if (!empty($this->preview['skip'])): ?>
                 <div class="preview-section skip">
                     <h3><span class="status-badge status-skip">⊘ Übersprungene Zeilen (<?= count($this->preview['skip']) ?>)</span></h3>
-                    <ul>
-                        <?php foreach ($this->preview['skip'] as $item): ?>
-                            <li><?= $item['reason'] ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+                    
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>Grund</th>
+                                <th>Daten aus Excel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->preview['skip'] as $item): ?>
+                                <tr>
+                                    <td><strong style="color: #dc3545;"><?= $item['reason'] ?></strong></td>
+                                    <td>
+                                        <?php if (!empty($item['data'])): ?>
+                                            <div style="font-family: monospace; font-size: 12px;">
+                                                <?php 
+                                                $dataPreview = array_filter($item['data'], function($val) {
+                                                    return $val !== null && $val !== '';
+                                                });
+                                                if (!empty($dataPreview)) {
+                                                    echo implode(' | ', array_map(function($val) {
+                                                        return htmlspecialchars($val);
+                                                    }, $dataPreview));
+                                                } else {
+                                                    echo '<em style="color: #999;">Leere Zeile</em>';
+                                                }
+                                                ?>
+                                            </div>
+                                        <?php else: ?>
+                                            <em style="color: #999;">Keine Daten</em>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             <?php endif; ?>
 
