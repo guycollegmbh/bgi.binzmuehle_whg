@@ -6,65 +6,340 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="/assets/contao/css/main.min.css">
     <style>
-        .preview-section {
+        body {
+            background: #f0f0f0;
+        }
+        
+        .import-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .import-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .import-header {
+            border-bottom: 3px solid #f47c00;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .import-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 28px;
+        }
+        
+        .import-instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
             margin: 20px 0;
-            padding: 15px;
-            background: #f5f5f5;
             border-radius: 4px;
         }
-        .preview-section h3 {
+        
+        .import-instructions h3 {
             margin-top: 0;
+            color: #007bff;
+            font-size: 18px;
+        }
+        
+        .column-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .column-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .column-letter {
+            background: #007bff;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .column-name {
+            font-weight: 500;
             color: #333;
         }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #fafafa;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #007bff;
+            background: #f0f7ff;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        .file-input-wrapper input[type="file"] {
+            font-size: 16px;
+            padding: 12px 20px;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        
+        .hint-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: start;
+        }
+        
+        .hint-icon {
+            color: #ffc107;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .preview-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .preview-section.update {
+            border-left-color: #ffc107;
+        }
+        
+        .preview-section.skip {
+            border-left-color: #dc3545;
+        }
+        
+        .preview-section h3 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .preview-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
+            margin: 15px 0;
             background: white;
+            border-radius: 4px;
+            overflow: hidden;
         }
+        
         .preview-table th,
         .preview-table td {
-            padding: 8px;
-            border: 1px solid #ddd;
+            padding: 12px;
             text-align: left;
+            border-bottom: 1px solid #e0e0e0;
         }
+        
         .preview-table th {
-            background: #e9e9e9;
+            background: #f8f9fa;
             font-weight: 600;
+            color: #495057;
         }
+        
+        .preview-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .change-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
+        
+        .change-header {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
         .change-old {
             color: #dc3545;
             text-decoration: line-through;
+            padding: 4px 8px;
+            background: #f8d7da;
+            border-radius: 3px;
+            display: inline-block;
         }
+        
         .change-new {
             color: #28a745;
             font-weight: 600;
+            padding: 4px 8px;
+            background: #d4edda;
+            border-radius: 3px;
+            display: inline-block;
         }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
         .status-new {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-update {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-skip {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .confirm-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .stat-card.new .stat-number {
             color: #28a745;
         }
-        .status-update {
+        
+        .stat-card.update .stat-number {
             color: #ffc107;
         }
-        .status-skip {
-            color: #6c757d;
-        }
-        .confirm-buttons {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
+        
+        .stat-card.skip .stat-number {
+            color: #dc3545;
         }
     </style>
 </head>
-<body class="__ua__ __os__ popup">
+<body class="__ua__ __os__">
 
-<div id="container">
-    <main id="main">
-        <div id="tl_buttons">
-            <a href="<?= $this->href ?>" class="header_back" title="<?= $this->title ?>"><?= $this->title ?></a>
+<div class="import-container">
+    <div class="import-card">
+        <div class="import-header">
+            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;">← <?= $this->title ?></a>
+            <h2>📥 Wohnungen importieren</h2>
         </div>
-
-        <h2 class="sub_headline">Wohnungen importieren</h2>
 
         <?php if ($this->messages): ?>
             <?= $this->messages ?>
@@ -72,146 +347,206 @@
 
         <?php if ($this->preview): ?>
             <!-- Vorschau anzeigen -->
-            <div class="tl_formbody_edit">
-                <h3>Import-Vorschau</h3>
-                
-                <?php if (!empty($this->preview['new'])): ?>
-                    <div class="preview-section">
-                        <h3 class="status-new">✓ Neue Wohnungen (<?= count($this->preview['new']) ?>)</h3>
-                        <table class="preview-table">
-                            <thead>
-                                <tr>
-                                    <th>Objektnr.</th>
-                                    <th>Bezeichnung</th>
-                                    <th>Bauetappe</th>
-                                    <th>Zeile</th>
-                                    <th>Adresse</th>
-                                    <th>Etage</th>
-                                    <th>Zimmer</th>
-                                    <th>Nettomiete</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($this->preview['new'] as $item): ?>
-                                    <tr>
-                                        <td><?= $item['objektnummer'] ?></td>
-                                        <td><?= $item['bezeichnung'] ?></td>
-                                        <td><?= $item['bauetappe'] ?></td>
-                                        <td><?= $item['zeile'] ?></td>
-                                        <td><?= $item['adresse'] ?></td>
-                                        <td><?= $item['etage'] ?></td>
-                                        <td><?= $item['zimmer'] ?></td>
-                                        <td><?= $item['nettomietzins'] ?></td>
-                                        <td><?= $item['status'] ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (!empty($this->preview['update'])): ?>
-                    <div class="preview-section">
-                        <h3 class="status-update">↻ Zu aktualisierende Wohnungen (<?= count($this->preview['update']) ?>)</h3>
-                        <?php foreach ($this->preview['update'] as $item): ?>
-                            <div style="margin: 15px 0; padding: 10px; background: white; border-left: 4px solid #ffc107;">
-                                <strong>Objektnummer: <?= $item['objektnummer'] ?> (ID: <?= $item['id'] ?>)</strong>
-                                <?php if (!empty($item['changes'])): ?>
-                                    <table class="preview-table" style="margin-top: 10px;">
-                                        <thead>
-                                            <tr>
-                                                <th>Feld</th>
-                                                <th>Alt</th>
-                                                <th>Neu</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($item['changes'] as $field => $change): ?>
-                                                <tr>
-                                                    <td><strong><?= $field ?></strong></td>
-                                                    <td class="change-old"><?= $change['old'] ?: '(leer)' ?></td>
-                                                    <td class="change-new"><?= $change['new'] ?: '(leer)' ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                <?php else: ?>
-                                    <p style="color: #6c757d; margin: 5px 0;">Keine Änderungen</p>
-                                <?php endif; ?>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (!empty($this->preview['skip'])): ?>
-                    <div class="preview-section">
-                        <h3 class="status-skip">⊘ Übersprungene Zeilen (<?= count($this->preview['skip']) ?>)</h3>
-                        <ul>
-                            <?php foreach ($this->preview['skip'] as $item): ?>
-                                <li><?= $item['reason'] ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Bestätigungs-Formular -->
-                <form action="<?= $this->action ?>" method="post">
-                    <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import_confirm">
-                    <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
-                    <input type="hidden" name="temp_file" value="<?= $this->preview['tempFile'] ?>">
-                    
-                    <div class="confirm-buttons">
-                        <button type="submit" class="tl_submit" style="background: #28a745;">
-                            ✓ Import bestätigen und ausführen
-                        </button>
-                        <a href="<?= $this->action ?>" class="tl_submit" style="background: #6c757d; text-decoration: none;">
-                            Abbrechen
-                        </a>
-                    </div>
-                </form>
+            <h3>📊 Import-Vorschau</h3>
+            
+            <div class="summary-stats">
+                <div class="stat-card new">
+                    <div class="stat-label">Neue Wohnungen</div>
+                    <div class="stat-number"><?= count($this->preview['new']) ?></div>
+                </div>
+                <div class="stat-card update">
+                    <div class="stat-label">Aktualisierungen</div>
+                    <div class="stat-number"><?= count($this->preview['update']) ?></div>
+                </div>
+                <div class="stat-card skip">
+                    <div class="stat-label">Übersprungen</div>
+                    <div class="stat-number"><?= count($this->preview['skip']) ?></div>
+                </div>
             </div>
+            
+            <?php if (!empty($this->preview['new'])): ?>
+                <div class="preview-section">
+                    <h3><span class="status-badge status-new">✓ Neue Wohnungen (<?= count($this->preview['new']) ?>)</span></h3>
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>Objektnr.</th>
+                                <th>Bezeichnung</th>
+                                <th>Bauetappe</th>
+                                <th>Zeile</th>
+                                <th>Adresse</th>
+                                <th>Etage</th>
+                                <th>Zimmer</th>
+                                <th>Nettomiete</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->preview['new'] as $item): ?>
+                                <tr>
+                                    <td><strong><?= $item['objektnummer'] ?></strong></td>
+                                    <td><?= $item['bezeichnung'] ?></td>
+                                    <td><?= $item['bauetappe'] ?></td>
+                                    <td><?= $item['zeile'] ?></td>
+                                    <td><?= $item['adresse'] ?></td>
+                                    <td><?= $item['etage'] ?></td>
+                                    <td><?= $item['zimmer'] ?></td>
+                                    <td><?= $item['nettomietzins'] ?></td>
+                                    <td><?= $item['status'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($this->preview['update'])): ?>
+                <div class="preview-section update">
+                    <h3><span class="status-badge status-update">↻ Zu aktualisierende Wohnungen (<?= count($this->preview['update']) ?>)</span></h3>
+                    <?php foreach ($this->preview['update'] as $item): ?>
+                        <div class="change-item">
+                            <div class="change-header">📝 Objektnummer: <?= $item['objektnummer'] ?> (ID: <?= $item['id'] ?>)</div>
+                            <?php if (!empty($item['changes'])): ?>
+                                <table class="preview-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 150px;">Feld</th>
+                                            <th>Alt</th>
+                                            <th>Neu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($item['changes'] as $field => $change): ?>
+                                            <tr>
+                                                <td><strong><?= $field ?></strong></td>
+                                                <td><span class="change-old"><?= $change['old'] ?: '(leer)' ?></span></td>
+                                                <td><span class="change-new"><?= $change['new'] ?: '(leer)' ?></span></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($this->preview['skip'])): ?>
+                <div class="preview-section skip">
+                    <h3><span class="status-badge status-skip">⊘ Übersprungene Zeilen (<?= count($this->preview['skip']) ?>)</span></h3>
+                    <ul>
+                        <?php foreach ($this->preview['skip'] as $item): ?>
+                            <li><?= $item['reason'] ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+            <!-- Bestätigungs-Formular -->
+            <form action="<?= $this->action ?>" method="post">
+                <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import_confirm">
+                <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
+                <input type="hidden" name="temp_file" value="<?= $this->preview['tempFile'] ?>">
+                
+                <div class="confirm-buttons">
+                    <button type="submit" class="btn-success">
+                        ✓ Import bestätigen und ausführen
+                    </button>
+                    <a href="<?= $this->action ?>" class="btn-secondary">
+                        Abbrechen
+                    </a>
+                </div>
+            </form>
+        </div>
 
         <?php else: ?>
             <!-- Upload-Formular -->
-            <div class="tl_formbody_edit">
-                <div class="tl_tbox">
-                    <h3>Excel-Datei hochladen</h3>
-                    <p>Laden Sie eine Excel-Datei mit folgender Struktur hoch:</p>
-                    <ul>
-                        <li><strong>Spalte A:</strong> Objektnummer (Pflicht)</li>
-                        <li><strong>Spalte B:</strong> Bezeichnung</li>
-                        <li><strong>Spalte C:</strong> Bauetappe</li>
-                        <li><strong>Spalte D:</strong> Zeile</li>
-                        <li><strong>Spalte E:</strong> Adresse</li>
-                        <li><strong>Spalte F:</strong> Etage</li>
-                        <li><strong>Spalte G:</strong> Zimmer</li>
-                        <li><strong>Spalte H:</strong> Fläche</li>
-                        <li><strong>Spalte I:</strong> Nettomiete</li>
-                        <li><strong>Spalte J:</strong> Nebenkosten</li>
-                        <li><strong>Spalte K:</strong> Bruttomiete</li>
-                        <li><strong>Spalte L:</strong> Status</li>
-                    </ul>
-                    
-                    <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird übersprungen.</p>
-                    
-                    <form action="<?= $this->action ?>" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import">
-                        <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
-                        
-                        <div class="widget">
-                            <h3><label for="import_file">Excel-Datei (.xlsx oder .xls)</label></h3>
-                            <input type="file" name="import_file" id="import_file" accept=".xlsx,.xls" required class="tl_text">
-                        </div>
-                        
-                        <div class="tl_submit_container">
-                            <button type="submit" name="preview" class="tl_submit">Vorschau anzeigen</button>
-                        </div>
-                    </form>
+            <div class="import-instructions">
+                <h3>📋 Excel-Datei Struktur</h3>
+                <p>Ihre Excel-Datei muss folgende Spalten in dieser Reihenfolge enthalten:</p>
+                
+                <div class="column-list">
+                    <div class="column-item">
+                        <div class="column-letter">A</div>
+                        <div class="column-name">Objektnummer *</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">B</div>
+                        <div class="column-name">Bezeichnung</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">C</div>
+                        <div class="column-name">Bauetappe</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">D</div>
+                        <div class="column-name">Zeile</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">E</div>
+                        <div class="column-name">Adresse</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">F</div>
+                        <div class="column-name">Etage</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">G</div>
+                        <div class="column-name">Zimmer</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">H</div>
+                        <div class="column-name">Fläche</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">I</div>
+                        <div class="column-name">Nettomiete</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">J</div>
+                        <div class="column-name">Nebenkosten</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">K</div>
+                        <div class="column-name">Bruttomiete</div>
+                    </div>
+                    <div class="column-item">
+                        <div class="column-letter">L</div>
+                        <div class="column-name">Status</div>
+                    </div>
                 </div>
             </div>
+            
+            <div class="hint-box">
+                <div class="hint-icon">💡</div>
+                <div>
+                    <strong>Hinweis:</strong> Die erste Zeile (Header) wird automatisch übersprungen. 
+                    Bestehende Wohnungen mit gleicher Objektnummer werden aktualisiert.
+                </div>
+            </div>
+            
+            <form action="<?= $this->action ?>" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import">
+                <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
+                
+                <div class="upload-area">
+                    <div class="upload-icon">📄</div>
+                    <h3>Excel-Datei auswählen</h3>
+                    <p style="color: #6c757d; margin: 10px 0;">Unterstützte Formate: .xlsx, .xls</p>
+                    
+                    <div class="file-input-wrapper">
+                        <input type="file" name="import_file" id="import_file" accept=".xlsx,.xls" required>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" class="btn-primary">
+                        🔍 Vorschau anzeigen
+                    </button>
+                </div>
+            </form>
         <?php endif; ?>
-    </main>
+    </div>
 </div>
 
 </body>
