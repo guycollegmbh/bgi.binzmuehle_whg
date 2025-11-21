@@ -29,25 +29,166 @@ class ApartmentsImportController extends Backend
         $csrfTokenManager = System::getContainer()->get('contao.csrf.token_manager');
         $template->requestToken = $csrfTokenManager->getToken(System::getContainer()->getParameter('contao.csrf_token_name'))->getValue();
         
-        // Wenn Datei hochgeladen wurde
-        if (Input::post('FORM_SUBMIT') === 'tl_apartments_import') {
+        // Messages für Template
+        $template->messages = Message::generate();
+        $template->preview = null;
+        
+        // Schritt 2: Bestätigung und Import
+        if (Input::post('FORM_SUBMIT') === 'tl_apartments_import_confirm') {
             $this->processImport();
+            $template->messages = Message::generate();
+        }
+        // Schritt 1: Vorschau generieren
+        elseif (Input::post('FORM_SUBMIT') === 'tl_apartments_import') {
+            $preview = $this->generatePreview();
+            if ($preview) {
+                $template->preview = $preview;
+            }
+            $template->messages = Message::generate();
         }
         
         return $template->parse();
     }
     
-    protected function processImport()
+    protected function generatePreview()
     {
         $uploadedFile = $_FILES['import_file'] ?? null;
         
         if (!$uploadedFile || $uploadedFile['error'] !== UPLOAD_ERR_OK) {
             Message::addError('Bitte wählen Sie eine Excel-Datei aus.');
-            return;
+            return null;
         }
         
         try {
             $spreadsheet = IOFactory::load($uploadedFile['tmp_name']);
+            $worksheet = $spreadsheet->getActiveSheet();
+            
+            $db = Database::getInstance();
+            $preview = [
+                'new' => [],
+                'update' => [],
+                'skip' => [],
+                'tempFile' => $this->saveTempFile($uploadedFile['tmp_name']),
+            ];
+            
+            // Zeilen durchgehen (Zeile 1 = Header, ab Zeile 2 = Daten)
+            foreach ($worksheet->getRowIterator(2) as $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false);
+                
+                $data = [];
+                foreach ($cellIterator as $cell) {
+                    $data[] = $cell->getValue();
+                }
+                
+                $objektnummer = $data[0] ?? '';
+                
+                if (empty($objektnummer)) {
+                    $preview['skip'][] = [
+                        'reason' => 'Keine Objektnummer',
+                        'data' => $data,
+                    ];
+                    continue;
+                }
+                
+                $apartmentData = [
+                    'objektnummer' => $objektnummer,
+                    'bezeichnung' => $data[1] ?? '',
+                    'bauetappe' => $data[2] ?? '',
+                    'zeile' => $data[3] ?? '',
+                    'adresse' => $data[4] ?? '',
+                    'etage' => $data[5] ?? '',
+                    'zimmer' => $data[6] ?? '',
+                    'flaeche' => $data[7] ?? '',
+                    'nettomietzins' => $data[8] ?? '',
+                    'nebenkosten' => $data[9] ?? '',
+                    'bruttomietzins' => $data[10] ?? '',
+                    'status' => $data[11] ?? 'Frei',
+                ];
+                
+                // Prüfen ob Wohnung bereits existiert
+                $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
+                    ->execute($objektnummer);
+                
+                if ($existing->numRows > 0) {
+                    // Update - Zeige was sich ändert
+                    $changes = [];
+                    $existingData = $existing->row();
+                    
+                    foreach ($apartmentData as $field => $newValue) {
+                        $oldValue = $existingData[$field] ?? '';
+                        if ($oldValue != $newValue) {
+                            $changes[$field] = [
+                                'old' => $oldValue,
+                                'new' => $newValue,
+                            ];
+                        }
+                    }
+                    
+                    $preview['update'][] = [
+                        'id' => $existingData['id'],
+                        'objektnummer' => $objektnummer,
+                        'changes' => $changes,
+                        'data' => $apartmentData,
+                    ];
+                } else {
+                    // Neu
+                    $preview['new'][] = $apartmentData;
+                }
+            }
+            
+            Message::addInfo(sprintf(
+                'Vorschau: %d neue Wohnungen, %d Updates, %d übersprungen',
+                count($preview['new']),
+                count($preview['update']),
+                count($preview['skip'])
+            ));
+            
+            return $preview;
+            
+        } catch (\Exception $e) {
+            Message::addError('Fehler beim Lesen der Datei: ' . $e->getMessage());
+            
+            $logger = System::getContainer()->get('monolog.logger.contao');
+            if ($logger instanceof LoggerInterface) {
+                $logger->error('Apartments Import Preview Error: ' . $e->getMessage(), ['exception' => $e]);
+            }
+            
+            return null;
+        }
+    }
+    
+    protected function saveTempFile($tmpFile)
+    {
+        $tempDir = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp';
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+        
+        $tempFile = $tempDir . '/apartments_import_' . uniqid() . '.xlsx';
+        copy($tmpFile, $tempFile);
+        
+        return basename($tempFile);
+    }
+    
+    protected function processImport()
+    {
+        $tempFileName = Input::post('temp_file');
+        
+        if (!$tempFileName) {
+            Message::addError('Keine Importdatei gefunden.');
+            return;
+        }
+        
+        $tempFile = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp/' . $tempFileName;
+        
+        if (!file_exists($tempFile)) {
+            Message::addError('Temporäre Datei nicht gefunden.');
+            return;
+        }
+        
+        try {
+            $spreadsheet = IOFactory::load($tempFile);
             $worksheet = $spreadsheet->getActiveSheet();
             
             $db = Database::getInstance();
@@ -65,7 +206,6 @@ class ApartmentsImportController extends Backend
                     $data[] = $cell->getValue();
                 }
                 
-                // Mapping basierend auf Excel-Struktur
                 $objektnummer = $data[0] ?? '';
                 
                 if (empty($objektnummer)) {
@@ -109,6 +249,9 @@ class ApartmentsImportController extends Backend
                 }
             }
             
+            // Temp-Datei löschen
+            @unlink($tempFile);
+            
             Message::addConfirmation(sprintf(
                 'Import erfolgreich! %d neue Wohnungen importiert, %d aktualisiert, %d übersprungen.',
                 $imported,
@@ -119,7 +262,6 @@ class ApartmentsImportController extends Backend
         } catch (\Exception $e) {
             Message::addError('Fehler beim Import: ' . $e->getMessage());
             
-            // Logger für Contao 5
             $logger = System::getContainer()->get('monolog.logger.contao');
             if ($logger instanceof LoggerInterface) {
                 $logger->error('Apartments Import Error: ' . $e->getMessage(), ['exception' => $e]);

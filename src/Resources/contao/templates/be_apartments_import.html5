@@ -5,6 +5,56 @@
     <title>Wohnungen importieren</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="/assets/contao/css/main.min.css">
+    <style>
+        .preview-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+        .preview-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            background: white;
+        }
+        .preview-table th,
+        .preview-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .preview-table th {
+            background: #e9e9e9;
+            font-weight: 600;
+        }
+        .change-old {
+            color: #dc3545;
+            text-decoration: line-through;
+        }
+        .change-new {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .status-new {
+            color: #28a745;
+        }
+        .status-update {
+            color: #ffc107;
+        }
+        .status-skip {
+            color: #6c757d;
+        }
+        .confirm-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
 </head>
 <body class="__ua__ __os__ popup">
 
@@ -16,44 +66,118 @@
 
         <h2 class="sub_headline">Wohnungen importieren</h2>
 
-        <div class="tl_formbody_edit">
-            <div class="tl_tbox">
-                <h3>Excel-Datei hochladen</h3>
-                <p>Laden Sie eine Excel-Datei mit folgender Struktur hoch:</p>
-                <ul>
-                    <li><strong>Spalte A:</strong> Objektnummer (Pflicht)</li>
-                    <li><strong>Spalte B:</strong> Bezeichnung</li>
-                    <li><strong>Spalte C:</strong> Bauetappe</li>
-                    <li><strong>Spalte D:</strong> Zeile</li>
-                    <li><strong>Spalte E:</strong> Adresse</li>
-                    <li><strong>Spalte F:</strong> Etage</li>
-                    <li><strong>Spalte G:</strong> Zimmer</li>
-                    <li><strong>Spalte H:</strong> Fläche</li>
-                    <li><strong>Spalte I:</strong> Nettomiete</li>
-                    <li><strong>Spalte J:</strong> Nebenkosten</li>
-                    <li><strong>Spalte K:</strong> Bruttomiete</li>
-                    <li><strong>Spalte L:</strong> Status</li>
-                </ul>
+        <?php if ($this->messages): ?>
+            <?= $this->messages ?>
+        <?php endif; ?>
+
+        <?php if ($this->preview): ?>
+            <!-- Vorschau anzeigen -->
+            <div class="tl_formbody_edit">
+                <h3>Import-Vorschau</h3>
                 
-                <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird übersprungen. Bestehende Wohnungen (gleiche Objektnummer) werden aktualisiert.</p>
-                
-                <form action="<?= $this->action ?>" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import">
-                    <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
-                    
-                    <div class="widget">
-                        <h3><label for="import_file">Excel-Datei (.xlsx oder .xls)</label></h3>
-                        <input type="file" name="import_file" id="import_file" accept=".xlsx,.xls" required class="tl_text">
+                <?php if (!empty($this->preview['new'])): ?>
+                    <div class="preview-section">
+                        <h3 class="status-new">✓ Neue Wohnungen (<?= count($this->preview['new']) ?>)</h3>
+                        <table class="preview-table">
+                            <thead>
+                                <tr>
+                                    <th>Objektnr.</th>
+                                    <th>Bezeichnung</th>
+                                    <th>Bauetappe</th>
+                                    <th>Zeile</th>
+                                    <th>Adresse</th>
+                                    <th>Etage</th>
+                                    <th>Zimmer</th>
+                                    <th>Nettomiete</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($this->preview['new'] as $item): ?>
+                                    <tr>
+                                        <td><?= $item['objektnummer'] ?></td>
+                                        <td><?= $item['bezeichnung'] ?></td>
+                                        <td><?= $item['bauetappe'] ?></td>
+                                        <td><?= $item['zeile'] ?></td>
+                                        <td><?= $item['adresse'] ?></td>
+                                        <td><?= $item['etage'] ?></td>
+                                        <td><?= $item['zimmer'] ?></td>
+                                        <td><?= $item['nettomietzins'] ?></td>
+                                        <td><?= $item['status'] ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
+                <?php endif; ?>
+
+                <?php if (!empty($this->preview['update'])): ?>
+                    <div class="preview-section">
+                        <h3 class="status-update">↻ Zu aktualisierende Wohnungen (<?= count($this->preview['update']) ?>)</h3>
+                        <?php foreach ($this->preview['update'] as $item): ?>
+                            <div style="margin: 15px 0; padding: 10px; background: white; border-left: 4px solid #ffc107;">
+                                <strong>Objektnummer: <?= $item['objektnummer'] ?> (ID: <?= $item['id'] ?>)</strong>
+                                <?php if (!empty($item['changes'])): ?>
+                                    <table class="preview-table" style="margin-top: 10px;">
+                                        <thead>
+                                            <tr>
+                                                <th>Feld</th>
+                                                <th>Alt</th>
+                                                <th>Neu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($item['changes'] as $field => $change): ?>
+                                                <tr>
+                                                    <td><strong><?= $field ?></strong></td>
+                                                    <td class="change-old"><?= $change['old'] ?: '(leer)' ?></td>
+                                                    <td class="change-new"><?= $change['new'] ?: '(leer)' ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else: ?>
+                                    <p style="color: #6c757d; margin: 5px 0;">Keine Änderungen</p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($this->preview['skip'])): ?>
+                    <div class="preview-section">
+                        <h3 class="status-skip">⊘ Übersprungene Zeilen (<?= count($this->preview['skip']) ?>)</h3>
+                        <ul>
+                            <?php foreach ($this->preview['skip'] as $item): ?>
+                                <li><?= $item['reason'] ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Bestätigungs-Formular -->
+                <form action="<?= $this->action ?>" method="post">
+                    <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import_confirm">
+                    <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
+                    <input type="hidden" name="temp_file" value="<?= $this->preview['tempFile'] ?>">
                     
-                    <div class="tl_submit_container">
-                        <button type="submit" name="save" class="tl_submit">Importieren</button>
+                    <div class="confirm-buttons">
+                        <button type="submit" class="tl_submit" style="background: #28a745;">
+                            ✓ Import bestätigen und ausführen
+                        </button>
+                        <a href="<?= $this->action ?>" class="tl_submit" style="background: #6c757d; text-decoration: none;">
+                            Abbrechen
+                        </a>
                     </div>
                 </form>
             </div>
-        </div>
-    </main>
-</div>
 
-</body>
-</html>
+        <?php else: ?>
+            <!-- Upload-Formular -->
+            <div class="tl_formbody_edit">
+                <div class="tl_tbox">
+                    <h3>Excel-Datei hochladen</h3>
+                    <p>Laden Sie eine Excel-Datei mit folgender Struktur hoch:</p>
+                    <ul>
+                        <li><strong>Spalte A:</strong> Objektnummer (Pflicht)</li>
+                        <li><strong>Spalte B:
