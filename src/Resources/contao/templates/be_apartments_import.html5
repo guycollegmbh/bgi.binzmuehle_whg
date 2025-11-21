@@ -33,7 +33,6 @@
             color: #333;
             font-size: 24px;
             font-weight: 600;
-            text-align:left;
         }
         
         .import-instructions {
@@ -57,8 +56,8 @@
         }
         
         .column-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 8px;
             margin-top: 15px;
         }
@@ -66,10 +65,10 @@
         .column-item {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
+            padding: 10px 12px;
             background: white;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 14px;
         }
         
         .column-letter {
@@ -396,8 +395,8 @@
 <div class="import-container">
     <div class="import-card">
         <div class="import-header">
-            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;"><?= $this->title ?></a>
-            <h2>📥 Elemente importieren</h2>
+            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;">← <?= $this->title ?></a>
+            <h2>📥 Wohnungen importieren</h2>
         </div>
 
         <?php if ($this->preview): ?>
@@ -405,7 +404,7 @@
             
             <div class="summary-stats">
                 <div class="stat-card new">
-                    <div class="stat-label">Neue Elemente</div>
+                    <div class="stat-label">Neue Wohnungen</div>
                     <div class="stat-number"><?= count($this->preview['new']) ?></div>
                 </div>
                 <div class="stat-card update">
@@ -420,7 +419,7 @@
             
             <?php if (!empty($this->preview['new'])): ?>
                 <div class="preview-section">
-                    <h3><span class="status-badge status-new">✓ Neue Elemente (<?= count($this->preview['new']) ?>)</span></h3>
+                    <h3><span class="status-badge status-new">✓ Neue Wohnungen (<?= count($this->preview['new']) ?>)</span></h3>
                     <table class="preview-table">
                         <thead>
                             <tr>
@@ -489,163 +488,4 @@
 
             <?php if (!empty($this->preview['skip'])): ?>
                 <div class="preview-section skip">
-                    <h3><span class="status-badge status-skip">⊘ Übersprungene Zeilen (<?= count($this->preview['skip']) ?>)</span></h3>
-                    
-                    <table class="preview-table">
-                        <thead>
-                            <tr>
-                                <th>Grund</th>
-                                <th>Daten aus Excel</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($this->preview['skip'] as $item): ?>
-                                <tr>
-                                    <td><strong style="color: #dc3545;"><?= $item['reason'] ?></strong></td>
-                                    <td>
-                                        <?php if (!empty($item['data'])): ?>
-                                            <div style="font-family: monospace; font-size: 12px;">
-                                                <?php 
-                                                $dataPreview = array_filter($item['data'], function($val) {
-                                                    return $val !== null && $val !== '';
-                                                });
-                                                if (!empty($dataPreview)) {
-                                                    echo implode(' | ', array_map(function($val) {
-                                                        return htmlspecialchars((string)$val);
-                                                    }, $dataPreview));
-                                                } else {
-                                                    echo '<em style="color: #999;">Leere Zeile</em>';
-                                                }
-                                                ?>
-                                            </div>
-                                        <?php else: ?>
-                                            <em style="color: #999;">Keine Daten</em>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif; ?>
-
-            <!-- Bestätigungs-Formular -->
-            <form action="<?= $this->action ?>" method="post">
-                <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import_confirm">
-                <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
-                <input type="hidden" name="temp_file" value="<?= $this->preview['tempFile'] ?>">
-                
-                <div class="confirm-buttons">
-                    <button type="submit" class="btn-success">
-                        ✓ Import bestätigen und ausführen
-                    </button>
-                    <a href="<?= $this->action ?>" class="btn-secondary">
-                        Abbrechen
-                    </a>
-                </div>
-            </form>
-
-        <?php else: ?>
-            <!-- Upload-Formular -->
-            <div class="import-instructions">
-                <h3>📋 Excel-Datei Struktur</h3>
-                <p>Ihre Excel-Datei muss folgende Spalten in dieser Reihenfolge enthalten. <strong>Alle Tabs werden automatisch importiert.</strong></p>
-                
-                <div class="column-list">
-                    <div class="column-item">
-                        <div class="column-letter">A</div>
-                        <div class="column-name">Objektnummer (Pflichtfeld)</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">B</div>
-                        <div class="column-name">Bezeichnung</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">C</div>
-                        <div class="column-name">Bauetappe</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">D</div>
-                        <div class="column-name">Zeile</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">E</div>
-                        <div class="column-name">Adresse</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">F</div>
-                        <div class="column-name">Etage</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">G</div>
-                        <div class="column-name">Zimmer</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">H</div>
-                        <div class="column-name">Fläche</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">I</div>
-                        <div class="column-name">Nettomiete</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">J</div>
-                        <div class="column-name">Nebenkosten</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">K</div>
-                        <div class="column-name">Bruttomiete</div>
-                    </div>
-                    <div class="column-item">
-                        <div class="column-letter">L</div>
-                        <div class="column-name">Status</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="hint-box">
-                <div class="hint-icon">💡</div>
-                <div>
-                    <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird automatisch übersprungen. 
-                    Bestehende Wohnungen mit gleicher Objektnummer werden aktualisiert. Alle Tabs in der Excel-Datei werden importiert.</p>
-                </div>
-            </div>
-            
-            <form action="<?= $this->action ?>" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import">
-                <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
-                
-                <div class="upload-section">
-                    <label for="import_file" class="upload-label">
-                        <div class="upload-icon">📄</div>
-                        <h3>Excel-Datei auswählen</h3>
-                        <p>Klicken Sie hier, um eine Datei auszuwählen</p>
-                        <p style="font-size: 12px; color: #999;">Unterstützte Formate: .xlsx, .xls</p>
-                    </label>
-                    <input type="file" name="import_file" id="import_file" accept=".xlsx,.xls" required class="file-input">
-                    <div id="file-name" class="file-name-display"></div>
-                </div>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <button type="submit" class="btn-primary">
-                        🔍 Vorschau anzeigen
-                    </button>
-                </div>
-            </form>
-
-            <script>
-            document.getElementById('import_file').addEventListener('change', function(e) {
-                const fileName = e.target.files[0]?.name;
-                const display = document.getElementById('file-name');
-                if (fileName) {
-                    display.textContent = '✓ Ausgewählt: ' + fileName;
-                    display.style.color = '#28a745';
-                }
-            });
-            </script>
-        <?php endif; ?>
-    </div>
-</div>
-
-</body>
-</html>
+                    <h3><span class="status-badge status-skip">⊘ Übersprungene Zeilen (<?= count($this->preview['skip'])
