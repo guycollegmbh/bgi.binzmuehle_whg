@@ -56,19 +56,19 @@
         }
         
         .column-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 8px;
             margin-top: 15px;
         }
-
+        
         .column-item {
             display: flex;
             align-items: center;
-            padding: 10px 12px;
+            padding: 8px 12px;
             background: white;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 13px;
         }
         
         .column-letter {
