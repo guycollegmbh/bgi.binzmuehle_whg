@@ -24,7 +24,7 @@
         }
         
         .import-header {
-            text-align: left;
+            text-align: center;
             margin-bottom: 40px;
         }
         
@@ -56,8 +56,8 @@
         }
         
         .column-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 8px;
             margin-top: 15px;
         }
@@ -65,10 +65,10 @@
         .column-item {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
+            padding: 10px 12px;
             background: white;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 14px;
         }
         
         .column-letter {
@@ -380,10 +380,6 @@
                 padding: 25px;
             }
             
-            .column-list {
-                grid-template-columns: 1fr;
-            }
-            
             .summary-stats {
                 grid-template-columns: 1fr;
             }
@@ -399,7 +395,7 @@
 <div class="import-container">
     <div class="import-card">
         <div class="import-header">
-            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;"><?= $this->title ?></a>
+            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;">← <?= $this->title ?></a>
             <h2>📥 Wohnungen importieren</h2>
         </div>
 
@@ -428,6 +424,7 @@
                         <thead>
                             <tr>
                                 <th>Objektnr.</th>
+                                <th>Tab</th>
                                 <th>Bezeichnung</th>
                                 <th>Bauetappe</th>
                                 <th>Zeile</th>
@@ -442,6 +439,7 @@
                             <?php foreach ($this->preview['new'] as $item): ?>
                                 <tr>
                                     <td><strong><?= $item['objektnummer'] ?></strong></td>
+                                    <td><small style="color: #999;"><?= $item['sheet'] ?></small></td>
                                     <td><?= $item['bezeichnung'] ?></td>
                                     <td><?= $item['bauetappe'] ?></td>
                                     <td><?= $item['zeile'] ?></td>
@@ -462,7 +460,7 @@
                     <h3><span class="status-badge status-update">↻ Zu aktualisierende Wohnungen (<?= count($this->preview['update']) ?>)</span></h3>
                     <?php foreach ($this->preview['update'] as $item): ?>
                         <div class="change-item">
-                            <div class="change-header">📝 Objektnummer: <?= $item['objektnummer'] ?> (ID: <?= $item['id'] ?>)</div>
+                            <div class="change-header">📝 Objektnummer: <?= $item['objektnummer'] ?> (ID: <?= $item['id'] ?>) <small style="color: #999;">- Tab: <?= $item['sheet'] ?></small></div>
                             <?php if (!empty($item['changes'])): ?>
                                 <table class="preview-table">
                                     <thead>
@@ -512,7 +510,7 @@
                                                 });
                                                 if (!empty($dataPreview)) {
                                                     echo implode(' | ', array_map(function($val) {
-                                                        return htmlspecialchars($val);
+                                                        return htmlspecialchars((string)$val);
                                                     }, $dataPreview));
                                                 } else {
                                                     echo '<em style="color: #999;">Leere Zeile</em>';
@@ -550,12 +548,12 @@
             <!-- Upload-Formular -->
             <div class="import-instructions">
                 <h3>📋 Excel-Datei Struktur</h3>
-                <p>Ihre Excel-Datei muss folgende Spalten in dieser Reihenfolge enthalten:</p>
+                <p>Ihre Excel-Datei muss folgende Spalten in dieser Reihenfolge enthalten. <strong>Alle Tabs werden automatisch importiert.</strong></p>
                 
                 <div class="column-list">
                     <div class="column-item">
                         <div class="column-letter">A</div>
-                        <div class="column-name">Objektnummer *</div>
+                        <div class="column-name">Objektnummer (Pflichtfeld)</div>
                     </div>
                     <div class="column-item">
                         <div class="column-letter">B</div>
@@ -608,7 +606,7 @@
                 <div class="hint-icon">💡</div>
                 <div>
                     <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird automatisch übersprungen. 
-                    Bestehende Wohnungen mit gleicher Objektnummer werden aktualisiert.</p>
+                    Bestehende Wohnungen mit gleicher Objektnummer werden aktualisiert. Alle Tabs in der Excel-Datei werden importiert.</p>
                 </div>
             </div>
             
