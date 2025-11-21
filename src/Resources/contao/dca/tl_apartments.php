@@ -120,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'inputType' => 'select',
             'options'   => ['1', '2'],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
-            'sql'       => ['type' => 'string', 'length' => 8, 'default' => ''],
+            'sql'       => ['type' => 'string', 'length' => 64, 'default' => ''],
         ],
         'zeile' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['zeile'],
@@ -130,7 +130,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'inputType' => 'select',
             'options'   => ['Zeile 1', 'Zeile 2', 'Zeile 3'],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
-            'sql'       => ['type' => 'string', 'length' => 8, 'default' => ''],
+            'sql'       => ['type' => 'string', 'length' => 64, 'default' => ''],
         ],
         'adresse' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['adresse'],
@@ -152,7 +152,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 ],
             ],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
-            'sql'       => ['type' => 'string', 'length' => 32, 'default' => ''],
+            'sql'       => ['type' => 'string', 'length' => 64, 'default' => ''],
         ],
         'etage' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['etage'],
@@ -162,7 +162,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'inputType' => 'select',
             'options'   => ['EG', 'DG', '1. OG', '2. OG', '3. OG'],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
-            'sql'       => ['type' => 'string', 'length' => 8, 'default' => ''],
+            'sql'       => ['type' => 'string', 'length' => 64, 'default' => ''],
         ],
         'zimmer' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['zimmer'],
@@ -172,7 +172,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'inputType' => 'select',
             'options'   => ['2', '2.5', '3.5', '4.5', '5.5'],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
-            'sql'       => ['type' => 'string', 'length' => 4, 'default' => ''],
+            'sql'       => ['type' => 'string', 'length' => 64, 'default' => ''],
         ],
         'flaeche' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['flaeche'],
