@@ -81,7 +81,7 @@ class ApartmentsImportController extends Backend
                     $data[] = $cell->getValue();
                 }
                 
-                $objektnummer = $data[0] ?? '';
+                $objektnummer = trim($data[0] ?? '');
                 
                 if (empty($objektnummer)) {
                     $preview['skip'][] = [
@@ -92,18 +92,18 @@ class ApartmentsImportController extends Backend
                 }
                 
                 $apartmentData = [
-                    'objektnummer' => $objektnummer,
-                    'bezeichnung' => $data[1] ?? '',
-                    'bauetappe' => $data[2] ?? '',
-                    'zeile' => $data[3] ?? '',
-                    'adresse' => $data[4] ?? '',
-                    'etage' => $data[5] ?? '',
-                    'zimmer' => $data[6] ?? '',
-                    'flaeche' => $data[7] ?? '',
-                    'nettomietzins' => $data[8] ?? '',
-                    'nebenkosten' => $data[9] ?? '',
-                    'bruttomietzins' => $data[10] ?? '',
-                    'status' => $data[11] ?? 'Frei',
+                    'objektnummer' => trim($objektnummer),
+                    'bezeichnung' => trim($data[1] ?? ''),
+                    'bauetappe' => trim($data[2] ?? ''),
+                    'zeile' => trim($data[3] ?? ''),
+                    'adresse' => trim($data[4] ?? ''),
+                    'etage' => trim($data[5] ?? ''),
+                    'zimmer' => trim($data[6] ?? ''),
+                    'flaeche' => trim($data[7] ?? ''),
+                    'nettomietzins' => trim($data[8] ?? ''),
+                    'nebenkosten' => trim($data[9] ?? ''),
+                    'bruttomietzins' => trim($data[10] ?? ''),
+                    'status' => trim($data[11] ?? '') ?: 'Frei',
                 ];
                 
                 // Prüfen ob Wohnung bereits existiert
@@ -116,8 +116,14 @@ class ApartmentsImportController extends Backend
                     $existingData = $existing->row();
                     
                     foreach ($apartmentData as $field => $newValue) {
-                        $oldValue = $existingData[$field] ?? '';
-                        if ($oldValue != $newValue) {
+                        $oldValue = trim($existingData[$field] ?? '');
+                        $newValue = trim($newValue);
+                        
+                        // Normalisiere Werte für Vergleich
+                        $oldNormalized = $this->normalizeValue($oldValue);
+                        $newNormalized = $this->normalizeValue($newValue);
+                        
+                        if ($oldNormalized !== $newNormalized) {
                             $changes[$field] = [
                                 'old' => $oldValue,
                                 'new' => $newValue,
@@ -125,12 +131,15 @@ class ApartmentsImportController extends Backend
                         }
                     }
                     
-                    $preview['update'][] = [
-                        'id' => $existingData['id'],
-                        'objektnummer' => $objektnummer,
-                        'changes' => $changes,
-                        'data' => $apartmentData,
-                    ];
+                    // Nur als Update zählen wenn tatsächlich Änderungen vorhanden sind
+                    if (!empty($changes)) {
+                        $preview['update'][] = [
+                            'id' => $existingData['id'],
+                            'objektnummer' => $objektnummer,
+                            'changes' => $changes,
+                            'data' => $apartmentData,
+                        ];
+                    }
                 } else {
                     // Neu
                     $preview['new'][] = $apartmentData;
@@ -156,6 +165,20 @@ class ApartmentsImportController extends Backend
             
             return null;
         }
+    }
+    
+    /**
+     * Normalisiert Werte für Vergleich (entfernt Leerzeichen, macht lowercase)
+     */
+    protected function normalizeValue($value)
+    {
+        // Trimmen und in lowercase konvertieren
+        $value = strtolower(trim($value));
+        
+        // Mehrfache Leerzeichen entfernen
+        $value = preg_replace('/\s+/', ' ', $value);
+        
+        return $value;
     }
     
     protected function saveTempFile($tmpFile)
@@ -206,7 +229,7 @@ class ApartmentsImportController extends Backend
                     $data[] = $cell->getValue();
                 }
                 
-                $objektnummer = $data[0] ?? '';
+                $objektnummer = trim($data[0] ?? '');
                 
                 if (empty($objektnummer)) {
                     $skipped++;
@@ -214,32 +237,51 @@ class ApartmentsImportController extends Backend
                 }
                 
                 // Prüfen ob Wohnung bereits existiert
-                $existing = $db->prepare('SELECT id FROM tl_apartments WHERE objektnummer = ?')
+                $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
                     ->execute($objektnummer);
                 
                 $apartmentData = [
                     'tstamp' => time(),
-                    'objektnummer' => $objektnummer,
-                    'bezeichnung' => $data[1] ?? '',
-                    'bauetappe' => $data[2] ?? '',
-                    'zeile' => $data[3] ?? '',
-                    'adresse' => $data[4] ?? '',
-                    'etage' => $data[5] ?? '',
-                    'zimmer' => $data[6] ?? '',
-                    'flaeche' => $data[7] ?? '',
-                    'nettomietzins' => $data[8] ?? '',
-                    'nebenkosten' => $data[9] ?? '',
-                    'bruttomietzins' => $data[10] ?? '',
-                    'status' => $data[11] ?? 'Frei',
+                    'objektnummer' => trim($objektnummer),
+                    'bezeichnung' => trim($data[1] ?? ''),
+                    'bauetappe' => trim($data[2] ?? ''),
+                    'zeile' => trim($data[3] ?? ''),
+                    'adresse' => trim($data[4] ?? ''),
+                    'etage' => trim($data[5] ?? ''),
+                    'zimmer' => trim($data[6] ?? ''),
+                    'flaeche' => trim($data[7] ?? ''),
+                    'nettomietzins' => trim($data[8] ?? ''),
+                    'nebenkosten' => trim($data[9] ?? ''),
+                    'bruttomietzins' => trim($data[10] ?? ''),
+                    'status' => trim($data[11] ?? '') ?: 'Frei',
                     'published' => true,
                 ];
                 
                 if ($existing->numRows > 0) {
-                    // Update
-                    $db->prepare('UPDATE tl_apartments %s WHERE id = ?')
-                        ->set($apartmentData)
-                        ->execute($existing->id);
-                    $updated++;
+                    // Prüfe ob es tatsächlich Änderungen gibt
+                    $hasChanges = false;
+                    $existingData = $existing->row();
+                    
+                    foreach ($apartmentData as $field => $newValue) {
+                        if ($field === 'tstamp' || $field === 'published') {
+                            continue;
+                        }
+                        
+                        $oldValue = $existingData[$field] ?? '';
+                        
+                        if ($this->normalizeValue($oldValue) !== $this->normalizeValue($newValue)) {
+                            $hasChanges = true;
+                            break;
+                        }
+                    }
+                    
+                    if ($hasChanges) {
+                        // Update nur wenn Änderungen vorhanden
+                        $db->prepare('UPDATE tl_apartments %s WHERE id = ?')
+                            ->set($apartmentData)
+                            ->execute($existing->id);
+                        $updated++;
+                    }
                 } else {
                     // Insert
                     $db->prepare('INSERT INTO tl_apartments %s')
