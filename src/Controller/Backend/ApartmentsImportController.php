@@ -12,6 +12,7 @@ use Contao\Input;
 use Contao\Message;
 use Contao\System;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class ApartmentsImportController extends Backend
 {
@@ -23,6 +24,10 @@ class ApartmentsImportController extends Backend
         $template->action = Environment::get('request');
         $template->href = System::getReferer();
         $template->title = 'Zurück';
+        
+        // CSRF Token für Contao 5
+        $csrfTokenManager = System::getContainer()->get('contao.csrf.token_manager');
+        $template->requestToken = $csrfTokenManager->getToken(System::getContainer()->getParameter('contao.csrf_token_name'))->getValue();
         
         // Wenn Datei hochgeladen wurde
         if (Input::post('FORM_SUBMIT') === 'tl_apartments_import') {
