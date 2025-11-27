@@ -242,29 +242,23 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'fixed'   => true,
             ],
         ],
-       'grundrisspdf' => [
-    'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['grundrisspdf'],
-    'inputType' => 'fileTree',
-    'load_callback' => [
-        function ($value, $dc) {
-            error_log("Grundriss UUID geladen für ID " . $dc->id . ": " . bin2hex($value ?: ''));
-            return $value;
-        }
-    ],
-    'eval'      => [
-        'fieldType'  => 'radio',
-        'filesOnly'  => true,
-        'extensions' => 'pdf',
-        'path'       => 'files/apartments/grundrisse',
-        'tl_class'   => 'w50 clr',
-    ],
-    'sql' => [
-        'type'    => 'binary',
-        'length'  => 16,
-        'notnull' => false,
-        'fixed'   => true,
-    ],
-],
+        'grundrisspdf' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['grundrisspdf'],
+            'inputType' => 'fileTree',
+            'eval'      => [
+                'fieldType'  => 'radio',
+                'filesOnly'  => true,
+                'extensions' => 'pdf', // Nur PDFs erlauben
+                'path'       => 'files/apartments/grundrisse', // Optional: Standardpfad
+                'tl_class'   => 'w50 clr',
+            ],
+            'sql' => [
+                'type'    => 'binary',
+                'length'  => 16,
+                'notnull' => false,
+                'fixed'   => true,
+            ],
+        ],
          'status' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['status'],
             'search'    => true,
