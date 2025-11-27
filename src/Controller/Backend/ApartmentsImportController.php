@@ -256,25 +256,21 @@ class ApartmentsImportController extends Backend
      */
     protected function findPdfByObjektnummer($objektnummer)
     {
-        // Bereinige Objektnummer für Dateiname (entferne Klammern etc.)
-        $filename = preg_replace('/[^0-9.]/', '', $objektnummer) . '.pdf';
+        // Bereinige Objektnummer für Dateiname (entferne alles außer Zahlen und Punkte)
+        $cleanNummer = preg_replace('/[^0-9.]/', '', $objektnummer);
+        $filename = $cleanNummer . '.pdf';
         $path = 'files/apartments/grundrisse/' . $filename;
         
-        // Prüfe ob Datei existiert
-        $projectDir = System::getContainer()->getParameter('kernel.project_dir');
-        $fullPath = $projectDir . '/' . $path;
+        // Hole UUID direkt aus der Datenbank
+        $db = Database::getInstance();
+        $file = $db->prepare('SELECT uuid FROM tl_files WHERE path = ?')
+            ->execute($path);
         
-        if (!file_exists($fullPath)) {
-            return null;
+        if ($file->numRows > 0) {
+            return $file->uuid;
         }
         
-        // Synchronisiere mit DBAFS falls nötig
-        Dbafs::addResource($path);
-        
-        // Hole UUID aus Datenbank
-        $file = FilesModel::findByPath($path);
-        
-        return $file ? $file->uuid : null;
+        return null;
     }
     
     /**
