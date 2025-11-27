@@ -710,7 +710,7 @@
             <div class="hint-box">
                 <div class="hint-icon">💡</div>
                 <div>
-                    <p><strong>Hinweis:</strong> Neue Elemente werden basierend auf der Objektnummer erstellt.<br />Der Status wird automatisch auf "Frei" gesetzt. Bestehende Elemente mit gleicher Objektnummer werden aktualisiert.</p>
+                    <p><strong>Hinweis:</strong><ul><li>Neue Elemente werden basierend auf der Objektnummer erstellt.</li><li>Der Status wird automatisch auf "Frei" gesetzt.</li><li>Bestehende Elemente mit gleicher Objektnummer werden aktualisiert.</li></ul></p>
                 </div>
             </div>
             
