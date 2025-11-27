@@ -83,7 +83,6 @@ class ApartmentsImportController extends Backend
             $this->processImport();
             $this->redirect('contao?do=apartments&table=tl_apartments');
         }
-        
         // Schritt 2: Vorschau generieren
         elseif (Input::post('FORM_SUBMIT') === 'tl_apartments_import_preview') {
             $preview = $this->generatePreview();
@@ -225,7 +224,7 @@ class ApartmentsImportController extends Backend
                         'nettomietzins' => trim((string)($data[8] ?? '')),
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
-                        'status' => 'Frei', // Immer "Frei"
+                        'status' => 'Frei', // Nur für neue Einträge
                         'grundrisspdf' => $pdfUuid,
                     ];
                     
@@ -234,11 +233,16 @@ class ApartmentsImportController extends Backend
                         ->execute($objektnummer);
                     
                     if ($existing->numRows > 0) {
-                        // Update - Zeige was sich ändert
+                        // Update - Zeige was sich ändert (Status ausschließen)
                         $changes = [];
                         $existingData = $existing->row();
                         
                         foreach ($apartmentData as $field => $newValue) {
+                            // Status nicht in Änderungen aufnehmen
+                            if ($field === 'status') {
+                                continue;
+                            }
+                            
                             $oldValue = trim((string)($existingData[$field] ?? ''));
                             $newValue = trim((string)$newValue);
                             
@@ -425,18 +429,19 @@ class ApartmentsImportController extends Backend
                         'nettomietzins' => trim((string)($data[8] ?? '')),
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
-                        'status' => 'Frei', // Immer "Frei"
+                        'status' => 'Frei', // Nur für neue Einträge
                         'grundrisspdf' => $pdfUuid ?: null,
                         'published' => true,
                     ];
                     
                     if ($existing->numRows > 0) {
-                        // Prüfe ob es tatsächlich Änderungen gibt
+                        // Prüfe ob es tatsächlich Änderungen gibt (Status ausschließen)
                         $hasChanges = false;
                         $existingData = $existing->row();
                         
                         foreach ($apartmentData as $field => $newValue) {
-                            if ($field === 'tstamp' || $field === 'published') {
+                            // Status, tstamp und published nicht bei Änderungsprüfung berücksichtigen
+                            if ($field === 'tstamp' || $field === 'published' || $field === 'status') {
                                 continue;
                             }
                             
@@ -449,6 +454,9 @@ class ApartmentsImportController extends Backend
                         }
                         
                         if ($hasChanges) {
+                            // Status aus apartmentData entfernen bevor UPDATE
+                            unset($apartmentData['status']);
+                            
                             // Update nur wenn Änderungen vorhanden
                             $db->prepare('UPDATE tl_apartments %s WHERE id = ?')
                                 ->set($apartmentData)
@@ -456,7 +464,7 @@ class ApartmentsImportController extends Backend
                             $updated++;
                         }
                     } else {
-                        // Insert
+                        // Insert - Status wird auf "Frei" gesetzt
                         $db->prepare('INSERT INTO tl_apartments %s')
                             ->set($apartmentData)
                             ->execute();
@@ -467,9 +475,9 @@ class ApartmentsImportController extends Backend
             
             // Temp-Datei löschen
             @unlink($tempFile);
-
+            
             $total = $imported + $updated + $skipped;
-
+            
             Message::addConfirmation(sprintf(
                 'Wohnungen importiert: %d neu, %d aktualisiert, %d übersprungen von insgesamt %d Zeilen.',
                 $imported,

@@ -628,7 +628,7 @@
                                 <input type="checkbox" name="selected_sheets[]" value="<?= htmlspecialchars($sheet['name']) ?>" checked>
                                 <div class="sheet-info">
                                     <div class="sheet-name"><?= htmlspecialchars($sheet['name']) ?></div>
-                                    <div class="sheet-count"><?= $sheet['rowCount'] ?> Zeilen (ohne Header)</div>
+                                    <div class="sheet-count"><?= $sheet['rowCount'] ?> Zeilen</div>
                                 </div>
                             </label>
                         <?php endforeach; ?>
