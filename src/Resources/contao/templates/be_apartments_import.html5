@@ -56,12 +56,12 @@
         }
         
         .column-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 8px;
             margin-top: 15px;
         }
-        
+
         .column-item {
             display: flex;
             align-items: center;
