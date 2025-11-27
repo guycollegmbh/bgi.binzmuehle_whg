@@ -326,8 +326,16 @@ class ApartmentsImportController extends Backend
      */
     protected function normalizeValue($value)
     {
-        // Trimmen und in lowercase konvertieren
-        $value = strtolower(trim((string)$value));
+        // Trimmen
+        $value = trim((string)$value);
+        
+        // Leere Werte einheitlich behandeln
+        if ($value === '' || $value === null) {
+            return '';
+        }
+        
+        // In lowercase konvertieren
+        $value = strtolower($value);
         
         // Mehrfache Leerzeichen entfernen
         $value = preg_replace('/\s+/', ' ', $value);
