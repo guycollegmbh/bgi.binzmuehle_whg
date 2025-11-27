@@ -33,7 +33,6 @@
             color: #333;
             font-size: 24px;
             font-weight: 600;
-            text-align: left;
         }
         
         .import-instructions {
@@ -57,8 +56,8 @@
         }
         
         .column-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 8px;
             margin-top: 15px;
         }
@@ -66,10 +65,10 @@
         .column-item {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
+            padding: 10px 12px;
             background: white;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 14px;
         }
         
         .column-letter {
@@ -89,6 +88,65 @@
         
         .column-name {
             color: #495057;
+        }
+        
+        /* Sheet Selection */
+        .sheet-selection {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .sheet-selection h3 {
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .sheet-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .sheet-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e1e4e8;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .sheet-item:hover {
+            border-color: #007bff;
+            background: #f0f7ff;
+        }
+        
+        .sheet-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        
+        .sheet-info {
+            flex: 1;
+        }
+        
+        .sheet-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .sheet-count {
+            color: #6c757d;
+            font-size: 13px;
+            margin-top: 3px;
         }
         
         .upload-section {
@@ -158,6 +216,11 @@
         
         .btn-primary:hover {
             background: #0056b3;
+        }
+        
+        .btn-primary:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
         }
         
         .hint-box {
@@ -381,10 +444,6 @@
                 padding: 25px;
             }
             
-            .column-list {
-                grid-template-columns: 1fr;
-            }
-            
             .summary-stats {
                 grid-template-columns: 1fr;
             }
@@ -400,16 +459,16 @@
 <div class="import-container">
     <div class="import-card">
         <div class="import-header">
-            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;"><?= $this->title ?></a>
-            <h2>Elemente importieren</h2>
+            <a href="<?= $this->href ?>" class="header_back" style="float: right; margin-top: 5px;">← <?= $this->title ?></a>
+            <h2>📥 Wohnungen importieren</h2>
         </div>
 
         <?php if ($this->preview): ?>
-            <!-- Vorschau anzeigen -->
+            <!-- SCHRITT 3: Vorschau anzeigen -->
             
             <div class="summary-stats">
                 <div class="stat-card new">
-                    <div class="stat-label">Neue Elemente</div>
+                    <div class="stat-label">Neue Wohnungen</div>
                     <div class="stat-number"><?= count($this->preview['new']) ?></div>
                 </div>
                 <div class="stat-card update">
@@ -424,11 +483,12 @@
             
             <?php if (!empty($this->preview['new'])): ?>
                 <div class="preview-section">
-                    <h3><span class="status-badge status-new">✓ Neue Elemente (<?= count($this->preview['new']) ?>)</span></h3>
+                    <h3><span class="status-badge status-new">✓ Neue Wohnungen (<?= count($this->preview['new']) ?>)</span></h3>
                     <table class="preview-table">
                         <thead>
                             <tr>
                                 <th>Objektnr.</th>
+                                <th>Tab</th>
                                 <th>Bezeichnung</th>
                                 <th>Bauetappe</th>
                                 <th>Zeile</th>
@@ -443,6 +503,7 @@
                             <?php foreach ($this->preview['new'] as $item): ?>
                                 <tr>
                                     <td><strong><?= $item['objektnummer'] ?></strong></td>
+                                    <td><small style="color: #999;"><?= $item['sheet'] ?></small></td>
                                     <td><?= $item['bezeichnung'] ?></td>
                                     <td><?= $item['bauetappe'] ?></td>
                                     <td><?= $item['zeile'] ?></td>
@@ -463,7 +524,7 @@
                     <h3><span class="status-badge status-update">↻ Zu aktualisierende Wohnungen (<?= count($this->preview['update']) ?>)</span></h3>
                     <?php foreach ($this->preview['update'] as $item): ?>
                         <div class="change-item">
-                            <div class="change-header">📝 Objektnummer: <?= $item['objektnummer'] ?> (ID: <?= $item['id'] ?>)</div>
+                            <div class="change-header">📝 Objektnummer: <?= $item['objektnummer'] ?> (ID: <?= $item['id'] ?>) <small style="color: #999;">- Tab: <?= $item['sheet'] ?></small></div>
                             <?php if (!empty($item['changes'])): ?>
                                 <table class="preview-table">
                                     <thead>
@@ -513,7 +574,7 @@
                                                 });
                                                 if (!empty($dataPreview)) {
                                                     echo implode(' | ', array_map(function($val) {
-                                                        return htmlspecialchars($val);
+                                                        return htmlspecialchars((string)$val);
                                                     }, $dataPreview));
                                                 } else {
                                                     echo '<em style="color: #999;">Leere Zeile</em>';
@@ -536,6 +597,7 @@
                 <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import_confirm">
                 <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
                 <input type="hidden" name="temp_file" value="<?= $this->preview['tempFile'] ?>">
+                <input type="hidden" name="selected_sheets" value="<?= implode(',', $this->preview['selectedSheets']) ?>">
                 
                 <div class="confirm-buttons">
                     <button type="submit" class="btn-success">
@@ -547,8 +609,52 @@
                 </div>
             </form>
 
+        <?php elseif ($this->sheets): ?>
+            <!-- SCHRITT 2: Tab-Auswahl -->
+            
+            <div class="sheet-selection">
+                <h3>📑 Tabs auswählen</h3>
+                <p style="margin-bottom: 20px; color: #6c757d;">Wählen Sie die Tabs aus, die Sie importieren möchten:</p>
+                
+                <form action="<?= $this->action ?>" method="post" id="sheet-form">
+                    <input type="hidden" name="FORM_SUBMIT" value="tl_apartments_import_preview">
+                    <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
+                    <input type="hidden" name="temp_file" value="<?= $this->sheets['tempFile'] ?>">
+                    
+                    <div class="sheet-list">
+                        <?php foreach ($this->sheets['list'] as $sheet): ?>
+                            <label class="sheet-item">
+                                <input type="checkbox" name="selected_sheets[]" value="<?= htmlspecialchars($sheet['name']) ?>" checked>
+                                <div class="sheet-info">
+                                    <div class="sheet-name"><?= htmlspecialchars($sheet['name']) ?></div>
+                                    <div class="sheet-count"><?= $sheet['rowCount'] ?> Zeilen (ohne Header)</div>
+                                </div>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button type="submit" class="btn-primary" id="preview-btn">
+                            🔍 Vorschau anzeigen
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <script>
+            // Mindestens 1 Tab muss ausgewählt sein
+            document.getElementById('sheet-form').addEventListener('submit', function(e) {
+                var checked = document.querySelectorAll('input[name="selected_sheets[]"]:checked');
+                if (checked.length === 0) {
+                    e.preventDefault();
+                    alert('Bitte wählen Sie mindestens einen Tab aus.');
+                }
+            });
+            </script>
+
         <?php else: ?>
-            <!-- Upload-Formular -->
+            <!-- SCHRITT 1: Upload-Formular -->
+            
             <div class="import-instructions">
                 <h3>📋 Excel-Datei Struktur</h3>
                 <p>Ihre Excel-Datei muss folgende Spalten in dieser Reihenfolge enthalten:</p>
@@ -556,7 +662,7 @@
                 <div class="column-list">
                     <div class="column-item">
                         <div class="column-letter">A</div>
-                        <div class="column-name">Objektnummer *</div>
+                        <div class="column-name">Objektnummer (Pflichtfeld)</div>
                     </div>
                     <div class="column-item">
                         <div class="column-letter">B</div>
@@ -609,7 +715,7 @@
                 <div class="hint-icon">💡</div>
                 <div>
                     <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird automatisch übersprungen. 
-                    Bestehende Wohnungen mit gleicher Objektnummer werden aktualisiert.</p>
+                    Bestehende Wohnungen mit gleicher Objektnummer werden aktualisiert. Sie können nach dem Upload auswählen, welche Tabs importiert werden sollen.</p>
                 </div>
             </div>
             
@@ -630,7 +736,7 @@
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <button type="submit" class="btn-primary">
-                        🔍 Vorschau anzeigen
+                        Weiter zur Tab-Auswahl →
                     </button>
                 </div>
             </form>

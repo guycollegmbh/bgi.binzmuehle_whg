@@ -32,17 +32,26 @@ class ApartmentsImportController extends Backend
         // Messages für Template
         $template->messages = Message::generate();
         $template->preview = null;
+        $template->sheets = null;
         
-        // Schritt 2: Bestätigung und Import
+        // Schritt 3: Import ausführen
         if (Input::post('FORM_SUBMIT') === 'tl_apartments_import_confirm') {
             $this->processImport();
             $template->messages = Message::generate();
         }
-        // Schritt 1: Vorschau generieren
-        elseif (Input::post('FORM_SUBMIT') === 'tl_apartments_import') {
+        // Schritt 2: Vorschau generieren
+        elseif (Input::post('FORM_SUBMIT') === 'tl_apartments_import_preview') {
             $preview = $this->generatePreview();
             if ($preview) {
                 $template->preview = $preview;
+            }
+            $template->messages = Message::generate();
+        }
+        // Schritt 1: Tab-Auswahl anzeigen
+        elseif (Input::post('FORM_SUBMIT') === 'tl_apartments_import') {
+            $sheets = $this->getSheetsList();
+            if ($sheets) {
+                $template->sheets = $sheets;
             }
             $template->messages = Message::generate();
         }
@@ -50,7 +59,7 @@ class ApartmentsImportController extends Backend
         return $template->parse();
     }
     
-    protected function generatePreview()
+    protected function getSheetsList()
     {
         $uploadedFile = $_FILES['import_file'] ?? null;
         
@@ -61,102 +70,162 @@ class ApartmentsImportController extends Backend
         
         try {
             $spreadsheet = IOFactory::load($uploadedFile['tmp_name']);
-            $worksheet = $spreadsheet->getActiveSheet();
+            $tempFile = $this->saveTempFile($uploadedFile['tmp_name']);
+            
+            $sheets = [];
+            foreach ($spreadsheet->getAllSheets() as $worksheet) {
+                $sheets[] = [
+                    'name' => $worksheet->getTitle(),
+                    'rowCount' => $worksheet->getHighestRow() - 1, // -1 für Header
+                ];
+            }
+            
+            return [
+                'tempFile' => $tempFile,
+                'list' => $sheets,
+            ];
+            
+        } catch (\Exception $e) {
+            Message::addError('Fehler beim Lesen der Datei: ' . $e->getMessage());
+            return null;
+        }
+    }
+    
+    protected function generatePreview()
+    {
+        $tempFileName = Input::post('temp_file');
+        $selectedSheets = Input::post('selected_sheets');
+        
+        if (!$tempFileName) {
+            Message::addError('Keine Importdatei gefunden.');
+            return null;
+        }
+        
+        if (empty($selectedSheets) || !is_array($selectedSheets)) {
+            Message::addError('Bitte wählen Sie mindestens einen Tab aus.');
+            return null;
+        }
+        
+        $tempFile = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp/' . $tempFileName;
+        
+        if (!file_exists($tempFile)) {
+            Message::addError('Temporäre Datei nicht gefunden.');
+            return null;
+        }
+        
+        try {
+            $spreadsheet = IOFactory::load($tempFile);
             
             $db = Database::getInstance();
             $preview = [
                 'new' => [],
                 'update' => [],
                 'skip' => [],
-                'tempFile' => $this->saveTempFile($uploadedFile['tmp_name']),
+                'tempFile' => $tempFileName,
+                'selectedSheets' => $selectedSheets,
             ];
             
-            // Zeilen durchgehen (Zeile 1 = Header, ab Zeile 2 = Daten)
-            foreach ($worksheet->getRowIterator(2) as $row) {
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(false);
+            // Nur ausgewählte Sheets durchgehen
+            foreach ($spreadsheet->getAllSheets() as $worksheet) {
+                $sheetName = $worksheet->getTitle();
                 
-                $data = [];
-                foreach ($cellIterator as $cell) {
-                    $data[] = $cell->getValue();
-                }
-                
-                $objektnummer = trim((string)($data[0] ?? ''));
-
-                if (empty($objektnummer)) {
-                    // Prüfe ob die Zeile komplett leer ist
-                    $hasData = false;
-                    foreach ($data as $cell) {
-                        if (!empty(trim((string)$cell))) {
-                            $hasData = true;
-                            break;
-                        }
-                    }
-                    
-                    $preview['skip'][] = [
-                        'reason' => $hasData ? 'Keine Objektnummer vorhanden' : 'Leere Zeile',
-                        'data' => $data,
-                    ];
+                // Skip wenn nicht ausgewählt
+                if (!in_array($sheetName, $selectedSheets)) {
                     continue;
                 }
                 
-                $apartmentData = [
-                    'objektnummer' => trim((string)$objektnummer),
-                    'bezeichnung' => trim((string)($data[1] ?? '')),
-                    'bauetappe' => trim((string)($data[2] ?? '')),
-                    'zeile' => trim((string)($data[3] ?? '')),
-                    'adresse' => trim((string)($data[4] ?? '')),
-                    'etage' => trim((string)($data[5] ?? '')),
-                    'zimmer' => trim((string)($data[6] ?? '')),
-                    'flaeche' => trim((string)($data[7] ?? '')),
-                    'nettomietzins' => trim((string)($data[8] ?? '')),
-                    'nebenkosten' => trim((string)($data[9] ?? '')),
-                    'bruttomietzins' => trim((string)($data[10] ?? '')),
-                    'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
-                ];
-                
-                // Prüfen ob Wohnung bereits existiert
-                $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
-                    ->execute($objektnummer);
-                
-                if ($existing->numRows > 0) {
-                    // Update - Zeige was sich ändert
-                    $changes = [];
-                    $existingData = $existing->row();
+                // Zeilen durchgehen (Zeile 1 = Header, ab Zeile 2 = Daten)
+                foreach ($worksheet->getRowIterator(2) as $row) {
+                    $cellIterator = $row->getCellIterator();
+                    $cellIterator->setIterateOnlyExistingCells(false);
                     
-                    foreach ($apartmentData as $field => $newValue) {
-                        $oldValue = trim($existingData[$field] ?? '');
-                        $newValue = trim($newValue);
+                    $data = [];
+                    foreach ($cellIterator as $cell) {
+                        $data[] = $cell->getValue();
+                    }
+                    
+                    $objektnummer = trim((string)($data[0] ?? ''));
+                    
+                    if (empty($objektnummer)) {
+                        // Prüfe ob die Zeile komplett leer ist
+                        $hasData = false;
+                        foreach ($data as $cell) {
+                            if (!empty(trim((string)$cell))) {
+                                $hasData = true;
+                                break;
+                            }
+                        }
                         
-                        // Normalisiere Werte für Vergleich
-                        $oldNormalized = $this->normalizeValue($oldValue);
-                        $newNormalized = $this->normalizeValue($newValue);
-                        
-                        if ($oldNormalized !== $newNormalized) {
-                            $changes[$field] = [
-                                'old' => $oldValue,
-                                'new' => $newValue,
+                        if ($hasData) {
+                            $preview['skip'][] = [
+                                'reason' => 'Keine Objektnummer (Tab: ' . $sheetName . ')',
+                                'data' => $data,
                             ];
                         }
+                        continue;
                     }
                     
-                    // Nur als Update zählen wenn tatsächlich Änderungen vorhanden sind
-                    if (!empty($changes)) {
-                        $preview['update'][] = [
-                            'id' => $existingData['id'],
-                            'objektnummer' => $objektnummer,
-                            'changes' => $changes,
-                            'data' => $apartmentData,
-                        ];
+                    $apartmentData = [
+                        'objektnummer' => trim((string)$objektnummer),
+                        'bezeichnung' => trim((string)($data[1] ?? '')),
+                        'bauetappe' => trim((string)($data[2] ?? '')),
+                        'zeile' => trim((string)($data[3] ?? '')),
+                        'adresse' => trim((string)($data[4] ?? '')),
+                        'etage' => trim((string)($data[5] ?? '')),
+                        'zimmer' => trim((string)($data[6] ?? '')),
+                        'flaeche' => trim((string)($data[7] ?? '')),
+                        'nettomietzins' => trim((string)($data[8] ?? '')),
+                        'nebenkosten' => trim((string)($data[9] ?? '')),
+                        'bruttomietzins' => trim((string)($data[10] ?? '')),
+                        'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
+                    ];
+                    
+                    // Prüfen ob Wohnung bereits existiert
+                    $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
+                        ->execute($objektnummer);
+                    
+                    if ($existing->numRows > 0) {
+                        // Update - Zeige was sich ändert
+                        $changes = [];
+                        $existingData = $existing->row();
+                        
+                        foreach ($apartmentData as $field => $newValue) {
+                            $oldValue = trim((string)($existingData[$field] ?? ''));
+                            $newValue = trim((string)$newValue);
+                            
+                            // Normalisiere Werte für Vergleich
+                            $oldNormalized = $this->normalizeValue($oldValue);
+                            $newNormalized = $this->normalizeValue($newValue);
+                            
+                            if ($oldNormalized !== $newNormalized) {
+                                $changes[$field] = [
+                                    'old' => $oldValue,
+                                    'new' => $newValue,
+                                ];
+                            }
+                        }
+                        
+                        // Nur als Update zählen wenn tatsächlich Änderungen vorhanden sind
+                        if (!empty($changes)) {
+                            $preview['update'][] = [
+                                'id' => $existingData['id'],
+                                'objektnummer' => $objektnummer,
+                                'sheet' => $sheetName,
+                                'changes' => $changes,
+                                'data' => $apartmentData,
+                            ];
+                        }
+                    } else {
+                        // Neu
+                        $apartmentData['sheet'] = $sheetName;
+                        $preview['new'][] = $apartmentData;
                     }
-                } else {
-                    // Neu
-                    $preview['new'][] = $apartmentData;
                 }
             }
             
             Message::addInfo(sprintf(
-                'Vorschau: %d neue Wohnungen, %d Updates, %d übersprungen',
+                'Vorschau (%d Tabs): %d neue Wohnungen, %d Updates, %d übersprungen',
+                count($selectedSheets),
                 count($preview['new']),
                 count($preview['update']),
                 count($preview['skip'])
@@ -182,7 +251,7 @@ class ApartmentsImportController extends Backend
     protected function normalizeValue($value)
     {
         // Trimmen und in lowercase konvertieren
-        $value = strtolower(trim($value));
+        $value = strtolower(trim((string)$value));
         
         // Mehrfache Leerzeichen entfernen
         $value = preg_replace('/\s+/', ' ', $value);
@@ -206,10 +275,21 @@ class ApartmentsImportController extends Backend
     protected function processImport()
     {
         $tempFileName = Input::post('temp_file');
+        $selectedSheets = Input::post('selected_sheets');
         
         if (!$tempFileName) {
             Message::addError('Keine Importdatei gefunden.');
             return;
+        }
+        
+        if (empty($selectedSheets)) {
+            Message::addError('Keine Tabs ausgewählt.');
+            return;
+        }
+        
+        // Wenn selected_sheets als String kommt (aus hidden input), in Array umwandeln
+        if (is_string($selectedSheets)) {
+            $selectedSheets = explode(',', $selectedSheets);
         }
         
         $tempFile = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp/' . $tempFileName;
@@ -221,82 +301,91 @@ class ApartmentsImportController extends Backend
         
         try {
             $spreadsheet = IOFactory::load($tempFile);
-            $worksheet = $spreadsheet->getActiveSheet();
             
             $db = Database::getInstance();
             $imported = 0;
             $updated = 0;
             $skipped = 0;
             
-            // Zeilen durchgehen (Zeile 1 = Header, ab Zeile 2 = Daten)
-            foreach ($worksheet->getRowIterator(2) as $row) {
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(false);
+            // Nur ausgewählte Sheets durchgehen
+            foreach ($spreadsheet->getAllSheets() as $worksheet) {
+                $sheetName = $worksheet->getTitle();
                 
-                $data = [];
-                foreach ($cellIterator as $cell) {
-                    $data[] = $cell->getValue();
-                }
-                
-                $objektnummer = trim($data[0] ?? '');
-                
-                if (empty($objektnummer)) {
-                    $skipped++;
+                // Skip wenn nicht ausgewählt
+                if (!in_array($sheetName, $selectedSheets)) {
                     continue;
                 }
                 
-                // Prüfen ob Wohnung bereits existiert
-                $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
-                    ->execute($objektnummer);
-                
-                $apartmentData = [
-                    'tstamp' => time(),
-                    'objektnummer' => trim((string)$objektnummer),
-                    'bezeichnung' => trim((string)($data[1] ?? '')),
-                    'bauetappe' => trim((string)($data[2] ?? '')),
-                    'zeile' => trim((string)($data[3] ?? '')),
-                    'adresse' => trim((string)($data[4] ?? '')),
-                    'etage' => trim((string)($data[5] ?? '')),
-                    'zimmer' => trim((string)($data[6] ?? '')),
-                    'flaeche' => trim((string)($data[7] ?? '')),
-                    'nettomietzins' => trim((string)($data[8] ?? '')),
-                    'nebenkosten' => trim((string)($data[9] ?? '')),
-                    'bruttomietzins' => trim((string)($data[10] ?? '')),
-                    'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
-                    'published' => true,
-                ];
-                
-                if ($existing->numRows > 0) {
-                    // Prüfe ob es tatsächlich Änderungen gibt
-                    $hasChanges = false;
-                    $existingData = $existing->row();
+                // Zeilen durchgehen (Zeile 1 = Header, ab Zeile 2 = Daten)
+                foreach ($worksheet->getRowIterator(2) as $row) {
+                    $cellIterator = $row->getCellIterator();
+                    $cellIterator->setIterateOnlyExistingCells(false);
                     
-                    foreach ($apartmentData as $field => $newValue) {
-                        if ($field === 'tstamp' || $field === 'published') {
-                            continue;
-                        }
-                        
-                        $oldValue = $existingData[$field] ?? '';
-                        
-                        if ($this->normalizeValue($oldValue) !== $this->normalizeValue($newValue)) {
-                            $hasChanges = true;
-                            break;
-                        }
+                    $data = [];
+                    foreach ($cellIterator as $cell) {
+                        $data[] = $cell->getValue();
                     }
                     
-                    if ($hasChanges) {
-                        // Update nur wenn Änderungen vorhanden
-                        $db->prepare('UPDATE tl_apartments %s WHERE id = ?')
+                    $objektnummer = trim((string)($data[0] ?? ''));
+                    
+                    if (empty($objektnummer)) {
+                        $skipped++;
+                        continue;
+                    }
+                    
+                    // Prüfen ob Wohnung bereits existiert
+                    $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
+                        ->execute($objektnummer);
+                    
+                    $apartmentData = [
+                        'tstamp' => time(),
+                        'objektnummer' => trim((string)$objektnummer),
+                        'bezeichnung' => trim((string)($data[1] ?? '')),
+                        'bauetappe' => trim((string)($data[2] ?? '')),
+                        'zeile' => trim((string)($data[3] ?? '')),
+                        'adresse' => trim((string)($data[4] ?? '')),
+                        'etage' => trim((string)($data[5] ?? '')),
+                        'zimmer' => trim((string)($data[6] ?? '')),
+                        'flaeche' => trim((string)($data[7] ?? '')),
+                        'nettomietzins' => trim((string)($data[8] ?? '')),
+                        'nebenkosten' => trim((string)($data[9] ?? '')),
+                        'bruttomietzins' => trim((string)($data[10] ?? '')),
+                        'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
+                        'published' => true,
+                    ];
+                    
+                    if ($existing->numRows > 0) {
+                        // Prüfe ob es tatsächlich Änderungen gibt
+                        $hasChanges = false;
+                        $existingData = $existing->row();
+                        
+                        foreach ($apartmentData as $field => $newValue) {
+                            if ($field === 'tstamp' || $field === 'published') {
+                                continue;
+                            }
+                            
+                            $oldValue = $existingData[$field] ?? '';
+                            
+                            if ($this->normalizeValue((string)$oldValue) !== $this->normalizeValue((string)$newValue)) {
+                                $hasChanges = true;
+                                break;
+                            }
+                        }
+                        
+                        if ($hasChanges) {
+                            // Update nur wenn Änderungen vorhanden
+                            $db->prepare('UPDATE tl_apartments %s WHERE id = ?')
+                                ->set($apartmentData)
+                                ->execute($existing->id);
+                            $updated++;
+                        }
+                    } else {
+                        // Insert
+                        $db->prepare('INSERT INTO tl_apartments %s')
                             ->set($apartmentData)
-                            ->execute($existing->id);
-                        $updated++;
+                            ->execute();
+                        $imported++;
                     }
-                } else {
-                    // Insert
-                    $db->prepare('INSERT INTO tl_apartments %s')
-                        ->set($apartmentData)
-                        ->execute();
-                    $imported++;
                 }
             }
             
