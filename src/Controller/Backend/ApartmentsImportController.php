@@ -183,7 +183,7 @@ class ApartmentsImportController extends Backend
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
                         'status' => 'Frei', // Immer "Frei"
-                        'grundrisspdf' => $pdfUuid,
+                        'grundrisspdf' => $pdfUuid ?: null, // Explizit null wenn leer
                     ];
                     
                     // Prüfen ob Wohnung bereits existiert
@@ -383,7 +383,7 @@ class ApartmentsImportController extends Backend
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
                         'status' => 'Frei', // Immer "Frei"
-                        'grundrisspdf' => $pdfUuid,
+                        'grundrisspdf' => $pdfUuid ?: null, // Explizit null wenn leer
                         'published' => true,
                     ];
                     
