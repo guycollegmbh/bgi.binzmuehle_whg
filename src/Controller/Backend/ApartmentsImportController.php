@@ -81,7 +81,8 @@ class ApartmentsImportController extends Backend
         // Schritt 3: Import ausführen
         if (Input::post('FORM_SUBMIT') === 'tl_apartments_import_confirm') {
             $this->processImport();
-            $template->messages = Message::generate();
+            // DIESE ZEILE LÖSCHEN: $template->messages = Message::generate();
+            return; // Hier return, weil redirect schon im processImport
         }
         // Schritt 2: Vorschau generieren
         elseif (Input::post('FORM_SUBMIT') === 'tl_apartments_import_preview') {
@@ -466,12 +467,15 @@ class ApartmentsImportController extends Backend
             
             // Temp-Datei löschen
             @unlink($tempFile);
-            
+
+            $total = $imported + $updated + $skipped;
+
             Message::addConfirmation(sprintf(
-                'Import erfolgreich! %d neue Wohnungen importiert, %d aktualisiert, %d übersprungen.',
+                'Wohnungen importiert: %d neu, %d aktualisiert, %d übersprungen von insgesamt %d Zeilen.',
                 $imported,
                 $updated,
-                $skipped
+                $skipped,
+                $total
             ));
             
         } catch (\Exception $e) {
