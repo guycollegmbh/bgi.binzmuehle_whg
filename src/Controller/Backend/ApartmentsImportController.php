@@ -81,9 +81,9 @@ class ApartmentsImportController extends Backend
         // Schritt 3: Import ausführen
         if (Input::post('FORM_SUBMIT') === 'tl_apartments_import_confirm') {
             $this->processImport();
-            // DIESE ZEILE LÖSCHEN: $template->messages = Message::generate();
-            return; // Hier return, weil redirect schon im processImport
+            $this->redirect('contao?do=apartments&table=tl_apartments');
         }
+        
         // Schritt 2: Vorschau generieren
         elseif (Input::post('FORM_SUBMIT') === 'tl_apartments_import_preview') {
             $preview = $this->generatePreview();
@@ -477,9 +477,6 @@ class ApartmentsImportController extends Backend
                 $skipped,
                 $total
             ));
-
-            // Redirect zur Apartments-Liste
-            $this->redirect('contao?do=apartments&table=tl_apartments');
             
         } catch (\Exception $e) {
             Message::addError('Fehler beim Import: ' . $e->getMessage());
