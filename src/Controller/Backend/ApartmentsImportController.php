@@ -261,12 +261,13 @@ class ApartmentsImportController extends Backend
         $filename = $cleanNummer . '.pdf';
         $path = 'files/apartments/grundrisse/' . $filename;
         
-        // Hole UUID direkt aus der Datenbank
+        // Hole UUID direkt aus der Datenbank als Binary
         $db = Database::getInstance();
         $file = $db->prepare('SELECT uuid FROM tl_files WHERE path = ?')
             ->execute($path);
         
         if ($file->numRows > 0) {
+            // UUID ist bereits im Binary-Format aus der DB
             return $file->uuid;
         }
         
