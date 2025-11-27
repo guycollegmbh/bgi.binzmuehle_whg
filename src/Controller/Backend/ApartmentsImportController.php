@@ -477,6 +477,9 @@ class ApartmentsImportController extends Backend
                 $skipped,
                 $total
             ));
+
+            // Redirect zur Apartments-Liste
+            $this->redirect('contao?do=apartments&table=tl_apartments');
             
         } catch (\Exception $e) {
             Message::addError('Fehler beim Import: ' . $e->getMessage());
