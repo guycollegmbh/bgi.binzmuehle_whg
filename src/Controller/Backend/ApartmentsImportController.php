@@ -228,14 +228,23 @@ class ApartmentsImportController extends Backend
                         'grundrisspdf' => $pdfUuid,
                     ];
                     
-                    // Prüfen ob Wohnung bereits existiert
-                    $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
-                        ->execute($objektnummer);
+                    // Normalisierte Version für Vergleich
+                    $objektnummerNormalized = $this->normalizeObjektnummer($objektnummer);
                     
-                    if ($existing->numRows > 0) {
+                    // Prüfen ob Wohnung bereits existiert (mit normalisiertem Vergleich)
+                    $existing = $db->execute('SELECT * FROM tl_apartments WHERE published = 1');
+                    $existingMatch = null;
+                    
+                    while ($existing->next()) {
+                        if ($this->normalizeObjektnummer($existing->objektnummer) === $objektnummerNormalized) {
+                            $existingMatch = $existing->row();
+                            break;
+                        }
+                    }
+                    
+                    if ($existingMatch !== null) {
                         // Update - Zeige was sich ändert (Status ausschließen)
                         $changes = [];
-                        $existingData = $existing->row();
                         
                         foreach ($apartmentData as $field => $newValue) {
                             // Status nicht in Änderungen aufnehmen
@@ -243,7 +252,7 @@ class ApartmentsImportController extends Backend
                                 continue;
                             }
                             
-                            $oldValue = trim((string)($existingData[$field] ?? ''));
+                            $oldValue = trim((string)($existingMatch[$field] ?? ''));
                             $newValue = trim((string)$newValue);
                             
                             // Normalisiere Werte für Vergleich
@@ -261,7 +270,7 @@ class ApartmentsImportController extends Backend
                         // Nur als Update zählen wenn tatsächlich Änderungen vorhanden sind
                         if (!empty($changes)) {
                             $preview['update'][] = [
-                                'id' => $existingData['id'],
+                                'id' => $existingMatch['id'],
                                 'objektnummer' => $objektnummer,
                                 'sheet' => $sheetName,
                                 'changes' => $changes,
@@ -319,6 +328,17 @@ class ApartmentsImportController extends Backend
         }
         
         return null;
+    }
+    
+    /**
+     * Normalisiert Objektnummer für Vergleich (entfernt Klammern und Inhalt)
+     */
+    protected function normalizeObjektnummer($objektnummer)
+    {
+        // Entferne alles in Klammern inkl. führende Leerzeichen
+        $normalized = preg_replace('/\s*\([^)]*\)/', '', $objektnummer);
+        // Trimmen
+        return trim($normalized);
     }
     
     /**
@@ -417,9 +437,19 @@ class ApartmentsImportController extends Backend
                         continue;
                     }
                     
-                    // Prüfen ob Wohnung bereits existiert
-                    $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
-                        ->execute($objektnummer);
+                    // Normalisierte Version für Vergleich
+                    $objektnummerNormalized = $this->normalizeObjektnummer($objektnummer);
+                    
+                    // Prüfen ob Wohnung bereits existiert (mit normalisiertem Vergleich)
+                    $existing = $db->execute('SELECT * FROM tl_apartments');
+                    $existingMatch = null;
+                    
+                    while ($existing->next()) {
+                        if ($this->normalizeObjektnummer($existing->objektnummer) === $objektnummerNormalized) {
+                            $existingMatch = $existing->row();
+                            break;
+                        }
+                    }
                     
                     // PDF-Verknüpfung suchen
                     $pdfUuid = $this->findPdfByObjektnummer($objektnummer);
@@ -442,10 +472,9 @@ class ApartmentsImportController extends Backend
                         'published' => true,
                     ];
                     
-                    if ($existing->numRows > 0) {
+                    if ($existingMatch !== null) {
                         // Prüfe ob es tatsächlich Änderungen gibt (Status ausschließen)
                         $hasChanges = false;
-                        $existingData = $existing->row();
                         
                         foreach ($apartmentData as $field => $newValue) {
                             // Status, tstamp und published nicht bei Änderungsprüfung berücksichtigen
@@ -453,7 +482,7 @@ class ApartmentsImportController extends Backend
                                 continue;
                             }
                             
-                            $oldValue = $existingData[$field] ?? '';
+                            $oldValue = $existingMatch[$field] ?? '';
                             
                             if ($this->normalizeValue((string)$oldValue) !== $this->normalizeValue((string)$newValue)) {
                                 $hasChanges = true;
@@ -468,7 +497,7 @@ class ApartmentsImportController extends Backend
                             // Update nur wenn Änderungen vorhanden
                             $db->prepare('UPDATE tl_apartments %s WHERE id = ?')
                                 ->set($apartmentData)
-                                ->execute($existing->id);
+                                ->execute($existingMatch['id']);
                             $updated++;
                         }
                     } else {
