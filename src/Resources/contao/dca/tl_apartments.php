@@ -248,8 +248,9 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'eval'      => [
                 'fieldType'  => 'radio',
                 'filesOnly'  => true,
-                'extensions' => Config::get('validImageTypes'),
-                'tl_class'   => 'w100 clr',
+                'extensions' => 'pdf', // Nur PDFs erlauben
+                'path'       => 'files/apartments/grundrisse', // Optional: Standardpfad
+                'tl_class'   => 'w50 clr',
             ],
             'sql' => [
                 'type'    => 'binary',
