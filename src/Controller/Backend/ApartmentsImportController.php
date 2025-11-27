@@ -20,35 +20,77 @@ use Psr\Log\LoggerInterface;
 class ApartmentsImportController extends Backend
 {
     /**
-     * PDF-Synchronisierung
+     * PDF-Synchronisierung mit Timestamp-Check
      */
     public function syncPdfs()
     {
         $db = Database::getInstance();
         
         // Hole alle Apartments
-        $apartments = $db->execute('SELECT id, objektnummer FROM tl_apartments');
+        $apartments = $db->execute('SELECT id, objektnummer, grundrisspdf FROM tl_apartments');
         
-        $synced = 0;
-        $notFound = 0;
+        $linked = 0;      // Neu verknüpft
+        $updated = 0;     // Aktualisiert (neuere Datei)
+        $unchanged = 0;   // Unverändert (gleiche oder ältere Datei)
+        $notFound = 0;    // Keine PDF gefunden
         $total = $apartments->numRows;
         
         while ($apartments->next()) {
             $objektnummer = $apartments->objektnummer;
-            $pdfUuid = $this->findPdfByObjektnummer($objektnummer);
+            $currentPdfUuid = $apartments->grundrisspdf;
+            $apartmentId = $apartments->id;
             
-            if ($pdfUuid) {
-                $db->prepare('UPDATE tl_apartments SET grundrisspdf = ? WHERE id = ?')
-                    ->execute($pdfUuid, $apartments->id);
-                $synced++;
-            } else {
+            // Suche neue PDF
+            $newPdfInfo = $this->findPdfByObjektnummer($objektnummer);
+            
+            if (!$newPdfInfo) {
+                // Keine PDF gefunden
                 $notFound++;
+                continue;
+            }
+            
+            // Wenn noch keine PDF verknüpft ist
+            if (!$currentPdfUuid) {
+                $db->prepare('UPDATE tl_apartments SET grundrisspdf = ? WHERE id = ?')
+                    ->execute($newPdfInfo['uuid'], $apartmentId);
+                $linked++;
+                continue;
+            }
+            
+            // Prüfe ob Update nötig ist (Timestamp-Vergleich)
+            $currentPdfModel = FilesModel::findByUuid($currentPdfUuid);
+            
+            if (!$currentPdfModel) {
+                // Alte Datei existiert nicht mehr, verknüpfe neue
+                $db->prepare('UPDATE tl_apartments SET grundrisspdf = ? WHERE id = ?')
+                    ->execute($newPdfInfo['uuid'], $apartmentId);
+                $updated++;
+                continue;
+            }
+            
+            // Vergleiche UUIDs
+            if (bin2hex($currentPdfUuid) === bin2hex($newPdfInfo['uuid'])) {
+                // Gleiche Datei, nichts zu tun
+                $unchanged++;
+                continue;
+            }
+            
+            // Vergleiche Timestamps - nur aktualisieren wenn neue Datei neuer ist
+            if ($newPdfInfo['tstamp'] > $currentPdfModel->tstamp) {
+                $db->prepare('UPDATE tl_apartments SET grundrisspdf = ? WHERE id = ?')
+                    ->execute($newPdfInfo['uuid'], $apartmentId);
+                $updated++;
+            } else {
+                // Neue Datei ist nicht neuer, nichts ändern
+                $unchanged++;
             }
         }
         
         Message::addConfirmation(sprintf(
-            'Grundrisse synchronisiert: %d verknüpft, %d nicht gefunden von insgesamt %d Wohnungen.',
-            $synced,
+            'Grundrisse synchronisiert: %d verknüpft, %d aktualisiert, %d unverändert, %d nicht gefunden von insgesamt %d Wohnungen.',
+            $linked,
+            $updated,
+            $unchanged,
             $notFound,
             $total
         ));
@@ -58,7 +100,7 @@ class ApartmentsImportController extends Backend
     }
     
     /**
-     * Excel-Import
+     * Excel-Import (OHNE PDF-Verknüpfung)
      */
     public function importApartments()
     {
@@ -209,9 +251,6 @@ class ApartmentsImportController extends Backend
                         continue;
                     }
                     
-                    // PDF-Verknüpfung suchen
-                    $pdfUuid = $this->findPdfByObjektnummer($objektnummer);
-                    
                     $apartmentData = [
                         'objektnummer' => trim((string)$objektnummer),
                         'bezeichnung' => trim((string)($data[1] ?? '')),
@@ -225,7 +264,6 @@ class ApartmentsImportController extends Backend
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
                         'status' => 'Frei', // Nur für neue Einträge
-                        'grundrisspdf' => $pdfUuid,
                     ];
                     
                     // Normalisierte Version für Vergleich
@@ -243,12 +281,12 @@ class ApartmentsImportController extends Backend
                     }
                     
                     if ($existingMatch !== null) {
-                        // Update - Zeige was sich ändert (Status ausschließen)
+                        // Update - Zeige was sich ändert (Status und grundrisspdf ausschließen)
                         $changes = [];
                         
                         foreach ($apartmentData as $field => $newValue) {
-                            // Status nicht in Änderungen aufnehmen
-                            if ($field === 'status') {
+                            // Status und grundrisspdf nicht in Änderungen aufnehmen
+                            if ($field === 'status' || $field === 'grundrisspdf') {
                                 continue;
                             }
                             
@@ -308,7 +346,7 @@ class ApartmentsImportController extends Backend
     }
     
     /**
-     * Findet PDF anhand Objektnummer
+     * Findet PDF anhand Objektnummer und gibt UUID + Timestamp zurück
      */
     protected function findPdfByObjektnummer($objektnummer)
     {
@@ -317,14 +355,17 @@ class ApartmentsImportController extends Backend
         $filename = $cleanNummer . '.pdf';
         $path = 'files/apartments/pdfGrundriss/' . $filename;
         
-        // Hole UUID direkt aus der Datenbank als Binary
+        // Hole UUID und Timestamp direkt aus der Datenbank
         $db = Database::getInstance();
-        $file = $db->prepare('SELECT uuid FROM tl_files WHERE path = ?')
+        $file = $db->prepare('SELECT uuid, tstamp FROM tl_files WHERE path = ?')
             ->execute($path);
         
         if ($file->numRows > 0) {
-            // UUID ist bereits im Binary-Format aus der DB
-            return $file->uuid;
+            return [
+                'uuid' => $file->uuid,
+                'tstamp' => $file->tstamp,
+                'path' => $path,
+            ];
         }
         
         return null;
@@ -451,9 +492,6 @@ class ApartmentsImportController extends Backend
                         }
                     }
                     
-                    // PDF-Verknüpfung suchen
-                    $pdfUuid = $this->findPdfByObjektnummer($objektnummer);
-                    
                     $apartmentData = [
                         'tstamp' => time(),
                         'objektnummer' => trim((string)$objektnummer),
@@ -468,17 +506,16 @@ class ApartmentsImportController extends Backend
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
                         'status' => 'Frei', // Nur für neue Einträge
-                        'grundrisspdf' => $pdfUuid ?: null,
                         'published' => true,
                     ];
                     
                     if ($existingMatch !== null) {
-                        // Prüfe ob es tatsächlich Änderungen gibt (Status ausschließen)
+                        // Prüfe ob es tatsächlich Änderungen gibt (Status und grundrisspdf ausschließen)
                         $hasChanges = false;
                         
                         foreach ($apartmentData as $field => $newValue) {
-                            // Status, tstamp und published nicht bei Änderungsprüfung berücksichtigen
-                            if ($field === 'tstamp' || $field === 'published' || $field === 'status') {
+                            // Status, tstamp, published und grundrisspdf nicht bei Änderungsprüfung berücksichtigen
+                            if ($field === 'tstamp' || $field === 'published' || $field === 'status' || $field === 'grundrisspdf') {
                                 continue;
                             }
                             
@@ -491,8 +528,9 @@ class ApartmentsImportController extends Backend
                         }
                         
                         if ($hasChanges) {
-                            // Status aus apartmentData entfernen bevor UPDATE
+                            // Status und grundrisspdf aus apartmentData entfernen bevor UPDATE
                             unset($apartmentData['status']);
+                            unset($apartmentData['grundrisspdf']);
                             
                             // Update nur wenn Änderungen vorhanden
                             $db->prepare('UPDATE tl_apartments %s WHERE id = ?')
@@ -501,7 +539,7 @@ class ApartmentsImportController extends Backend
                             $updated++;
                         }
                     } else {
-                        // Insert - Status wird auf "Frei" gesetzt
+                        // Insert - Status wird auf "Frei" gesetzt, grundrisspdf bleibt NULL
                         $db->prepare('INSERT INTO tl_apartments %s')
                             ->set($apartmentData)
                             ->execute();
