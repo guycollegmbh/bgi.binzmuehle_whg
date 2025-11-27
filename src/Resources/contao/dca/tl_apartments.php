@@ -249,7 +249,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'fieldType'  => 'radio',
                 'filesOnly'  => true,
                 'extensions' => 'pdf', // Nur PDFs erlauben
-                'path'       => 'files/apartments/grundrisse', // Optional: Standardpfad
+                'path'       => 'files/apartments/pdfGrundriss', // Optional: Standardpfad
                 'tl_class'   => 'w50 clr',
             ],
             'sql' => [

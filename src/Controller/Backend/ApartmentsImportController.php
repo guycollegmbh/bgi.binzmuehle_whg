@@ -306,7 +306,7 @@ class ApartmentsImportController extends Backend
         // Bereinige Objektnummer für Dateiname (entferne alles außer Zahlen und Punkte)
         $cleanNummer = preg_replace('/[^0-9.]/', '', $objektnummer);
         $filename = $cleanNummer . '.pdf';
-        $path = 'files/apartments/grundrisse/' . $filename;
+        $path = 'files/apartments/pdfGrundriss/' . $filename;
         
         // Hole UUID direkt aus der Datenbank als Binary
         $db = Database::getInstance();
