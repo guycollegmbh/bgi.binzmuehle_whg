@@ -1,4 +1,4 @@
- <div class="mod_apartments_detail">
+<div class="mod_apartments_detail">
     {% if error %}
         <div class="alert alert-warning">{{ error }}</div>
         <a href="javascript:history.back()" class="btn btn-back">Zurück zur Übersicht</a>
@@ -69,6 +69,19 @@
                     </div>
                 {% endif %}
 
+                {% if apartment.grundrisspdf_path %}
+                    <div class="detail-section download-section">
+                        <h2>Downloads</h2>
+                        <a href="{{ apartment.grundrisspdf_path }}" class="btn btn-download" download>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            Grundriss herunterladen (PDF)
+                        </a>
+                    </div>
+                {% endif %}
+
                 {% if apartment.imagegrundriss_path or apartment.imageetage_path %}
                     <div class="detail-section images-section">
                         <h2>Pläne & Ansichten</h2>
@@ -88,19 +101,6 @@
                         </div>
                     </div>
                 {% endif %}
-
-                {% if apartment.grundrisspdf_path %}
-                    <div class="detail-section download-section">
-                        <h2>Downloads</h2>
-                        <a href="{{ apartment.grundrisspdf_path }}" class="btn btn-download" download>
-                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                            </svg>
-                            {{ apartment.grundrisspdf_name|default('Grundriss') }} herunterladen
-                        </a>
-                    </div>
-                {% endif %}
             </div>
 
             <div class="detail-footer">
@@ -109,3 +109,192 @@
         </div>
     {% endif %}
 </div>
+
+<style>
+.mod_apartments_detail {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.apartment-detail {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.detail-header {
+    padding: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.detail-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 32px;
+}
+
+.objektnummer {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+}
+
+.detail-content {
+    padding: 30px;
+}
+
+.detail-section {
+    margin-bottom: 40px;
+}
+
+.detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.detail-section h2 {
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    color: #333;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.info-list,
+.costs-list {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 15px 30px;
+    margin: 0;
+}
+
+.info-list dt,
+.costs-list dt {
+    font-weight: 600;
+    color: #666;
+}
+
+.info-list dd,
+.costs-list dd {
+    margin: 0;
+    color: #333;
+}
+
+.costs-list dt.total,
+.costs-list dd.total {
+    font-size: 20px;
+    font-weight: 700;
+    color: #667eea;
+    padding-top: 15px;
+    border-top: 2px solid #f0f0f0;
+    margin-top: 10px;
+}
+
+.download-section {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    margin: 30px 0;
+}
+
+.btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.btn-download:hover {
+    background: #218838;
+}
+
+.btn-download svg {
+    width: 20px;
+    height: 20px;
+}
+
+.images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.image-item h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #666;
+}
+
+.image-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.detail-footer {
+    padding: 20px 30px;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.btn-back:hover {
+    background: #5a6268;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+}
+
+@media (max-width: 768px) {
+    .info-list,
+    .costs-list {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .detail-header h1 {
+        font-size: 24px;
+    }
+    
+    .images-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

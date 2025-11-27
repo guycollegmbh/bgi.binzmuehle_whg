@@ -704,18 +704,14 @@
                         <div class="column-letter">K</div>
                         <div class="column-name">Bruttomiete</div>
                     </div>
-                    <div class="column-item">
-                        <div class="column-letter">L</div>
-                        <div class="column-name">Status</div>
-                    </div>
                 </div>
             </div>
             
             <div class="hint-box">
                 <div class="hint-icon">💡</div>
                 <div>
-                    <p><strong>Hinweis:</strong> Die erste Zeile (Header) wird automatisch übersprungen. 
-                    Bestehende Wohnungen mit gleicher Objektnummer werden aktualisiert. Sie können nach dem Upload auswählen, welche Tabs importiert werden sollen.</p>
+                    <p><strong>Hinweis:</strong> Die ersten 4 Zeilen werden übersprungen (Titel, Datum, Leer, Header). 
+                    Status wird automatisch auf "Frei" gesetzt. Bestehende Elemente mit gleicher Objektnummer werden aktualisiert.</p>
                 </div>
             </div>
             
