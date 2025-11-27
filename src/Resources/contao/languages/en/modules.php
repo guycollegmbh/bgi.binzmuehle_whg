@@ -3,6 +3,8 @@ $GLOBALS['TL_LANG']['MOD']['binzmuehle'] = 'Binzmühle';
 
 // Import Button
 $GLOBALS['TL_LANG']['tl_apartments']['import'] = ['Wohnungen importieren', 'Excel-Datei mit Wohnungen importieren'];
+// sync_pdfs
+$GLOBALS['TL_LANG']['tl_apartments']['sync_pdfs'] = ['Grundrisse aktualisieren', 'Verknüpft automatisch alle PDFs aus dem Ordner files/apartments/grundrisse'];
 
 //Module
 $GLOBALS['TL_LANG']['MOD']['apartments'][0] = 'Wohnungen';

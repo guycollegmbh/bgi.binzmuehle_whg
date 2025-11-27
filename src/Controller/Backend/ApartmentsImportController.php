@@ -13,11 +13,53 @@ use Contao\Message;
 use Contao\System;
 use Contao\FilesModel;
 use Contao\Dbafs;
+use Contao\Controller;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Psr\Log\LoggerInterface;
 
 class ApartmentsImportController extends Backend
 {
+    /**
+     * PDF-Synchronisierung
+     */
+    public function syncPdfs()
+    {
+        $db = Database::getInstance();
+        
+        // Hole alle Apartments
+        $apartments = $db->execute('SELECT id, objektnummer FROM tl_apartments');
+        
+        $synced = 0;
+        $notFound = 0;
+        $total = $apartments->numRows;
+        
+        while ($apartments->next()) {
+            $objektnummer = $apartments->objektnummer;
+            $pdfUuid = $this->findPdfByObjektnummer($objektnummer);
+            
+            if ($pdfUuid) {
+                $db->prepare('UPDATE tl_apartments SET grundrisspdf = ? WHERE id = ?')
+                    ->execute($pdfUuid, $apartments->id);
+                $synced++;
+            } else {
+                $notFound++;
+            }
+        }
+        
+        Message::addConfirmation(sprintf(
+            'Grundrisse synchronisiert: %d verknüpft, %d nicht gefunden von insgesamt %d Wohnungen.',
+            $synced,
+            $notFound,
+            $total
+        ));
+        
+        // Zurück zur Übersicht
+        Controller::redirect(System::getReferer());
+    }
+    
+    /**
+     * Excel-Import
+     */
     public function importApartments()
     {
         // Backend Template laden
@@ -183,7 +225,7 @@ class ApartmentsImportController extends Backend
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
                         'status' => 'Frei', // Immer "Frei"
-                        'grundrisspdf' => $pdfUuid ?: null, // Explizit null wenn leer
+                        'grundrisspdf' => $pdfUuid,
                     ];
                     
                     // Prüfen ob Wohnung bereits existiert
@@ -383,7 +425,7 @@ class ApartmentsImportController extends Backend
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
                         'status' => 'Frei', // Immer "Frei"
-                        'grundrisspdf' => $pdfUuid ?: null, // Explizit null wenn leer
+                        'grundrisspdf' => $pdfUuid ?: null,
                         'published' => true,
                     ];
                     

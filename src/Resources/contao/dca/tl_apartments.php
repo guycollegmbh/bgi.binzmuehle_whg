@@ -48,6 +48,13 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
                 'icon'  => 'new.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
             ],
+            'sync_pdfs' => [
+                'label' => &$GLOBALS['TL_LANG']['tl_apartments']['sync_pdfs'],
+                'href'  => 'key=sync_pdfs',
+                'class' => 'header_sync',
+                'icon'  => 'sync.svg',
+                'attributes' => 'onclick="if(!confirm(\'Alle Grundrisse neu verknüpfen?\'))return false;Backend.getScrollOffset()"',
+            ],
             'all' => [
                 'href'       => 'act=select',
                 'class'      => 'header_edit_all',
