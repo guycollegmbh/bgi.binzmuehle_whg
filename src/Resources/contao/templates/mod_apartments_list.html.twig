@@ -72,6 +72,7 @@
                         <th>Nebenkosten</th>
                         <th>Bruttomiete</th>
                         <th>Status</th>
+                        <th>Grundriss</th>
                         <th>Details</th>
                     </tr>
                 </thead>
@@ -95,8 +96,15 @@
                                     -
                                 {% endif %}
                             </td>
+                            <td class="text-center">
+                                {% if apartment.grundrisspdf_path %}
+                                    <a href="{{ apartment.grundrisspdf_path }}" class="btn-download" download title="Grundriss herunterladen">📥 PDF</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
                             <td>
-                                <a href="wohnungen/details?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
+                                <a href="detail?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -128,13 +136,16 @@
                     language: {
                         url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
                     },
-                    pageLength: 9999, // Alle anzeigen
-                    paging: false,    // Pagination deaktivieren
-                    info: false,      // Info deaktivieren
+                    pageLength: 9999,
+                    paging: false,
+                    info: false,
                     lengthChange: false,
                     searching: true,
-                    dom: 'rt',        // Nur Table anzeigen
-                    order: [[0, 'asc']]
+                    dom: 'rt',
+                    order: [[0, 'asc']],
+                    columnDefs: [
+                        { orderable: false, targets: [11, 12] } // Grundriss und Details nicht sortierbar
+                    ]
                 });
 
                 // Funktion: Unique Werte extrahieren
@@ -238,7 +249,7 @@
                 });
             });
             
-       })(jQuery);
-    </script>
+        })(jQuery);
+        </script>
     {% endif %}
 </div>

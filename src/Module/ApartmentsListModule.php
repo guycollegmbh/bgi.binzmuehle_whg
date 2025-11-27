@@ -7,6 +7,7 @@ namespace Guycollegmbh\ApartmentsBundle\Module;
 use Contao\Database;
 use Contao\Module;
 use Contao\Controller;
+use Contao\FilesModel;
 
 class ApartmentsListModule extends Module
 {
@@ -31,6 +32,15 @@ class ApartmentsListModule extends Module
             $objektnr = preg_replace('/[^0-9]/', '', $objektnr);
             
             $data['objektnummer_url'] = $objektnr;
+            
+            // PDF-Pfad generieren falls vorhanden
+            if ($data['grundrisspdf']) {
+                $fileModel = FilesModel::findByUuid($data['grundrisspdf']);
+                if ($fileModel) {
+                    $data['grundrisspdf_path'] = $fileModel->path;
+                }
+            }
+            
             $apartmentsList[] = $data;
         }
 

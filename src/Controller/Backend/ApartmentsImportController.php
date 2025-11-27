@@ -11,6 +11,8 @@ use Contao\Environment;
 use Contao\Input;
 use Contao\Message;
 use Contao\System;
+use Contao\FilesModel;
+use Contao\Dbafs;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Psr\Log\LoggerInterface;
 
@@ -76,7 +78,7 @@ class ApartmentsImportController extends Backend
             foreach ($spreadsheet->getAllSheets() as $worksheet) {
                 $sheets[] = [
                     'name' => $worksheet->getTitle(),
-                    'rowCount' => $worksheet->getHighestRow() - 1, // -1 für Header
+                    'rowCount' => $worksheet->getHighestRow() - 4, // -4 für Titel, Datum, Leer, Header
                 ];
             }
             
@@ -134,8 +136,8 @@ class ApartmentsImportController extends Backend
                     continue;
                 }
                 
-                // Zeilen durchgehen (Zeile 1 = Header, ab Zeile 2 = Daten)
-                foreach ($worksheet->getRowIterator(2) as $row) {
+                // Zeilen durchgehen (Zeile 5 = erste Datenzeile)
+                foreach ($worksheet->getRowIterator(5) as $row) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false);
                     
@@ -149,7 +151,7 @@ class ApartmentsImportController extends Backend
                     if (empty($objektnummer)) {
                         // Prüfe ob die Zeile komplett leer ist
                         $hasData = false;
-                        foreach ($data as $cell) {
+                        foreach (array_slice($data, 0, 11) as $cell) { // Nur erste 11 Spalten prüfen
                             if (!empty(trim((string)$cell))) {
                                 $hasData = true;
                                 break;
@@ -159,11 +161,14 @@ class ApartmentsImportController extends Backend
                         if ($hasData) {
                             $preview['skip'][] = [
                                 'reason' => 'Keine Objektnummer (Tab: ' . $sheetName . ')',
-                                'data' => $data,
+                                'data' => array_slice($data, 0, 11),
                             ];
                         }
                         continue;
                     }
+                    
+                    // PDF-Verknüpfung suchen
+                    $pdfUuid = $this->findPdfByObjektnummer($objektnummer);
                     
                     $apartmentData = [
                         'objektnummer' => trim((string)$objektnummer),
@@ -177,7 +182,8 @@ class ApartmentsImportController extends Backend
                         'nettomietzins' => trim((string)($data[8] ?? '')),
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
-                        'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
+                        'status' => 'Frei', // Immer "Frei"
+                        'grundrisspdf' => $pdfUuid,
                     ];
                     
                     // Prüfen ob Wohnung bereits existiert
@@ -243,6 +249,32 @@ class ApartmentsImportController extends Backend
             
             return null;
         }
+    }
+    
+    /**
+     * Findet PDF anhand Objektnummer
+     */
+    protected function findPdfByObjektnummer($objektnummer)
+    {
+        // Bereinige Objektnummer für Dateiname (entferne Klammern etc.)
+        $filename = preg_replace('/[^0-9.]/', '', $objektnummer) . '.pdf';
+        $path = 'files/apartments/grundrisse/' . $filename;
+        
+        // Prüfe ob Datei existiert
+        $projectDir = System::getContainer()->getParameter('kernel.project_dir');
+        $fullPath = $projectDir . '/' . $path;
+        
+        if (!file_exists($fullPath)) {
+            return null;
+        }
+        
+        // Synchronisiere mit DBAFS falls nötig
+        Dbafs::addResource($path);
+        
+        // Hole UUID aus Datenbank
+        $file = FilesModel::findByPath($path);
+        
+        return $file ? $file->uuid : null;
     }
     
     /**
@@ -316,8 +348,8 @@ class ApartmentsImportController extends Backend
                     continue;
                 }
                 
-                // Zeilen durchgehen (Zeile 1 = Header, ab Zeile 2 = Daten)
-                foreach ($worksheet->getRowIterator(2) as $row) {
+                // Zeilen durchgehen (Zeile 5 = erste Datenzeile)
+                foreach ($worksheet->getRowIterator(5) as $row) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false);
                     
@@ -337,6 +369,9 @@ class ApartmentsImportController extends Backend
                     $existing = $db->prepare('SELECT * FROM tl_apartments WHERE objektnummer = ?')
                         ->execute($objektnummer);
                     
+                    // PDF-Verknüpfung suchen
+                    $pdfUuid = $this->findPdfByObjektnummer($objektnummer);
+                    
                     $apartmentData = [
                         'tstamp' => time(),
                         'objektnummer' => trim((string)$objektnummer),
@@ -350,7 +385,8 @@ class ApartmentsImportController extends Backend
                         'nettomietzins' => trim((string)($data[8] ?? '')),
                         'nebenkosten' => trim((string)($data[9] ?? '')),
                         'bruttomietzins' => trim((string)($data[10] ?? '')),
-                        'status' => trim((string)($data[11] ?? '')) ?: 'Frei',
+                        'status' => 'Frei', // Immer "Frei"
+                        'grundrisspdf' => $pdfUuid,
                         'published' => true,
                     ];
                     
