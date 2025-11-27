@@ -710,8 +710,7 @@
             <div class="hint-box">
                 <div class="hint-icon">💡</div>
                 <div>
-                    <p><strong>Hinweis:</strong> Die ersten 4 Zeilen werden übersprungen (Titel, Datum, Leer, Header). 
-                    Status wird automatisch auf "Frei" gesetzt. Bestehende Elemente mit gleicher Objektnummer werden aktualisiert.</p>
+                    <p><strong>Hinweis:</strong> Neue Elemente werden basierend auf der Objektnummer erstellt. Der Status wird automatisch auf "Frei" gesetzt. Bestehende Elemente mit gleicher Objektnummer werden aktualisiert.</p>
                 </div>
             </div>
             
