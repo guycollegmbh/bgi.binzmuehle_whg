@@ -1,255 +1,453 @@
 <div class="mod_apartments_list">
-    {% if apartments is empty %}
-        <p class="no-apartments">Aktuell sind keine Wohnungen verfügbar.</p>
-    {% else %}
-        <!-- Filter-Bereich oberhalb der Tabelle -->
-        <div class="apartments-filters">
-            <h3>Filter</h3>
-            
-            <!-- Select-Filter in einer Reihe -->
-            <div class="filter-grid">
-                <!-- Adresse Filter -->
-                <div class="filter-item">
-                    <label for="filter-adresse">Adresse</label>
-                    <select id="filter-adresse" class="filter-select">
-                        <option value="">Alle</option>
-                    </select>
+    
+    {# Live Preview Bereich #}
+    <div class="apartment-preview-container">
+        <div class="preview-box">
+            <h3>Grundriss</h3>
+            <div class="preview-image-wrapper">
+                <img id="preview-grundriss" 
+                     src="files/apartments/defaults/grundriss.jpg" 
+                     alt="Grundriss Vorschau"
+                     class="preview-image">
+                <div class="preview-placeholder">
+                    <span>Bewegen Sie die Maus über eine Wohnung</span>
                 </div>
-
-                <!-- Zeile Filter -->
-                <div class="filter-item">
-                    <label for="filter-zeile">Zeile</label>
-                    <select id="filter-zeile" class="filter-select">
-                        <option value="">Alle</option>
-                    </select>
-                </div>
-
-                <!-- Etage Filter -->
-                <div class="filter-item">
-                    <label for="filter-etage">Etage</label>
-                    <select id="filter-etage" class="filter-select">
-                        <option value="">Alle</option>
-                    </select>
-                </div>
-
-                <!-- Status Filter -->
-                <div class="filter-item">
-                    <label for="filter-status">Status</label>
-                    <select id="filter-status" class="filter-select">
-                        <option value="">Alle</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Nettomiete Range Slider darunter -->
-            <div class="filter-range">
-                <label>Nettomiete: <span id="min-display">0</span> CHF - <span id="max-display">5000</span> CHF</label>
-                <div class="range-slider-container">
-                    <input type="range" id="min-price" min="0" max="5000" step="50" value="0" class="range-input">
-                    <input type="range" id="max-price" min="0" max="5000" step="50" value="5000" class="range-input">
-                </div>
-            </div>
-
-            <!-- Reset Button -->
-            <div class="filter-actions">
-                <button id="reset-filters" class="btn-reset">Alle Filter zurücksetzen</button>
             </div>
         </div>
+        <div class="preview-box">
+            <h3>Etagenplan</h3>
+            <div class="preview-image-wrapper">
+                <img id="preview-etage" 
+                     src="files/apartments/defaults/etage.jpg" 
+                     alt="Etagenplan Vorschau"
+                     class="preview-image">
+                <div class="preview-placeholder">
+                    <span>Bewegen Sie die Maus über eine Wohnung</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Tabelle -->
-        <div class="table-responsive">
-            <table id="apartments-table" class="apartments-table display">
-                <thead>
-                    <tr>
-                        <th>Objekt-Nr.</th>
-                        <th>Bezeichnung</th>
-                        <th>Adresse</th>
-                        <th>Zeile</th>
-                        <th>Etage</th>
-                        <th>Zimmer</th>
-                        <th>Fläche</th>
-                        <th>Nettomiete</th>
-                        <th>Nebenkosten</th>
-                        <th>Bruttomiete</th>
-                        <th>Status</th>
-                        <th>Grundriss</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for apartment in apartments %}
-                        <tr>
-                            <td>{{ apartment.objektnummer|default('-') }}</td>
-                            <td>{{ apartment.bezeichnung|default('-') }}</td>
-                            <td>{{ apartment.adresse|default('-') }}</td>
-                            <td>{{ apartment.zeile|default('-') }}</td>
-                            <td>{{ apartment.etage|default('-') }}</td>
-                            <td data-order="{{ apartment.zimmer|default('0') }}">{{ apartment.zimmer|default('-') }}</td>
-                            <td data-order="{{ apartment.flaeche|default('0') }}">{{ apartment.flaeche ? apartment.flaeche ~ ' m²' : '-' }}</td>
-                            <td data-order="{{ apartment.nettomietzins|default('0')|replace({'CHF ': '', ',': '', '.': ''}) }}">{{ apartment.nettomietzins ? 'CHF ' ~ apartment.nettomietzins : '-' }}</td>
-                            <td data-order="{{ apartment.nebenkosten|default('0')|replace({'CHF ': '', ',': '', '.': ''}) }}">{{ apartment.nebenkosten ? 'CHF ' ~ apartment.nebenkosten : '-' }}</td>
-                            <td data-order="{{ apartment.bruttomietzins|default('0')|replace({'CHF ': '', ',': '', '.': ''}) }}">{{ apartment.bruttomietzins ? 'CHF ' ~ apartment.bruttomietzins : '-' }}</td>
-                            <td>
-                                {% if apartment.status %}
-                                    <span class="badge status-{{ apartment.status|lower }}">{{ apartment.status }}</span>
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                            <td class="text-center">
-                                {% if apartment.grundrisspdf_path %}
-                                    <a href="{{ apartment.grundrisspdf_path }}" class="btn-download" download title="Grundriss herunterladen">Grundriss (PDF)</a>
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="wohnungen/details?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
-                            </td>
-                        </tr>
+    {# Filter Section #}
+    <div class="filter-section">
+        <h2>Filter</h2>
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label for="status">Status:</label>
+                <select name="status" id="status">
+                    <option value="">Alle</option>
+                    {% for option in statusOptions %}
+                        <option value="{{ option.status }}" {% if currentStatus == option.status %}selected{% endif %}>
+                            {{ option.status }}
+                        </option>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                </select>
+            </div>
 
-        <!-- DataTables CSS -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+            <div class="filter-group">
+                <label for="zimmer">Zimmer:</label>
+                <select name="zimmer" id="zimmer">
+                    <option value="">Alle</option>
+                    {% for option in zimmerOptions %}
+                        <option value="{{ option.zimmer }}" {% if currentZimmer == option.zimmer %}selected{% endif %}>
+                            {{ option.zimmer }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        
-        <!-- DataTables JS -->
-        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+            <div class="filter-group">
+                <label for="bauetappe">Bauetappe:</label>
+                <select name="bauetappe" id="bauetappe">
+                    <option value="">Alle</option>
+                    {% for option in bauetappeOptions %}
+                        <option value="{{ option.bauetappe }}" {% if currentBauetappe == option.bauetappe %}selected{% endif %}>
+                            {{ option.bauetappe }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-       <script>
-        (function($) {
-            'use strict';
-            
-            $(document).ready(function() {
-                var minPriceInput = document.getElementById('min-price');
-                var maxPriceInput = document.getElementById('max-price');
-                var minDisplay = document.getElementById('min-display');
-                var maxDisplay = document.getElementById('max-display');
+            <button type="submit" class="btn-filter">Filtern</button>
+            <a href="?" class="btn-reset">Zurücksetzen</a>
+        </form>
+    </div>
 
-                // DataTables initialisieren
-                var table = $('#apartments-table').DataTable({
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
-                    },
-                    pageLength: 9999,
-                    paging: false,
-                    info: false,
-                    lengthChange: false,
-                    searching: true,
-                    dom: 'rt',
-                    order: [[0, 'asc']],
-                    columnDefs: [
-                        { orderable: false, targets: [11, 12] } // Grundriss und Details nicht sortierbar
-                    ]
-                });
-
-                // Funktion: Unique Werte extrahieren
-                function getUniqueValues(columnIndex) {
-                    var uniqueValues = [];
-                    table.column(columnIndex).data().unique().each(function(d) {
-                        var text;
-                        if (typeof d === 'string' && d.indexOf('<') !== -1) {
-                            var tempDiv = document.createElement('div');
-                            tempDiv.innerHTML = d;
-                            text = (tempDiv.textContent || tempDiv.innerText || '').trim();
-                        } else {
-                            text = (d || '').toString().trim();
-                        }
-                        
-                        if (text && text !== '-' && uniqueValues.indexOf(text) === -1) {
-                            uniqueValues.push(text);
-                        }
-                    });
-                    return uniqueValues.sort();
-                }
-
-                // Filter-Dropdowns befüllen
-                var filters = [
-                    { id: 'filter-adresse', column: 2 },
-                    { id: 'filter-zeile', column: 3 },
-                    { id: 'filter-etage', column: 4 },
-                    { id: 'filter-status', column: 10 }
-                ];
-
-                filters.forEach(function(filter) {
-                    var select = $('#' + filter.id);
-                    var values = getUniqueValues(filter.column);
-                    
-                    values.forEach(function(value) {
-                        select.append('<option value="' + value + '">' + value + '</option>');
-                    });
-
-                    select.on('change', function() {
-                        var val = $(this).val();
-                        if (val) {
-                            table.column(filter.column).search('^' + $.fn.dataTable.util.escapeRegex(val) + '$', true, false);
-                        } else {
-                            table.column(filter.column).search('');
-                        }
-                        table.draw();
-                    });
-                });
-
-                // Range Slider für Nettomiete
-                function updateRangeValues() {
-                    var minVal = parseInt(minPriceInput.value);
-                    var maxVal = parseInt(maxPriceInput.value);
-
-                    if (minVal > maxVal) {
-                        minPriceInput.value = maxVal;
-                        minVal = maxVal;
-                    }
-
-                    minDisplay.textContent = minVal;
-                    maxDisplay.textContent = maxVal;
-                }
-
-                // Custom Search für Nettomiete
-                $.fn.dataTable.ext.search.push(
-                    function(settings, data, dataIndex) {
-                        var min = parseInt(minPriceInput.value);
-                        var max = parseInt(maxPriceInput.value);
-                        var nettomiete = parseFloat(data[7].replace(/[^0-9.-]+/g,"")) || 0;
-
-                        return (nettomiete >= min && nettomiete <= max);
-                    }
-                );
-
-                // Range Input Events
-                minPriceInput.addEventListener('input', function() {
-                    updateRangeValues();
-                    table.draw();
-                });
-
-                maxPriceInput.addEventListener('input', function() {
-                    updateRangeValues();
-                    table.draw();
-                });
-
-                // Initial update
-                updateRangeValues();
-
-                // Reset Button
-                $('#reset-filters').on('click', function() {
-                    $('.filter-select').val('');
-                    
-                    filters.forEach(function(filter) {
-                        table.column(filter.column).search('');
-                    });
-                    
-                    minPriceInput.value = 0;
-                    maxPriceInput.value = 5000;
-                    updateRangeValues();
-                    table.draw();
-                });
-            });
-            
-        })(jQuery);
-        </script>
-    {% endif %}
+    {# Apartments Table #}
+    <div class="table-container">
+        <table id="apartments-table" class="display">
+            <thead>
+                <tr>
+                    <th>Objektnummer</th>
+                    <th>Bezeichnung</th>
+                    <th>Bauetappe</th>
+                    <th>Zeile</th>
+                    <th>Adresse</th>
+                    <th>Etage</th>
+                    <th>Zimmer</th>
+                    <th>Fläche (m²)</th>
+                    <th>Nettomiete (CHF)</th>
+                    <th>Nebenkosten (CHF)</th>
+                    <th>Bruttomiete (CHF)</th>
+                    <th>Status</th>
+                    <th>Grundriss</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for apartment in apartments %}
+                    <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}" 
+                        data-etage="{{ apartment.imageetage_path|default('') }}"
+                        class="apartment-row">
+                        <td>{{ apartment.objektnummer }}</td>
+                        <td>{{ apartment.bezeichnung }}</td>
+                        <td>{{ apartment.bauetappe }}</td>
+                        <td>{{ apartment.zeile }}</td>
+                        <td>{{ apartment.adresse }}</td>
+                        <td>{{ apartment.etage }}</td>
+                        <td>{{ apartment.zimmer }}</td>
+                        <td>{{ apartment.flaeche }}</td>
+                        <td>{{ apartment.nettomietzins }}</td>
+                        <td>{{ apartment.nebenkosten }}</td>
+                        <td>{{ apartment.bruttomietzins }}</td>
+                        <td>
+                            <span class="status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">
+                                {{ apartment.status }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            {% if apartment.grundrisspdf_path %}
+                                <a href="{{ apartment.grundrisspdf_path }}" class="btn-download" download title="Grundriss herunterladen">📥 PDF</a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="wohnungen/details?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<style>
+/* Preview Container */
+.apartment-preview-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.preview-box {
+    text-align: center;
+}
+
+.preview-box h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.preview-image-wrapper {
+    background: #f8f9fa;
+    border: 2px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.preview-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.preview-image.has-image ~ .preview-placeholder {
+    display: none;
+}
+
+/* Table Hover Effect */
+#apartments-table tbody tr {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#apartments-table tbody tr:hover {
+    background-color: #f0f7ff !important;
+    transform: translateX(3px);
+    box-shadow: 0 2px 8px rgba(0,123,255,0.1);
+}
+
+/* Existing Styles */
+.mod_apartments_list {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.filter-section {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-section h2 {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.filter-form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #555;
+}
+
+.filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 150px;
+}
+
+.btn-filter,
+.btn-reset {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.btn-filter {
+    background: #007bff;
+    color: white;
+}
+
+.btn-filter:hover {
+    background: #0056b3;
+}
+
+.btn-reset {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-reset:hover {
+    background: #5a6268;
+}
+
+.table-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-frei {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-reserviert {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-vermietet {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.btn-download {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.btn-download:hover {
+    color: #218838;
+    text-decoration: underline;
+}
+
+.btn-details {
+    padding: 6px 16px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.btn-details:hover {
+    background: #0056b3;
+}
+
+.text-center {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .apartment-preview-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .filter-group select {
+        width: 100%;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const previewGrundriss = document.getElementById('preview-grundriss');
+    const previewEtage = document.getElementById('preview-etage');
+    
+    const defaultGrundriss = 'files/apartments/defaults/grundriss.jpg';
+    const defaultEtage = 'files/apartments/defaults/etage.jpg';
+    
+    // Prüfe ob Bilder existieren
+    function imageExists(src) {
+        return src && src !== '' && src !== defaultGrundriss && src !== defaultEtage;
+    }
+    
+    // DataTable initialisieren
+    const table = $('#apartments-table').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
+        },
+        pageLength: 25,
+        order: [[0, 'asc']],
+        columnDefs: [
+            { orderable: false, targets: [12, 13] }
+        ]
+    });
+    
+    // Hover-Effekt für alle Zeilen (auch nach Filterung/Sortierung)
+    $('#apartments-table tbody').on('mouseenter', 'tr', function() {
+        const grundrissPath = $(this).data('grundriss');
+        const etagePath = $(this).data('etage');
+        
+        // Fade out
+        previewGrundriss.style.opacity = '0.3';
+        previewEtage.style.opacity = '0.3';
+        
+        // Nach kurzer Verzögerung Bild wechseln und fade in
+        setTimeout(function() {
+            // Grundriss
+            if (imageExists(grundrissPath)) {
+                previewGrundriss.src = grundrissPath;
+                previewGrundriss.classList.add('has-image');
+            } else {
+                previewGrundriss.src = defaultGrundriss;
+                previewGrundriss.classList.remove('has-image');
+            }
+            
+            // Etage
+            if (imageExists(etagePath)) {
+                previewEtage.src = etagePath;
+                previewEtage.classList.add('has-image');
+            } else {
+                previewEtage.src = defaultEtage;
+                previewEtage.classList.remove('has-image');
+            }
+            
+            previewGrundriss.style.opacity = '1';
+            previewEtage.style.opacity = '1';
+        }, 150);
+    });
+    
+    // Optional: Bei Verlassen der Tabelle zu Default zurück
+    $('#apartments-table').on('mouseleave', function() {
+        setTimeout(function() {
+            previewGrundriss.style.opacity = '0.3';
+            previewEtage.style.opacity = '0.3';
+            
+            setTimeout(function() {
+                previewGrundriss.src = defaultGrundriss;
+                previewEtage.src = defaultEtage;
+                previewGrundriss.classList.remove('has-image');
+                previewEtage.classList.remove('has-image');
+                previewGrundriss.style.opacity = '1';
+                previewEtage.style.opacity = '1';
+            }, 150);
+        }, 300);
+    });
+});
+</script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
+<!-- jQuery & DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
