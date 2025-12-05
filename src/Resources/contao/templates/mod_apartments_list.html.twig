@@ -283,53 +283,60 @@
 }
 
 .filter-section h2 {
-    margin: 0 0 20px 0;
-    font-size: 20px;
+    margin: 0 0 12px 0;
+    font-size: 18px;
     color: #333;
 }
 
 .filter-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
 .filter-group label {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
     color: #555;
 }
 
 .filter-group select {
-    padding: 8px 12px;
+    padding: 6px 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filter-group select option {
+    white-space: normal;
 }
 
 /* Price Range Slider */
 .price-slider-group {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .price-values {
     text-align: center;
     font-weight: 600;
     color: #007bff;
-    margin-bottom: 10px;
-    font-size: 15px;
+    margin-bottom: 8px;
+    font-size: 14px;
 }
 
 .dual-range-wrapper {
     position: relative;
-    height: 40px;
+    height: 35px;
 }
 
 .range-slider {
