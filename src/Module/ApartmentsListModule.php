@@ -53,8 +53,10 @@ class ApartmentsListModule extends Module
         while ($result->next()) {
             $data = $result->row();
 
-            // URL-freundliche Objektnummer
-            $data['objektnummer_url'] = urlencode($data['objektnummer']);
+            // URL-freundliche Objektnummer (mit Punkten, aber ohne Klammern)
+            $objektnr = html_entity_decode($data['objektnummer'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $objektnr = preg_replace('/\s*\([^)]*\)/', '', $objektnr); // Entferne Klammern
+            $data['objektnummer_url'] = urlencode(trim($objektnr)); // URL-encode für Sonderzeichen
 
             // PDF-Pfad generieren falls vorhanden
             if ($data['grundrisspdf']) {

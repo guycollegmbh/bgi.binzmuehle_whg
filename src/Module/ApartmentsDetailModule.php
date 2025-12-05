@@ -15,7 +15,7 @@ class ApartmentsDetailModule extends Module
 
     protected function compile(): void
     {
-        // Hole die bereinigte Objektnummer aus der URL
+        // Hole die Objektnummer aus der URL
         $objektnummerUrl = Input::get('id');
 
         if (!$objektnummerUrl) {
@@ -24,24 +24,28 @@ class ApartmentsDetailModule extends Module
             return;
         }
 
+        // Normalisiere URL-Parameter (decode)
+        $objektnummerUrl = urldecode($objektnummerUrl);
+        $objektnummerUrl = trim($objektnummerUrl);
+
         // Hole ALLE veröffentlichten Wohnungen
         $apartments = Database::getInstance()
             ->prepare('SELECT * FROM tl_apartments WHERE published = ?')
             ->execute(1);
 
         $apartmentData = null;
-        
+
         while ($apartments->next()) {
             $row = $apartments->row();
-            
+
             // HTML-Entities dekodieren
             $objektnr = html_entity_decode($row['objektnummer'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             // Entferne alles in Klammern
             $objektnr = preg_replace('/\s*\([^)]*\)/', '', $objektnr);
-            // Entferne Punkte und Leerzeichen, behalte nur Zahlen
-            $cleanObjNr = preg_replace('/[^0-9]/', '', $objektnr);
-            
-            if ($cleanObjNr === $objektnummerUrl) {
+            $objektnr = trim($objektnr);
+
+            // Direkter Vergleich mit Punkten
+            if ($objektnr === $objektnummerUrl) {
                 $apartmentData = $row;
                 break;
             }
