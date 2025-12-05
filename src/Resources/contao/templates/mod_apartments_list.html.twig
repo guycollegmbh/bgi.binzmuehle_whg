@@ -116,8 +116,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-filter">Filtern</button>
-            <a href="?" class="btn-reset">Zurücksetzen</a>
+            <a href="?" class="btn-reset">Filter zurücksetzen</a>
         </form>
             </div>
         </div>
@@ -421,7 +420,6 @@
     z-index: 4;
 }
 
-.btn-filter,
 .btn-reset {
     padding: 8px 16px;
     border: none;
@@ -433,22 +431,9 @@
     text-align: center;
     transition: background 0.2s;
     width: 100%;
-}
-
-.btn-filter {
-    background: #90303e;
-    color: white;
-    margin-bottom: 8px;
-    margin-top: 5px;
-}
-
-.btn-filter:hover {
-    background: #6e2530;
-}
-
-.btn-reset {
     background: #6c757d;
     color: white;
+    margin-top: 15px;
 }
 
 .btn-reset:hover {
@@ -561,6 +546,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // const previewGrundriss = document.getElementById('preview-grundriss');
     const previewEtage = document.getElementById('preview-etage');
 
+    // ========== Auto-Submit bei Filter-Änderung ========== //
+    const filterForm = document.querySelector('.filter-form');
+    const filterSelects = filterForm.querySelectorAll('select');
+
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            filterForm.submit();
+        });
+    });
+
     // ========== Price Range Slider ========== //
     const minPriceSlider = document.getElementById('minPrice');
     const maxPriceSlider = document.getElementById('maxPrice');
@@ -581,6 +576,9 @@ document.addEventListener('DOMContentLoaded', function() {
         maxPriceDisplay.textContent = urlMaxPrice;
     }
 
+    // Auto-Submit Timeout für Slider
+    let priceTimeout;
+
     // Min-Slider Event
     minPriceSlider.addEventListener('input', function() {
         let minVal = parseInt(this.value);
@@ -592,6 +590,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         minPriceDisplay.textContent = minVal;
+
+        // Auto-Submit nach 800ms ohne weitere Änderung
+        clearTimeout(priceTimeout);
+        priceTimeout = setTimeout(() => filterForm.submit(), 800);
     });
 
     // Max-Slider Event
@@ -605,6 +607,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         maxPriceDisplay.textContent = maxVal;
+
+        // Auto-Submit nach 800ms ohne weitere Änderung
+        clearTimeout(priceTimeout);
+        priceTimeout = setTimeout(() => filterForm.submit(), 800);
     });
 
     // ========== Area Range Slider ========== //
@@ -626,6 +632,9 @@ document.addEventListener('DOMContentLoaded', function() {
         maxAreaDisplay.textContent = urlMaxArea;
     }
 
+    // Auto-Submit Timeout für Area-Slider
+    let areaTimeout;
+
     // Min-Area-Slider Event
     minAreaSlider.addEventListener('input', function() {
         let minVal = parseInt(this.value);
@@ -637,6 +646,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         minAreaDisplay.textContent = minVal;
+
+        // Auto-Submit nach 800ms ohne weitere Änderung
+        clearTimeout(areaTimeout);
+        areaTimeout = setTimeout(() => filterForm.submit(), 800);
     });
 
     // Max-Area-Slider Event
@@ -650,6 +663,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         maxAreaDisplay.textContent = maxVal;
+
+        // Auto-Submit nach 800ms ohne weitere Änderung
+        clearTimeout(areaTimeout);
+        areaTimeout = setTimeout(() => filterForm.submit(), 800);
     });
 
     // ========== Default-Bilder ========== //
