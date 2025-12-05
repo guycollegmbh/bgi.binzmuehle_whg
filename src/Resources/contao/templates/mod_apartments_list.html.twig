@@ -137,11 +137,17 @@
                     <th>Etage</th>
                     <th>Zimmer</th>
                     <th>Fläche (m²)</th>
-                    <th>Nettomiete (CHF)</th>
-                    <th>Nebenkosten (CHF)</th>
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - START #}
+                    {# <th>Nettomiete (CHF)</th> #}
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - ENDE #}
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - START #}
+                    {# <th>Nebenkosten (CHF)</th> #}
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - ENDE #}
                     <th>Bruttomiete (CHF)</th>
                     <th>Status</th>
-                    <th>Grundriss</th>
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - START #}
+                    {# <th>Grundriss</th> #}
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - ENDE #}
                     <th>Details</th>
                 </tr>
             </thead>
@@ -158,21 +164,27 @@
                         <td>{{ apartment.etage }}</td>
                         <td>{{ apartment.zimmer }}</td>
                         <td>{{ apartment.flaeche }}</td>
-                        <td>{{ apartment.nettomietzins }}</td>
-                        <td>{{ apartment.nebenkosten }}</td>
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - START #}
+                        {# <td>{{ apartment.nettomietzins }}</td> #}
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - ENDE #}
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - START #}
+                        {# <td>{{ apartment.nebenkosten }}</td> #}
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - ENDE #}
                         <td>{{ apartment.bruttomietzins }}</td>
                         <td>
                             <span class="status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">
                                 {{ apartment.status }}
                             </span>
                         </td>
-                        <td class="text-center">
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - START #}
+                        {# <td class="text-center">
                             {% if apartment.grundrisspdf_path %}
                                 <a href="{{ apartment.grundrisspdf_path }}" class="btn-download" download title="Grundriss herunterladen">📥 PDF</a>
                             {% else %}
                                 -
                             {% endif %}
-                        </td>
+                        </td> #}
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - ENDE #}
                         <td class="text-center">
                             <a href="wohnungen/details?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
                         </td>
@@ -659,7 +671,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pageLength: 50,
         order: [[0, 'asc']],
         columnDefs: [
-            { orderable: false, targets: [12, 13] }
+            { orderable: false, targets: [9, 10] } // Status und Details nicht sortierbar (angepasst nach Ausblenden von 3 Spalten)
         ],
         // Suche und "Zeilen anzeigen" ausblenden
         searching: false,
