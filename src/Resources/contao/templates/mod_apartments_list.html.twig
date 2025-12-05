@@ -1,8 +1,12 @@
 <div class="mod_apartments_list">
-    
-    {# Live Preview Bereich #}
+
+    {# ========== LIVE PREVIEW BEREICH ========== #}
     <div class="apartment-preview-container">
-        {# TODO: Grundriss-Vorschau - Aktuell ausgeblendet, später wieder aktivieren #}
+
+        {# ========== TODO SPÄTER WIEDER EINBLENDEN: GRUNDRISS-VORSCHAU - START ========== #}
+        {# Zum Einblenden: Kommentarzeichen {# und #} in Zeilen 7-18 entfernen #}
+        {# Achtung: Auch CSS-Anpassung in Zeile 140 nötig (grid-template-columns: 1fr 1fr) #}
+        {# Achtung: Auch JavaScript in Zeilen 373-446 anpassen (auskommentierte Zeilen aktivieren) #}
         {# <div class="preview-box">
             <h3>Grundriss</h3>
             <div class="preview-image-wrapper">
@@ -15,6 +19,9 @@
                 </div>
             </div>
         </div> #}
+        {# ========== TODO SPÄTER WIEDER EINBLENDEN: GRUNDRISS-VORSCHAU - ENDE ========== #}
+
+        {# Etagenplan - AKTIV #}
         <div class="preview-box">
             <h3>Etagenplan</h3>
             <div class="preview-image-wrapper">
@@ -134,11 +141,14 @@
 </div>
 
 <style>
+/* ========== TODO SPÄTER WIEDER EINBLENDEN: CSS für 2-Spalten-Layout ========== */
 /* Preview Container */
 .apartment-preview-container {
     display: grid;
-    /* grid-template-columns: 1fr 1fr; */ /* TODO: Später für 2 Spalten wieder aktivieren */
-    grid-template-columns: 1fr; /* Aktuell nur Etagenplan */
+    /* TODO: Für Grundriss + Etagenplan (2 Spalten) diese Zeile aktivieren: */
+    /* grid-template-columns: 1fr 1fr; */
+    /* Aktuell nur Etagenplan (1 Spalte): */
+    grid-template-columns: 1fr;
     gap: 30px;
     margin-bottom: 40px;
     padding: 30px;
@@ -370,20 +380,28 @@
 </style>
 
 <script>
+/* ========== TODO SPÄTER WIEDER EINBLENDEN: JavaScript für Grundriss-Vorschau ========== */
+/* Zum Einblenden alle auskommentierte Zeilen mit "TODO: Später wieder aktivieren" reaktivieren */
+/* Betrifft: Zeilen 383, 387, 409, 412-427, 438, 447-452, 456 */
+
 document.addEventListener('DOMContentLoaded', function() {
-    // TODO: Grundriss-Element später wieder aktivieren
+    // ========== Element-Referenzen ========== //
+    // TODO: Später wieder aktivieren - Grundriss-Element
     // const previewGrundriss = document.getElementById('preview-grundriss');
     const previewEtage = document.getElementById('preview-etage');
 
+    // ========== Default-Bilder ========== //
+    // TODO: Später wieder aktivieren - Grundriss-Default
     // const defaultGrundriss = 'files/apartments/defaults/grundriss.jpg';
     const defaultEtage = 'files/apartments/defaults/etage.jpg';
 
-    // Prüfe ob Bilder existieren
+    // ========== Hilfsfunktion: Bild-Existenz prüfen ========== //
     function imageExists(src) {
-        return src && src !== '' && src !== defaultEtage; // defaultGrundriss später wieder hinzufügen
+        // TODO: Später wieder hinzufügen - && src !== defaultGrundriss
+        return src && src !== '' && src !== defaultEtage;
     }
 
-    // DataTable initialisieren
+    // ========== DataTable initialisieren ========== //
     const table = $('#apartments-table').DataTable({
         language: {
             url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
@@ -395,19 +413,22 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     });
 
-    // Hover-Effekt für alle Zeilen (auch nach Filterung/Sortierung)
+    // ========== Hover-Effekt für Tabellenzeilen ========== //
     $('#apartments-table tbody').on('mouseenter', 'tr', function() {
-        // const grundrissPath = $(this).data('grundriss'); // TODO: Später wieder aktivieren
+        // TODO: Später wieder aktivieren - Grundriss-Pfad aus data-Attribut holen
+        // const grundrissPath = $(this).data('grundriss');
         const etagePath = $(this).data('etage');
 
-        // Fade out
-        // previewGrundriss.style.opacity = '0.3'; // TODO: Später wieder aktivieren
+        // Fade out - Start
+        // TODO: Später wieder aktivieren - Grundriss Fade-out
+        // previewGrundriss.style.opacity = '0.3';
         previewEtage.style.opacity = '0.3';
 
         // Nach kurzer Verzögerung Bild wechseln und fade in
         setTimeout(function() {
-            /* TODO: Grundriss später wieder aktivieren
-            // Grundriss
+            // ========== TODO: SPÄTER WIEDER AKTIVIEREN - GRUNDRISS-UPDATE - START ========== //
+            /*
+            // Grundriss-Bild aktualisieren
             if (imageExists(grundrissPath)) {
                 previewGrundriss.src = grundrissPath;
                 previewGrundriss.classList.add('has-image');
@@ -416,8 +437,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 previewGrundriss.classList.remove('has-image');
             }
             */
+            // ========== TODO: SPÄTER WIEDER AKTIVIEREN - GRUNDRISS-UPDATE - ENDE ========== //
 
-            // Etage
+            // Etagen-Bild aktualisieren (AKTIV)
             if (imageExists(etagePath)) {
                 previewEtage.src = etagePath;
                 previewEtage.classList.add('has-image');
@@ -426,23 +448,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 previewEtage.classList.remove('has-image');
             }
 
-            // previewGrundriss.style.opacity = '1'; // TODO: Später wieder aktivieren
+            // Fade in - Ende
+            // TODO: Später wieder aktivieren - Grundriss Fade-in
+            // previewGrundriss.style.opacity = '1';
             previewEtage.style.opacity = '1';
         }, 150);
     });
 
-    // Optional: Bei Verlassen der Tabelle zu Default zurück
+    // ========== Bei Verlassen der Tabelle zu Default zurück ========== //
     $('#apartments-table').on('mouseleave', function() {
         setTimeout(function() {
-            // previewGrundriss.style.opacity = '0.3'; // TODO: Später wieder aktivieren
+            // Fade out - Start
+            // TODO: Später wieder aktivieren - Grundriss Fade-out
+            // previewGrundriss.style.opacity = '0.3';
             previewEtage.style.opacity = '0.3';
 
             setTimeout(function() {
-                // previewGrundriss.src = defaultGrundriss; // TODO: Später wieder aktivieren
+                // Zurück zu Default-Bildern
+                // TODO: Später wieder aktivieren - Grundriss zurücksetzen
+                // previewGrundriss.src = defaultGrundriss;
                 previewEtage.src = defaultEtage;
-                // previewGrundriss.classList.remove('has-image'); // TODO: Später wieder aktivieren
+                // TODO: Später wieder aktivieren - Grundriss has-image Klasse entfernen
+                // previewGrundriss.classList.remove('has-image');
                 previewEtage.classList.remove('has-image');
-                // previewGrundriss.style.opacity = '1'; // TODO: Später wieder aktivieren
+
+                // Fade in - Ende
+                // TODO: Später wieder aktivieren - Grundriss Fade-in
+                // previewGrundriss.style.opacity = '1';
                 previewEtage.style.opacity = '1';
             }, 150);
         }, 300);
