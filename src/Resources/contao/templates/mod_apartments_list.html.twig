@@ -376,6 +376,8 @@
     cursor: pointer;
     pointer-events: all;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 3;
 }
 
 .range-slider::-moz-range-thumb {
@@ -387,6 +389,8 @@
     cursor: pointer;
     pointer-events: all;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 3;
 }
 
 .range-slider::-webkit-slider-thumb:hover {
@@ -399,12 +403,12 @@
 
 #minPrice,
 #minArea {
-    z-index: 2;
+    z-index: 5;
 }
 
 #maxPrice,
 #maxArea {
-    z-index: 1;
+    z-index: 4;
 }
 
 .btn-filter,
