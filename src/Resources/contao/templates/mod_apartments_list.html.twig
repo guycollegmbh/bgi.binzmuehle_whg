@@ -418,11 +418,16 @@ document.addEventListener('DOMContentLoaded', function() {
         language: {
             url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
         },
-        pageLength: 25,
+        pageLength: 50,
         order: [[0, 'asc']],
         columnDefs: [
             { orderable: false, targets: [12, 13] }
-        ]
+        ],
+        // Suche und "Zeilen anzeigen" ausblenden
+        searching: false,
+        lengthChange: false,
+        // Info-Text ausblenden (optional)
+        info: true
     });
 
     // ========== Hover-Effekt für Tabellenzeilen ========== //
