@@ -1,43 +1,46 @@
 <div class="mod_apartments_list">
 
-    {# ========== LIVE PREVIEW BEREICH ========== #}
-    <div class="apartment-preview-container">
+    {# ========== PREVIEW & FILTER CONTAINER (2-spaltig) ========== #}
+    <div class="preview-filter-container">
 
-        {# ========== TODO SPÄTER WIEDER EINBLENDEN: GRUNDRISS-VORSCHAU - START ========== #}
-        {# Zum Einblenden: Kommentarzeichen {# und #} in Zeilen 7-18 entfernen #}
-        {# Achtung: Auch CSS-Anpassung in Zeile 140 nötig (grid-template-columns: 1fr 1fr) #}
-        {# Achtung: Auch JavaScript in Zeilen 373-446 anpassen (auskommentierte Zeilen aktivieren) #}
-        {# <div class="preview-box">
-            <h3>Grundriss</h3>
-            <div class="preview-image-wrapper">
-                <img id="preview-grundriss"
-                     src="files/apartments/defaults/grundriss.jpg"
-                     alt="Grundriss Vorschau"
-                     class="preview-image">
-                <div class="preview-placeholder">
-                    <span>Bewegen Sie die Maus über eine Wohnung</span>
+        {# ========== LINKE SPALTE: ETAGENPLAN VORSCHAU ========== #}
+        <div class="preview-column">
+            {# ========== TODO SPÄTER WIEDER EINBLENDEN: GRUNDRISS-VORSCHAU - START ========== #}
+            {# Zum Einblenden: Kommentarzeichen {# und #} in Zeilen 11-22 entfernen #}
+            {# Achtung: Auch CSS-Anpassung nötig (.preview-images-grid auf 2 Spalten) #}
+            {# Achtung: Auch JavaScript in Zeilen 373-446 anpassen (auskommentierte Zeilen aktivieren) #}
+            {# <div class="preview-box">
+                <h3>Grundriss</h3>
+                <div class="preview-image-wrapper">
+                    <img id="preview-grundriss"
+                         src="files/apartments/defaults/grundriss.jpg"
+                         alt="Grundriss Vorschau"
+                         class="preview-image">
+                    <div class="preview-placeholder">
+                        <span>Bewegen Sie die Maus über eine Wohnung</span>
+                    </div>
                 </div>
-            </div>
-        </div> #}
-        {# ========== TODO SPÄTER WIEDER EINBLENDEN: GRUNDRISS-VORSCHAU - ENDE ========== #}
+            </div> #}
+            {# ========== TODO SPÄTER WIEDER EINBLENDEN: GRUNDRISS-VORSCHAU - ENDE ========== #}
 
-        {# Etagenplan - AKTIV #}
-        <div class="preview-box">
-            <h3>Etagenplan</h3>
-            <div class="preview-image-wrapper">
-                <img id="preview-etage"
-                     src="files/apartments/defaults/etage.jpg"
-                     alt="Etagenplan Vorschau"
-                     class="preview-image">
-                <div class="preview-placeholder">
-                    <span>Bewegen Sie die Maus über eine Wohnung</span>
+            {# Etagenplan - AKTIV #}
+            <div class="preview-box">
+                <h3>Etagenplan</h3>
+                <div class="preview-image-wrapper">
+                    <img id="preview-etage"
+                         src="files/apartments/defaults/etage.jpg"
+                         alt="Etagenplan Vorschau"
+                         class="preview-image">
+                    <div class="preview-placeholder">
+                        <span>Bewegen Sie die Maus über eine Wohnung</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {# Filter Section #}
-    <div class="filter-section">
+        {# ========== RECHTE SPALTE: FILTER ========== #}
+        <div class="filter-column">
+            <div class="filter-section">
         <h2>Filter</h2>
         <form method="get" class="filter-form">
             <div class="filter-group">
@@ -79,6 +82,9 @@
             <button type="submit" class="btn-filter">Filtern</button>
             <a href="?" class="btn-reset">Zurücksetzen</a>
         </form>
+            </div>
+        </div>
+
     </div>
 
     {# Apartments Table #}
@@ -141,20 +147,26 @@
 </div>
 
 <style>
-/* ========== TODO SPÄTER WIEDER EINBLENDEN: CSS für 2-Spalten-Layout ========== */
-/* Preview Container */
-.apartment-preview-container {
+/* ========== PREVIEW & FILTER CONTAINER (2-Spalten-Layout) ========== */
+.preview-filter-container {
     display: grid;
-    /* TODO: Für Grundriss + Etagenplan (2 Spalten) diese Zeile aktivieren: */
-    /* grid-template-columns: 1fr 1fr; */
-    /* Aktuell nur Etagenplan (1 Spalte): */
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr 1fr; /* Etagenplan breiter, Filter schmaler */
     gap: 30px;
     margin-bottom: 40px;
-    padding: 30px;
+}
+
+/* Linke Spalte: Etagenplan Vorschau */
+.preview-column {
     background: white;
+    padding: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Rechte Spalte: Filter */
+.filter-column {
+    display: flex;
+    flex-direction: column;
 }
 
 .preview-box {
@@ -229,8 +241,8 @@
     background: white;
     padding: 25px;
     border-radius: 8px;
-    margin-bottom: 30px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 100%;
 }
 
 .filter-section h2 {
@@ -241,9 +253,8 @@
 
 .filter-form {
     display: flex;
+    flex-direction: column;
     gap: 15px;
-    flex-wrap: wrap;
-    align-items: flex-end;
 }
 
 .filter-group {
@@ -263,24 +274,27 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
-    min-width: 150px;
+    width: 100%;
 }
 
 .btn-filter,
 .btn-reset {
-    padding: 8px 20px;
+    padding: 10px 20px;
     border: none;
     border-radius: 4px;
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
-    display: inline-block;
+    display: block;
+    text-align: center;
     transition: background 0.2s;
+    width: 100%;
 }
 
 .btn-filter {
     background: #007bff;
     color: white;
+    margin-bottom: 10px;
 }
 
 .btn-filter:hover {
@@ -359,22 +373,17 @@
     text-align: center;
 }
 
-@media (max-width: 768px) {
-    .apartment-preview-container {
+@media (max-width: 1024px) {
+    .preview-filter-container {
         grid-template-columns: 1fr;
     }
-    
-    .filter-form {
-        flex-direction: column;
-        align-items: stretch;
+
+    .preview-column {
+        order: 1;
     }
-    
-    .filter-group {
-        width: 100%;
-    }
-    
-    .filter-group select {
-        width: 100%;
+
+    .filter-column {
+        order: 2;
     }
 }
 </style>
