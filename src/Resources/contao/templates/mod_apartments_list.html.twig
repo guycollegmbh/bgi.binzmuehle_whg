@@ -388,6 +388,7 @@
     pointer-events: all;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     position: relative;
+    z-index: 10;
 }
 
 .range-slider::-moz-range-thumb {
@@ -400,6 +401,7 @@
     pointer-events: all;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     position: relative;
+    z-index: 10;
 }
 
 .range-slider::-webkit-slider-thumb:hover {
@@ -412,12 +414,38 @@
 
 #minPrice,
 #minArea {
-    z-index: 5;
+    z-index: 3;
+    pointer-events: none;
+}
+
+#minPrice::-webkit-slider-thumb,
+#minArea::-webkit-slider-thumb {
+    pointer-events: auto;
+    z-index: 4;
+}
+
+#minPrice::-moz-range-thumb,
+#minArea::-moz-range-thumb {
+    pointer-events: auto;
+    z-index: 4;
 }
 
 #maxPrice,
 #maxArea {
-    z-index: 4;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#maxPrice::-webkit-slider-thumb,
+#maxArea::-webkit-slider-thumb {
+    pointer-events: auto;
+    z-index: 3;
+}
+
+#maxPrice::-moz-range-thumb,
+#maxArea::-moz-range-thumb {
+    pointer-events: auto;
+    z-index: 3;
 }
 
 .btn-reset {
@@ -545,6 +573,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // TODO: Später wieder aktivieren - Grundriss-Element
     // const previewGrundriss = document.getElementById('preview-grundriss');
     const previewEtage = document.getElementById('preview-etage');
+
+    // ========== DataTable initialisieren (MUSS ZUERST KOMMEN) ========== //
+    const table = $('#apartments-table').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
+        },
+        pageLength: 50,
+        order: [[0, 'asc']],
+        columnDefs: [
+            { orderable: false, targets: [9, 10] } // Status und Details nicht sortierbar (angepasst nach Ausblenden von 3 Spalten)
+        ],
+        // Suche und "Zeilen anzeigen" ausblenden
+        searching: false,
+        lengthChange: false,
+        // Info-Text ausblenden (optional)
+        info: true
+    });
 
     // ========== Filter ohne Seitenneuladung ========== //
     const filterForm = document.querySelector('.filter-form');
@@ -745,23 +790,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // TODO: Später wieder hinzufügen - && src !== defaultGrundriss
         return src && src !== '' && src !== defaultEtage;
     }
-
-    // ========== DataTable initialisieren ========== //
-    const table = $('#apartments-table').DataTable({
-        language: {
-            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/de-DE.json'
-        },
-        pageLength: 50,
-        order: [[0, 'asc']],
-        columnDefs: [
-            { orderable: false, targets: [9, 10] } // Status und Details nicht sortierbar (angepasst nach Ausblenden von 3 Spalten)
-        ],
-        // Suche und "Zeilen anzeigen" ausblenden
-        searching: false,
-        lengthChange: false,
-        // Info-Text ausblenden (optional)
-        info: true
-    });
 
     // ========== Hover-Effekt für Tabellenzeilen ========== //
     $('#apartments-table tbody').on('mouseenter', 'tr', function() {
