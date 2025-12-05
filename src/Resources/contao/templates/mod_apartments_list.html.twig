@@ -546,13 +546,79 @@ document.addEventListener('DOMContentLoaded', function() {
     // const previewGrundriss = document.getElementById('preview-grundriss');
     const previewEtage = document.getElementById('preview-etage');
 
-    // ========== Auto-Submit bei Filter-Änderung ========== //
+    // ========== Filter ohne Seitenneuladung ========== //
     const filterForm = document.querySelector('.filter-form');
     const filterSelects = filterForm.querySelectorAll('select');
 
+    // Funktion zum Filtern der Tabelle ohne Reload
+    function applyFilters() {
+        const status = document.getElementById('status').value;
+        const zimmer = document.getElementById('zimmer').value;
+        const bauetappe = document.getElementById('bauetappe').value;
+        const zeile = document.getElementById('zeile').value;
+        const minPrice = parseInt(document.getElementById('minPrice').value);
+        const maxPrice = parseInt(document.getElementById('maxPrice').value);
+        const minArea = parseInt(document.getElementById('minArea').value);
+        const maxArea = parseInt(document.getElementById('maxArea').value);
+
+        // Alle Zeilen durchgehen und filtern
+        const rows = table.rows().nodes();
+
+        table.rows().every(function() {
+            const row = this.node();
+            const data = this.data();
+
+            let visible = true;
+
+            // Status Filter
+            if (status && data[9] && !data[9].includes(status)) {
+                visible = false;
+            }
+
+            // Zimmer Filter
+            if (zimmer && data[6] !== zimmer) {
+                visible = false;
+            }
+
+            // Bauetappe Filter
+            if (bauetappe && data[2] !== bauetappe) {
+                visible = false;
+            }
+
+            // Zeile Filter
+            if (zeile && data[3] !== zeile) {
+                visible = false;
+            }
+
+            // Preis Filter (Bruttomiete ist Spalte 8)
+            if (data[8]) {
+                const price = parseFloat(data[8].replace(/[^\d.]/g, '').replace(',', '.'));
+                if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
+                    visible = false;
+                }
+            }
+
+            // Fläche Filter (Fläche ist Spalte 7)
+            if (data[7]) {
+                const area = parseFloat(data[7].replace(/[^\d.]/g, '').replace(',', '.'));
+                if (!isNaN(area) && (area < minArea || area > maxArea)) {
+                    visible = false;
+                }
+            }
+
+            // Zeile ein-/ausblenden
+            if (visible) {
+                $(row).show();
+            } else {
+                $(row).hide();
+            }
+        });
+    }
+
+    // Auto-Filter bei Select-Änderung
     filterSelects.forEach(select => {
         select.addEventListener('change', function() {
-            filterForm.submit();
+            applyFilters();
         });
     });
 
@@ -591,9 +657,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         minPriceDisplay.textContent = minVal;
 
-        // Auto-Submit nach 800ms ohne weitere Änderung
+        // Auto-Filter nach 500ms ohne weitere Änderung
         clearTimeout(priceTimeout);
-        priceTimeout = setTimeout(() => filterForm.submit(), 800);
+        priceTimeout = setTimeout(() => applyFilters(), 500);
     });
 
     // Max-Slider Event
@@ -608,9 +674,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         maxPriceDisplay.textContent = maxVal;
 
-        // Auto-Submit nach 800ms ohne weitere Änderung
+        // Auto-Filter nach 500ms ohne weitere Änderung
         clearTimeout(priceTimeout);
-        priceTimeout = setTimeout(() => filterForm.submit(), 800);
+        priceTimeout = setTimeout(() => applyFilters(), 500);
     });
 
     // ========== Area Range Slider ========== //
@@ -647,9 +713,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         minAreaDisplay.textContent = minVal;
 
-        // Auto-Submit nach 800ms ohne weitere Änderung
+        // Auto-Filter nach 500ms ohne weitere Änderung
         clearTimeout(areaTimeout);
-        areaTimeout = setTimeout(() => filterForm.submit(), 800);
+        areaTimeout = setTimeout(() => applyFilters(), 500);
     });
 
     // Max-Area-Slider Event
@@ -664,9 +730,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         maxAreaDisplay.textContent = maxVal;
 
-        // Auto-Submit nach 800ms ohne weitere Änderung
+        // Auto-Filter nach 500ms ohne weitere Änderung
         clearTimeout(areaTimeout);
-        areaTimeout = setTimeout(() => filterForm.submit(), 800);
+        areaTimeout = setTimeout(() => applyFilters(), 500);
     });
 
     // ========== Default-Bilder ========== //
