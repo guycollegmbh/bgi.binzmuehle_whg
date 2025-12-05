@@ -82,6 +82,40 @@
                 </select>
             </div>
 
+            <div class="filter-group">
+                <label for="zeile">Zeile:</label>
+                <select name="zeile" id="zeile">
+                    <option value="">Alle</option>
+                    {% for option in zeileOptions %}
+                        <option value="{{ option.zeile }}" {% if currentZeile == option.zeile %}selected{% endif %}>
+                            {{ option.zeile }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group price-slider-group">
+                <label for="priceRange">Bruttomiete (CHF):</label>
+                <div class="price-values">
+                    <span id="minPriceDisplay">0</span> - <span id="maxPriceDisplay">5000</span>
+                </div>
+                <div class="dual-range-wrapper">
+                    <input type="range" id="minPrice" name="minPrice" min="0" max="5000" step="50" value="0" class="range-slider">
+                    <input type="range" id="maxPrice" name="maxPrice" min="0" max="5000" step="50" value="5000" class="range-slider">
+                </div>
+            </div>
+
+            <div class="filter-group price-slider-group">
+                <label for="areaRange">Wohnfläche (m²):</label>
+                <div class="price-values">
+                    <span id="minAreaDisplay">0</span> - <span id="maxAreaDisplay">200</span>
+                </div>
+                <div class="dual-range-wrapper">
+                    <input type="range" id="minArea" name="minArea" min="0" max="200" step="5" value="0" class="range-slider">
+                    <input type="range" id="maxArea" name="maxArea" min="0" max="200" step="5" value="200" class="range-slider">
+                </div>
+            </div>
+
             <button type="submit" class="btn-filter">Filtern</button>
             <a href="?" class="btn-reset">Zurücksetzen</a>
         </form>
@@ -280,6 +314,89 @@
     width: 100%;
 }
 
+/* Price Range Slider */
+.price-slider-group {
+    margin-top: 10px;
+}
+
+.price-values {
+    text-align: center;
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.dual-range-wrapper {
+    position: relative;
+    height: 40px;
+}
+
+.range-slider {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    outline: none;
+    pointer-events: none;
+}
+
+.range-slider::-webkit-slider-track {
+    width: 100%;
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+}
+
+.range-slider::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #007bff;
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.range-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #007bff;
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+    background: #0056b3;
+}
+
+.range-slider::-moz-range-thumb:hover {
+    background: #0056b3;
+}
+
+#minPrice {
+    z-index: 1;
+}
+
+#maxPrice {
+    z-index: 2;
+}
+
 .btn-filter,
 .btn-reset {
     padding: 10px 20px;
@@ -401,6 +518,97 @@ document.addEventListener('DOMContentLoaded', function() {
     // TODO: Später wieder aktivieren - Grundriss-Element
     // const previewGrundriss = document.getElementById('preview-grundriss');
     const previewEtage = document.getElementById('preview-etage');
+
+    // ========== Price Range Slider ========== //
+    const minPriceSlider = document.getElementById('minPrice');
+    const maxPriceSlider = document.getElementById('maxPrice');
+    const minPriceDisplay = document.getElementById('minPriceDisplay');
+    const maxPriceDisplay = document.getElementById('maxPriceDisplay');
+
+    // URL-Parameter auslesen für Initial-Werte
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlMinPrice = urlParams.get('minPrice');
+    const urlMaxPrice = urlParams.get('maxPrice');
+
+    if (urlMinPrice) {
+        minPriceSlider.value = urlMinPrice;
+        minPriceDisplay.textContent = urlMinPrice;
+    }
+    if (urlMaxPrice) {
+        maxPriceSlider.value = urlMaxPrice;
+        maxPriceDisplay.textContent = urlMaxPrice;
+    }
+
+    // Min-Slider Event
+    minPriceSlider.addEventListener('input', function() {
+        let minVal = parseInt(this.value);
+        let maxVal = parseInt(maxPriceSlider.value);
+
+        if (minVal >= maxVal) {
+            this.value = maxVal - 50;
+            minVal = maxVal - 50;
+        }
+
+        minPriceDisplay.textContent = minVal;
+    });
+
+    // Max-Slider Event
+    maxPriceSlider.addEventListener('input', function() {
+        let minVal = parseInt(minPriceSlider.value);
+        let maxVal = parseInt(this.value);
+
+        if (maxVal <= minVal) {
+            this.value = minVal + 50;
+            maxVal = minVal + 50;
+        }
+
+        maxPriceDisplay.textContent = maxVal;
+    });
+
+    // ========== Area Range Slider ========== //
+    const minAreaSlider = document.getElementById('minArea');
+    const maxAreaSlider = document.getElementById('maxArea');
+    const minAreaDisplay = document.getElementById('minAreaDisplay');
+    const maxAreaDisplay = document.getElementById('maxAreaDisplay');
+
+    // URL-Parameter auslesen für Initial-Werte
+    const urlMinArea = urlParams.get('minArea');
+    const urlMaxArea = urlParams.get('maxArea');
+
+    if (urlMinArea) {
+        minAreaSlider.value = urlMinArea;
+        minAreaDisplay.textContent = urlMinArea;
+    }
+    if (urlMaxArea) {
+        maxAreaSlider.value = urlMaxArea;
+        maxAreaDisplay.textContent = urlMaxArea;
+    }
+
+    // Min-Area-Slider Event
+    minAreaSlider.addEventListener('input', function() {
+        let minVal = parseInt(this.value);
+        let maxVal = parseInt(maxAreaSlider.value);
+
+        if (minVal >= maxVal) {
+            this.value = maxVal - 5;
+            minVal = maxVal - 5;
+        }
+
+        minAreaDisplay.textContent = minVal;
+    });
+
+    // Max-Area-Slider Event
+    maxAreaSlider.addEventListener('input', function() {
+        let minVal = parseInt(minAreaSlider.value);
+        let maxVal = parseInt(this.value);
+
+        if (maxVal <= minVal) {
+            this.value = minVal + 5;
+            maxVal = minVal + 5;
+        }
+
+        maxAreaDisplay.textContent = maxVal;
+    });
 
     // ========== Default-Bilder ========== //
     // TODO: Später wieder aktivieren - Grundriss-Default
