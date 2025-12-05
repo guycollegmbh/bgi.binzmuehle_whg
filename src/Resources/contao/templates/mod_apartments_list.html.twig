@@ -356,6 +356,8 @@
     height: 6px;
     background: #ddd;
     border-radius: 3px;
+    position: relative;
+    z-index: 1;
 }
 
 .range-slider::-moz-range-track {
@@ -363,6 +365,8 @@
     height: 6px;
     background: #ddd;
     border-radius: 3px;
+    position: relative;
+    z-index: 1;
 }
 
 .range-slider::-webkit-slider-thumb {
@@ -377,7 +381,7 @@
     pointer-events: all;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     position: relative;
-    z-index: 3;
+    z-index: 10;
 }
 
 .range-slider::-moz-range-thumb {
@@ -390,7 +394,7 @@
     pointer-events: all;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     position: relative;
-    z-index: 3;
+    z-index: 10;
 }
 
 .range-slider::-webkit-slider-thumb:hover {
