@@ -458,7 +458,12 @@
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    overflow-x: auto;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-container table {
+    min-width: 100%;
 }
 
 /* Hidden Column (für Zeile-Filter) */
