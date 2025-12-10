@@ -132,14 +132,15 @@
 }
 
 .detail-header {
-    padding: 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    background: #90303e;
     color: white;
 }
 
 .detail-header h1 {
     margin: 0 0 10px 0;
-    font-size: 32px;
+    font-size: 28px;
+    font-weight: 600;
 }
 
 .objektnummer {
@@ -151,20 +152,36 @@
 .status-badge {
     display: inline-block;
     padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 14px;
     font-weight: 600;
     margin-top: 10px;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
+}
+
+.status-badge.status-frei {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.status-reserviert {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.status-vermietet {
+    background: #f8d7da;
+    color: #721c24;
 }
 
 .detail-content {
-    padding: 30px;
+    padding: 20px;
 }
 
 .detail-section {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .detail-section:last-child {
@@ -173,80 +190,97 @@
 
 .detail-section h2 {
     margin: 0 0 20px 0;
-    font-size: 24px;
-    color: #333;
-    border-bottom: 2px solid #f0f0f0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #90303e;
+    border-bottom: 2px solid #90303e;
     padding-bottom: 10px;
 }
 
 .info-list,
 .costs-list {
     display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 15px 30px;
+    grid-template-columns: 180px 1fr;
+    gap: 12px 20px;
     margin: 0;
 }
 
 .info-list dt,
 .costs-list dt {
     font-weight: 600;
+    font-size: 14px;
     color: #666;
 }
 
 .info-list dd,
 .costs-list dd {
     margin: 0;
+    font-size: 14px;
     color: #333;
+}
+
+.costs-section {
+    background: white;
+    border: 2px solid #90303e;
 }
 
 .costs-list dt.total,
 .costs-list dd.total {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
-    color: #667eea;
+    color: #90303e;
     padding-top: 15px;
-    border-top: 2px solid #f0f0f0;
+    border-top: 2px solid #90303e;
     margin-top: 10px;
 }
 
 .download-section {
-    background: #f8f9fa;
-    padding: 30px;
+    background: white;
+    padding: 20px;
     border-radius: 8px;
-    margin: 30px 0;
 }
 
 .btn-download {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 24px;
-    background: #28a745;
+    padding: 10px 20px;
+    background: #90303e;
     color: white;
     text-decoration: none;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: background 0.3s;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid #90303e;
 }
 
 .btn-download:hover {
-    background: #218838;
+    background: white;
+    color: #90303e;
+    border-color: #90303e;
+    text-decoration: none;
 }
 
 .btn-download svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+}
+
+.images-section {
+    background: white;
 }
 
 .images-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    gap: 20px;
 }
 
 .image-item h3 {
     margin: 0 0 15px 0;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 600;
     color: #666;
 }
 
@@ -258,29 +292,36 @@
 }
 
 .detail-footer {
-    padding: 20px 30px;
-    background: #f8f9fa;
-    border-top: 1px solid #e0e0e0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-top: 1px solid #ddd;
 }
 
 .btn-back {
     display: inline-block;
     padding: 10px 20px;
-    background: #6c757d;
+    background: #90303e;
     color: white;
     text-decoration: none;
-    border-radius: 6px;
-    transition: background 0.3s;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid #90303e;
 }
 
 .btn-back:hover {
-    background: #5a6268;
+    background: white;
+    color: #90303e;
+    border-color: #90303e;
+    text-decoration: none;
 }
 
 .alert {
     padding: 15px;
     border-radius: 6px;
     margin-bottom: 20px;
+    font-size: 14px;
 }
 
 .alert-warning {
@@ -295,13 +336,21 @@
         grid-template-columns: 1fr;
         gap: 10px;
     }
-    
+
     .detail-header h1 {
-        font-size: 24px;
+        font-size: 22px;
     }
-    
+
     .images-grid {
         grid-template-columns: 1fr;
+    }
+
+    .detail-content {
+        padding: 15px;
+    }
+
+    .detail-section {
+        padding: 15px;
     }
 }
 </style>
