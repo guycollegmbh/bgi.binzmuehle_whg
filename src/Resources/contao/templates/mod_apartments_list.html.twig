@@ -126,12 +126,12 @@
                     <th>Zimmer</th>
                     <th>Fläche (m²)</th>
                     {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - START #}
-                    {# <th>Nettomiete (CHF)</th> #}
+                    {# <th>Nettomiete</th> #}
                     {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - ENDE #}
                     {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - START #}
-                    {# <th>Nebenkosten (CHF)</th> #}
+                    {# <th>Nebenkosten</th> #}
                     {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - ENDE #}
-                    <th>Bruttomiete (CHF)</th>
+                    <th>Bruttomiete</th>
                     <th>Status</th>
                     {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - START #}
                     {# <th>Grundriss</th> #}
@@ -472,6 +472,19 @@
     text-align: left;
     border-bottom: 2px solid #ddd;
     color: #333 !important;
+}
+
+/* DataTables Sortierung - Aktive Pfeile rot färben */
+#apartments-table thead th.sorting_asc,
+#apartments-table thead th.sorting_desc {
+    color: #90303e !important;
+}
+
+/* Optional: Sortierungs-Pfeile selbst rot färben */
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after {
+    color: #90303e !important;
+    opacity: 1 !important;
 }
 
 /* Table Body Styling */
