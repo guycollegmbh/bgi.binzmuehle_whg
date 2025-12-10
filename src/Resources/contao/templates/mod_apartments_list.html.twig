@@ -515,6 +515,14 @@ table.dataTable thead>tr>td.sorting_desc_disabled:after {
     right: 0 !important;
 }
 
+/* DataTables Column Ordering Box-Shadow entfernen */
+table.dataTable.display>tbody>tr.odd>.sorting_1,
+table.dataTable.order-column.stripe>tbody>tr.odd>.sorting_1,
+table.dataTable.display>tbody>tr.even>.sorting_1,
+table.dataTable.order-column.stripe>tbody>tr.even>.sorting_1 {
+    box-shadow: none !important;
+}
+
 /* Table Body Styling */
 #apartments-table tbody td {
     font-size: 14px;
