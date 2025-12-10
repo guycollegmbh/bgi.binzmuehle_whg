@@ -120,6 +120,7 @@
                     <th>Objektnummer</th>
                     <th>Bezeichnung</th>
                     <th>Bauetappe</th>
+                    <th class="hidden-column">Zeile</th>
                     <th>Adresse</th>
                     <th>Etage</th>
                     <th>Zimmer</th>
@@ -146,6 +147,7 @@
                         <td>{{ apartment.objektnummer }}</td>
                         <td>{{ apartment.bezeichnung }}</td>
                         <td>{{ apartment.bauetappe }}</td>
+                        <td class="hidden-column">{{ apartment.zeile }}</td>
                         <td>{{ apartment.adresse }}</td>
                         <td>{{ apartment.etage }}</td>
                         <td>{{ apartment.zimmer }}</td>
@@ -457,6 +459,11 @@
     overflow-x: auto;
 }
 
+/* Hidden Column (für Zeile-Filter) */
+.hidden-column {
+    display: none !important;
+}
+
 /* Table Header Styling */
 #apartments-table thead th {
     font-weight: 600;
@@ -563,7 +570,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pageLength: 50,
         order: [[0, 'asc']],
         columnDefs: [
-            { orderable: false, targets: [8, 9] } // Status und Details nicht sortierbar
+            { orderable: false, targets: [9, 10] } // Status und Details nicht sortierbar
         ],
         // Suche und "Zeilen anzeigen" ausblenden (DOM ohne f = ohne Filter-Box, ohne l = ohne Length-Selector)
         dom: 'rtip', // r=processing, t=table, i=info, p=pagination (kein f=filter, kein l=length)
@@ -595,12 +602,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // 0: Objektnummer
             // 1: Bezeichnung
             // 2: Bauetappe
-            // 3: Adresse
-            // 4: Etage
-            // 5: Zimmer
-            // 6: Fläche
-            // 7: Bruttomiete
-            // 8: Status
+            // 3: Zeile (versteckt)
+            // 4: Adresse
+            // 5: Etage
+            // 6: Zimmer
+            // 7: Fläche
+            // 8: Bruttomiete
+            // 9: Status
 
             // Bauetappe Filter
             if (bauetappe && searchData[2] !== bauetappe) {
@@ -608,24 +616,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Zimmer Filter
-            if (zimmer && searchData[5] !== zimmer) {
+            if (zimmer && searchData[6] !== zimmer) {
                 return false;
             }
 
-            // Zeile Filter (falls aktiviert)
-            // Hinweis: Zeile ist nicht mehr in der Tabelle, daher deaktiviert
-            // if (zeile && searchData[3] !== zeile) {
-            //     return false;
-            // }
+            // Zeile Filter
+            if (zeile && searchData[3] !== zeile) {
+                return false;
+            }
 
             // Status Filter
-            if (status && searchData[8].indexOf(status) === -1) {
+            if (status && searchData[9].indexOf(status) === -1) {
                 return false;
             }
 
             // Preis Filter (Bruttomiete)
-            if (searchData[7]) {
-                const price = parseFloat(searchData[7].replace(/[^\d.]/g, ''));
+            if (searchData[8]) {
+                const price = parseFloat(searchData[8].replace(/[^\d.]/g, ''));
                 if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
                     return false;
                 }
