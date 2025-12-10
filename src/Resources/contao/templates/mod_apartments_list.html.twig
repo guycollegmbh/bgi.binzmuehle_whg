@@ -95,7 +95,7 @@
             </div>
 
             <div class="filter-group price-slider-group">
-                <label for="priceRange">Bruttomiete (CHF):</label>
+                <label for="priceRange">Bruttomiete:</label>
                 <div class="price-values">
                     <span id="minPriceDisplay">0</span> - <span id="maxPriceDisplay">3500</span>
                 </div>
@@ -432,23 +432,24 @@
 }
 
 .btn-reset {
-    padding: 8px 16px;
-    border: none;
+    padding: 6px 16px;
+    background: #90303e;
+    color: white;
+    text-decoration: none;
     border-radius: 4px;
     font-size: 13px;
-    cursor: pointer;
-    text-decoration: none;
+    font-weight: 500;
     display: block;
     text-align: center;
     transition: background 0.2s;
     width: 100%;
-    background: #6c757d;
-    color: white;
     margin-top: 15px;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-reset:hover {
-    background: #5a6268;
+    background: #6e2530;
 }
 
 .table-container {
@@ -472,12 +473,6 @@
     text-align: left;
     border-bottom: 2px solid #ddd;
     color: #333 !important;
-}
-
-/* DataTables Sortierung - Aktiver (dunkler) Pfeil in Rot */
-table.dataTable thead th.sorting_asc:before,
-table.dataTable thead th.sorting_desc:before {
-    color: #90303e !important;
 }
 
 /* Table Body Styling */
