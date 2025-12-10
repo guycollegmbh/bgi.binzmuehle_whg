@@ -83,21 +83,16 @@
                 {% endif %}
 
                 {# ========== BILDERGALERIE ========== #}
-                {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss-Bild ist aktuell auskommentiert #}
-                {# Zum Einblenden: Zeile 86 ändern von "apartment.imageetage_path" zu "apartment.imagegrundriss_path or apartment.imageetage_path" #}
-                {# Zum Einblenden: Grundriss-Block (Zeilen 90-94) auskommentieren (Kommentarzeichen entfernen) #}
-                {% if apartment.imageetage_path %}
+                {% if apartment.imagegrundriss_path or apartment.imageetage_path %}
                     <div class="detail-section images-section">
                         <h2>Pläne & Ansichten</h2>
                         <div class="images-grid">
-                            {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss-Bild - START #}
-                            {# {% if apartment.imagegrundriss_path %}
+                            {% if apartment.imagegrundriss_path %}
                                 <div class="image-item">
                                     <h3>Grundriss</h3>
                                     <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss {{ apartment.bezeichnung }}">
                                 </div>
-                            {% endif %} #}
-                            {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss-Bild - ENDE #}
+                            {% endif %}
 
                             {% if apartment.imageetage_path %}
                                 <div class="image-item">
@@ -133,7 +128,6 @@
 
 .detail-header {
     padding: 20px;
-    background: #90303e;
     color: white;
 }
 
