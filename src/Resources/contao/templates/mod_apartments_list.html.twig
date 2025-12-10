@@ -565,8 +565,8 @@ document.addEventListener('DOMContentLoaded', function() {
         columnDefs: [
             { orderable: false, targets: [8, 9] } // Status und Details nicht sortierbar
         ],
-        // Suche und "Zeilen anzeigen" ausblenden
-        searching: false,
+        // Suche und "Zeilen anzeigen" ausblenden (DOM ohne f = ohne Filter-Box, ohne l = ohne Length-Selector)
+        dom: 'rtip', // r=processing, t=table, i=info, p=pagination (kein f=filter, kein l=length)
         lengthChange: false,
         // Info-Text ausblenden (optional)
         info: true
