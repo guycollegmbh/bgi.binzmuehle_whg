@@ -576,57 +576,68 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterForm = document.querySelector('.filter-form');
     const filterSelects = filterForm.querySelectorAll('select');
 
-    // Funktion zum Filtern der Tabelle ohne Reload
-    function applyFilters() {
-        const status = document.getElementById('status').value;
-        const zimmer = document.getElementById('zimmer').value;
-        const bauetappe = document.getElementById('bauetappe').value;
-        const zeile = document.getElementById('zeile').value;
-        const minPrice = parseInt(document.getElementById('minPrice').value);
-        const maxPrice = parseInt(document.getElementById('maxPrice').value);
-
-        // Alle Zeilen durchgehen und filtern
-        const rows = table.rows().nodes();
-
-        table.rows().every(function() {
-            const row = this.node();
-            const data = this.data();
-
-            let visible = true;
-
-            // Status Filter (Spalte 8)
-            if (status && data[8] && !data[8].includes(status)) {
-                visible = false;
+    // Custom Search Function für DataTables
+    $.fn.dataTable.ext.search.push(
+        function(settings, searchData, index, rowData, counter) {
+            // Nur auf unsere Tabelle anwenden
+            if (settings.nTable.id !== 'apartments-table') {
+                return true;
             }
 
-            // Zimmer Filter (Spalte 5)
-            if (zimmer && data[5] !== zimmer) {
-                visible = false;
+            const status = document.getElementById('status').value;
+            const zimmer = document.getElementById('zimmer').value;
+            const bauetappe = document.getElementById('bauetappe').value;
+            const zeile = document.getElementById('zeile').value;
+            const minPrice = parseInt(document.getElementById('minPrice').value);
+            const maxPrice = parseInt(document.getElementById('maxPrice').value);
+
+            // Spaltenindizes (0-basiert):
+            // 0: Objektnummer
+            // 1: Bezeichnung
+            // 2: Bauetappe
+            // 3: Adresse
+            // 4: Etage
+            // 5: Zimmer
+            // 6: Fläche
+            // 7: Bruttomiete
+            // 8: Status
+
+            // Bauetappe Filter
+            if (bauetappe && searchData[2] !== bauetappe) {
+                return false;
             }
 
-            // Bauetappe Filter (Spalte 2)
-            if (bauetappe && data[2] !== bauetappe) {
-                visible = false;
+            // Zimmer Filter
+            if (zimmer && searchData[5] !== zimmer) {
+                return false;
             }
 
-            // Zeile Filter - wird nicht mehr angezeigt, aber Filter bleibt im Code
-            // (könnte entfernt werden, falls Zeile-Filter komplett weg soll)
+            // Zeile Filter (falls aktiviert)
+            // Hinweis: Zeile ist nicht mehr in der Tabelle, daher deaktiviert
+            // if (zeile && searchData[3] !== zeile) {
+            //     return false;
+            // }
 
-            // Preis Filter (Bruttomiete ist Spalte 7)
-            if (data[7]) {
-                const price = parseFloat(data[7].replace(/[^\d.]/g, '').replace(',', '.'));
+            // Status Filter
+            if (status && searchData[8].indexOf(status) === -1) {
+                return false;
+            }
+
+            // Preis Filter (Bruttomiete)
+            if (searchData[7]) {
+                const price = parseFloat(searchData[7].replace(/[^\d.]/g, ''));
                 if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
-                    visible = false;
+                    return false;
                 }
             }
 
-            // Zeile ein-/ausblenden
-            if (visible) {
-                $(row).show();
-            } else {
-                $(row).hide();
-            }
-        });
+            return true;
+        }
+    );
+
+    // Funktion zum Filtern der Tabelle
+    function applyFilters() {
+        table.draw();
     }
 
     // Auto-Filter bei Select-Änderung
