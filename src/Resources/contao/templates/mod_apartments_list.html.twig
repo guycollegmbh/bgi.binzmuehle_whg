@@ -435,7 +435,7 @@
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     display: block;
     text-align: center;
@@ -458,13 +458,22 @@
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    overflow-y: scroll;
-    max-height: 600px;
+    max-height: 900px;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    position: relative;
 }
 
 .table-container table {
     width: 100%;
+}
+
+/* Sticky Table Header */
+#apartments-table thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
 }
 
 /* Hidden Column (für Zeile-Filter) */
@@ -529,7 +538,7 @@
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     display: inline-block;
     transition: all 0.2s;
