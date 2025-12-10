@@ -105,17 +105,6 @@
                 </div>
             </div>
 
-            <div class="filter-group price-slider-group">
-                <label for="areaRange">Wohnfläche (m²):</label>
-                <div class="price-values">
-                    <span id="minAreaDisplay">0</span> - <span id="maxAreaDisplay">125</span>
-                </div>
-                <div class="dual-range-wrapper">
-                    <input type="range" id="minArea" name="minArea" min="0" max="125" step="5" value="0" class="range-slider">
-                    <input type="range" id="maxArea" name="maxArea" min="0" max="125" step="5" value="125" class="range-slider">
-                </div>
-            </div>
-
             <a href="/wohnungen/liste" class="btn-reset">Filter zurücksetzen</a>
         </form>
             </div>
@@ -131,7 +120,6 @@
                     <th>Objektnummer</th>
                     <th>Bezeichnung</th>
                     <th>Bauetappe</th>
-                    <th>Zeile</th>
                     <th>Adresse</th>
                     <th>Etage</th>
                     <th>Zimmer</th>
@@ -152,13 +140,12 @@
             </thead>
             <tbody>
                 {% for apartment in apartments %}
-                    <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}" 
+                    <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}"
                         data-etage="{{ apartment.imageetage_path|default('') }}"
                         class="apartment-row">
                         <td>{{ apartment.objektnummer }}</td>
                         <td>{{ apartment.bezeichnung }}</td>
                         <td>{{ apartment.bauetappe }}</td>
-                        <td>{{ apartment.zeile }}</td>
                         <td>{{ apartment.adresse }}</td>
                         <td>{{ apartment.etage }}</td>
                         <td>{{ apartment.zimmer }}</td>
@@ -412,38 +399,32 @@
     background: #6e2530;
 }
 
-#minPrice,
-#minArea {
+#minPrice {
     /*z-index: 3;*/
     pointer-events: none;
 }
 
-#minPrice::-webkit-slider-thumb,
-#minArea::-webkit-slider-thumb {
+#minPrice::-webkit-slider-thumb {
     pointer-events: auto;
     z-index: 4;
 }
 
-#minPrice::-moz-range-thumb,
-#minArea::-moz-range-thumb {
+#minPrice::-moz-range-thumb {
     pointer-events: auto;
     z-index: 4;
 }
 
-#maxPrice,
-#maxArea {
+#maxPrice {
     z-index: 2;
     pointer-events: none;
 }
 
-#maxPrice::-webkit-slider-thumb,
-#maxArea::-webkit-slider-thumb {
+#maxPrice::-webkit-slider-thumb {
     pointer-events: auto;
     z-index: 3;
 }
 
-#maxPrice::-moz-range-thumb,
-#maxArea::-moz-range-thumb {
+#maxPrice::-moz-range-thumb {
     pointer-events: auto;
     z-index: 3;
 }
@@ -582,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pageLength: 50,
         order: [[0, 'asc']],
         columnDefs: [
-            { orderable: false, targets: [9, 10] } // Status und Details nicht sortierbar (angepasst nach Ausblenden von 3 Spalten)
+            { orderable: false, targets: [8, 9] } // Status und Details nicht sortierbar
         ],
         // Suche und "Zeilen anzeigen" ausblenden
         searching: false,
@@ -603,8 +584,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const zeile = document.getElementById('zeile').value;
         const minPrice = parseInt(document.getElementById('minPrice').value);
         const maxPrice = parseInt(document.getElementById('maxPrice').value);
-        const minArea = parseInt(document.getElementById('minArea').value);
-        const maxArea = parseInt(document.getElementById('maxArea').value);
 
         // Alle Zeilen durchgehen und filtern
         const rows = table.rows().nodes();
@@ -615,38 +594,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let visible = true;
 
-            // Status Filter
-            if (status && data[9] && !data[9].includes(status)) {
+            // Status Filter (Spalte 8)
+            if (status && data[8] && !data[8].includes(status)) {
                 visible = false;
             }
 
-            // Zimmer Filter
-            if (zimmer && data[6] !== zimmer) {
+            // Zimmer Filter (Spalte 5)
+            if (zimmer && data[5] !== zimmer) {
                 visible = false;
             }
 
-            // Bauetappe Filter
+            // Bauetappe Filter (Spalte 2)
             if (bauetappe && data[2] !== bauetappe) {
                 visible = false;
             }
 
-            // Zeile Filter
-            if (zeile && data[3] !== zeile) {
-                visible = false;
-            }
+            // Zeile Filter - wird nicht mehr angezeigt, aber Filter bleibt im Code
+            // (könnte entfernt werden, falls Zeile-Filter komplett weg soll)
 
-            // Preis Filter (Bruttomiete ist Spalte 8)
-            if (data[8]) {
-                const price = parseFloat(data[8].replace(/[^\d.]/g, '').replace(',', '.'));
-                if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
-                    visible = false;
-                }
-            }
-
-            // Fläche Filter (Fläche ist Spalte 7)
+            // Preis Filter (Bruttomiete ist Spalte 7)
             if (data[7]) {
-                const area = parseFloat(data[7].replace(/[^\d.]/g, '').replace(',', '.'));
-                if (!isNaN(area) && (area < minArea || area > maxArea)) {
+                const price = parseFloat(data[7].replace(/[^\d.]/g, '').replace(',', '.'));
+                if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
                     visible = false;
                 }
             }
@@ -722,62 +691,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Auto-Filter nach 500ms ohne weitere Änderung
         clearTimeout(priceTimeout);
         priceTimeout = setTimeout(() => applyFilters(), 500);
-    });
-
-    // ========== Area Range Slider ========== //
-    const minAreaSlider = document.getElementById('minArea');
-    const maxAreaSlider = document.getElementById('maxArea');
-    const minAreaDisplay = document.getElementById('minAreaDisplay');
-    const maxAreaDisplay = document.getElementById('maxAreaDisplay');
-
-    // URL-Parameter auslesen für Initial-Werte
-    const urlMinArea = urlParams.get('minArea');
-    const urlMaxArea = urlParams.get('maxArea');
-
-    if (urlMinArea) {
-        minAreaSlider.value = urlMinArea;
-        minAreaDisplay.textContent = urlMinArea;
-    }
-    if (urlMaxArea) {
-        maxAreaSlider.value = urlMaxArea;
-        maxAreaDisplay.textContent = urlMaxArea;
-    }
-
-    // Auto-Submit Timeout für Area-Slider
-    let areaTimeout;
-
-    // Min-Area-Slider Event
-    minAreaSlider.addEventListener('input', function() {
-        let minVal = parseInt(this.value);
-        let maxVal = parseInt(maxAreaSlider.value);
-
-        if (minVal >= maxVal) {
-            this.value = maxVal - 5;
-            minVal = maxVal - 5;
-        }
-
-        minAreaDisplay.textContent = minVal;
-
-        // Auto-Filter nach 500ms ohne weitere Änderung
-        clearTimeout(areaTimeout);
-        areaTimeout = setTimeout(() => applyFilters(), 500);
-    });
-
-    // Max-Area-Slider Event
-    maxAreaSlider.addEventListener('input', function() {
-        let minVal = parseInt(minAreaSlider.value);
-        let maxVal = parseInt(this.value);
-
-        if (maxVal <= minVal) {
-            this.value = minVal + 5;
-            maxVal = minVal + 5;
-        }
-
-        maxAreaDisplay.textContent = maxVal;
-
-        // Auto-Filter nach 500ms ohne weitere Änderung
-        clearTimeout(areaTimeout);
-        areaTimeout = setTimeout(() => applyFilters(), 500);
     });
 
     // ========== Default-Bilder ========== //
