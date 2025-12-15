@@ -46,28 +46,21 @@
                             <dt>Wohnfläche:</dt>
                             <dd>{{ apartment.flaeche }} m²</dd>
                         {% endif %}
+                        {% if apartment.nettomietzins %}
+                            <dt>Nettomiete:</dt>
+                            <dd>CHF {{ apartment.nettomietzins }}</dd>
+                        {% endif %}
+                        {% if apartment.nebenkosten %}
+                            <dt>Nebenkosten:</dt>
+                            <dd>CHF {{ apartment.nebenkosten }}</dd>
+                        {% endif %}
+                        {% if apartment.bruttomietzins %}
+                            <dt class="total">Bruttomiete:</dt>
+                            <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
+                        {% endif %}
                     </dl>
                 </div>
 
-                {% if apartment.nettomietzins or apartment.nebenkosten or apartment.bruttomietzins %}
-                    <div class="detail-section costs-section">
-                        <h2>Mietkosten</h2>
-                        <dl class="costs-list">
-                            {% if apartment.nettomietzins %}
-                                <dt>Nettomiete:</dt>
-                                <dd>CHF {{ apartment.nettomietzins }}</dd>
-                            {% endif %}
-                            {% if apartment.nebenkosten %}
-                                <dt>Nebenkosten:</dt>
-                                <dd>CHF {{ apartment.nebenkosten }}</dd>
-                            {% endif %}
-                            {% if apartment.bruttomietzins %}
-                                <dt class="total">Bruttomiete:</dt>
-                                <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
-                            {% endif %}
-                        </dl>
-                    </div>
-                {% endif %}
 
                 {# ========== BILDERGALERIE ========== #}
                 <div class="detail-section images-section">
