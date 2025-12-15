@@ -8,6 +8,9 @@
                 {% if apartment.bezeichnung %}
                     <h1>{{ apartment.bezeichnung }} {{ apartment.objektnummer }}</h1>
                 {% endif %}
+                {% if apartment.objektnummer %}
+                    <p class="objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</p>
+                {% endif %}
                 {% if apartment.status %}
                     <div class="status-badge status-{{ apartment.status|lower }}">
                         {{ apartment.status }}
