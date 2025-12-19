@@ -21,7 +21,15 @@ class ApartmentsListController extends AbstractFrontendModuleController
             ->execute(1);
 
         // Bezeichnungen die ausgeblendet werden sollen
-        $excludedBezeichnungen = ['Parkplätze', 'Motorradparkplätze', 'Jokerzimmer', 'Atelier'];
+        $excludedBezeichnungen = [
+            'Jokerzimmer',
+            'Atelier',
+            'Parkplatz IV',
+            'Parkplatz',
+            'Moto Hallenplatz',
+            'Parkplatz IV E-Mob',
+            'Parkplatz E-Mob'
+        ];
 
         $apartmentsList = [];
         while ($apartments->next()) {
