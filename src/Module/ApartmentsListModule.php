@@ -17,9 +17,9 @@ class ApartmentsListModule extends Module
     {
         $db = Database::getInstance();
 
-        // Basis-Query
-        $query = 'SELECT * FROM tl_apartments WHERE published = ?';
-        $params = [1];
+        // Basis-Query - nur Wohnungen anzeigen
+        $query = 'SELECT * FROM tl_apartments WHERE published = ? AND bezeichnung = ?';
+        $params = [1, 'Wohnung'];
 
         // Filter verarbeiten
         $where = [];
@@ -112,11 +112,11 @@ class ApartmentsListModule extends Module
             $apartments[] = $data;
         }
 
-        // Filter-Optionen
-        $statusOptions = $db->execute('SELECT DISTINCT status FROM tl_apartments WHERE published = 1 ORDER BY status')->fetchAllAssoc();
-        $zimmerOptions = $db->execute('SELECT DISTINCT zimmer FROM tl_apartments WHERE published = 1 ORDER BY zimmer')->fetchAllAssoc();
-        $bauetappeOptions = $db->execute('SELECT DISTINCT bauetappe FROM tl_apartments WHERE published = 1 ORDER BY bauetappe')->fetchAllAssoc();
-        $zeileOptions = $db->execute('SELECT DISTINCT zeile FROM tl_apartments WHERE published = 1 AND zeile != \'\' ORDER BY zeile')->fetchAllAssoc();
+        // Filter-Optionen - nur für Wohnungen
+        $statusOptions = $db->execute('SELECT DISTINCT status FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' ORDER BY status')->fetchAllAssoc();
+        $zimmerOptions = $db->execute('SELECT DISTINCT zimmer FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' ORDER BY zimmer')->fetchAllAssoc();
+        $bauetappeOptions = $db->execute('SELECT DISTINCT bauetappe FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' ORDER BY bauetappe')->fetchAllAssoc();
+        $zeileOptions = $db->execute('SELECT DISTINCT zeile FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' AND zeile != \'\' ORDER BY zeile')->fetchAllAssoc();
 
         // Template-Variablen
         $this->Template->apartments = $apartments;
