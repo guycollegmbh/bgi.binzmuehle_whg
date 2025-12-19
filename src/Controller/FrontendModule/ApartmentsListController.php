@@ -35,8 +35,19 @@ class ApartmentsListController extends AbstractFrontendModuleController
         while ($apartments->next()) {
             $row = $apartments->row();
 
+            // Bereinige Bezeichnung (trim) und prüfe ob sie ausgeschlossen werden soll
+            $bezeichnung = trim($row['bezeichnung']);
+            $excluded = false;
+
+            foreach ($excludedBezeichnungen as $excludedBezeichnung) {
+                if (stripos($bezeichnung, $excludedBezeichnung) !== false) {
+                    $excluded = true;
+                    break;
+                }
+            }
+
             // Filtere ausgeschlossene Bezeichnungen heraus
-            if (!in_array($row['bezeichnung'], $excludedBezeichnungen)) {
+            if (!$excluded) {
                 $apartmentsList[] = $row;
             }
         }
