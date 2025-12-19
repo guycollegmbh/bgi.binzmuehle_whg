@@ -20,9 +20,17 @@ class ApartmentsListController extends AbstractFrontendModuleController
             ->prepare('SELECT * FROM tl_apartments WHERE published = ? ORDER BY bauetappe, zeile, objektnummer')
             ->execute(1);
 
+        // Bezeichnungen die ausgeblendet werden sollen
+        $excludedBezeichnungen = ['Parkplätze', 'Motorradparkplätze', 'Jokerzimmer', 'Atelier'];
+
         $apartmentsList = [];
         while ($apartments->next()) {
-            $apartmentsList[] = $apartments->row();
+            $row = $apartments->row();
+
+            // Filtere ausgeschlossene Bezeichnungen heraus
+            if (!in_array($row['bezeichnung'], $excludedBezeichnungen)) {
+                $apartmentsList[] = $row;
+            }
         }
 
         $template->set('apartments', $apartmentsList);
