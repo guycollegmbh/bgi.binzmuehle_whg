@@ -113,55 +113,58 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ========== Price Range Slider ========== //
+    // TODO: Wieder aktivieren wenn Bruttomiete Range-Slider eingeblendet wird
     const minPriceSlider = document.getElementById('minPrice');
     const maxPriceSlider = document.getElementById('maxPrice');
     const minPriceDisplay = document.getElementById('minPriceDisplay');
     const maxPriceDisplay = document.getElementById('maxPriceDisplay');
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlMinPrice = urlParams.get('minPrice');
-    const urlMaxPrice = urlParams.get('maxPrice');
+    if (minPriceSlider && maxPriceSlider) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMinPrice = urlParams.get('minPrice');
+        const urlMaxPrice = urlParams.get('maxPrice');
 
-    if (urlMinPrice) {
-        minPriceSlider.value = urlMinPrice;
-        minPriceDisplay.textContent = urlMinPrice;
-    }
-    if (urlMaxPrice) {
-        maxPriceSlider.value = urlMaxPrice;
-        maxPriceDisplay.textContent = urlMaxPrice;
-    }
-
-    let priceTimeout;
-
-    minPriceSlider.addEventListener('input', function() {
-        let minVal = parseInt(this.value);
-        let maxVal = parseInt(maxPriceSlider.value);
-
-        if (minVal >= maxVal) {
-            this.value = maxVal - 50;
-            minVal = maxVal - 50;
+        if (urlMinPrice) {
+            minPriceSlider.value = urlMinPrice;
+            minPriceDisplay.textContent = urlMinPrice;
+        }
+        if (urlMaxPrice) {
+            maxPriceSlider.value = urlMaxPrice;
+            maxPriceDisplay.textContent = urlMaxPrice;
         }
 
-        minPriceDisplay.textContent = minVal;
+        let priceTimeout;
 
-        clearTimeout(priceTimeout);
-        priceTimeout = setTimeout(() => applyFilters(), 500);
-    });
+        minPriceSlider.addEventListener('input', function() {
+            let minVal = parseInt(this.value);
+            let maxVal = parseInt(maxPriceSlider.value);
 
-    maxPriceSlider.addEventListener('input', function() {
-        let minVal = parseInt(minPriceSlider.value);
-        let maxVal = parseInt(this.value);
+            if (minVal >= maxVal) {
+                this.value = maxVal - 50;
+                minVal = maxVal - 50;
+            }
 
-        if (maxVal <= minVal) {
-            this.value = minVal + 50;
-            maxVal = minVal + 50;
-        }
+            minPriceDisplay.textContent = minVal;
 
-        maxPriceDisplay.textContent = maxVal;
+            clearTimeout(priceTimeout);
+            priceTimeout = setTimeout(() => applyFilters(), 500);
+        });
 
-        clearTimeout(priceTimeout);
-        priceTimeout = setTimeout(() => applyFilters(), 500);
-    });
+        maxPriceSlider.addEventListener('input', function() {
+            let minVal = parseInt(minPriceSlider.value);
+            let maxVal = parseInt(this.value);
+
+            if (maxVal <= minVal) {
+                this.value = minVal + 50;
+                maxVal = minVal + 50;
+            }
+
+            maxPriceDisplay.textContent = maxVal;
+
+            clearTimeout(priceTimeout);
+            priceTimeout = setTimeout(() => applyFilters(), 500);
+        });
+    }
 
     // ========== Default-Bilder ========== //
     // TODO: Später wieder aktivieren - Grundriss-Default
