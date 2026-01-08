@@ -6,23 +6,16 @@
         <a href="javascript:history.back()" class="btn btn-back">Zurück zur Übersicht</a>
     {% elseif apartment %}
         <div class="apartment-detail">
-            <div class="detail-header">
-                {% if apartment.bezeichnung %}
-                    <h1>{{ apartment.bezeichnung }}</h1>
-                {% endif %}
-                {% if apartment.objektnummer %}
-                    <p class="objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</p>
-                {% endif %}
-                {% if apartment.status %}
-                    <div class="status-badge status-{{ apartment.status|lower }}">
-                        {{ apartment.status }}
-                    </div>
-                {% endif %}
-            </div>
-
             <div class="detail-content">
                 <div class="detail-section">
-                    <h2>Allgemeine Informationen</h2>
+
+                    {% if apartment.status %}
+                        <div class="status-badge status-{{ apartment.status|lower }}">
+                            {{ apartment.status }}
+                        </div>
+                    {% endif %}
+
+                    <h2>Objekt-Nr.: {{ apartment.objektnummer }}</h2>
                     <dl class="info-list">
                         {% if apartment.adresse %}
                             <dt>Adresse:</dt>
