@@ -73,24 +73,25 @@
     color: #90303e;
     z-index: 3;
     pointer-events: none;
+    white-space: nowrap;
 }
 
 .street-left {
-    left: -60px;
+    left: 10px;
     top: 50%;
     transform: translateY(-50%) rotate(-90deg);
-    transform-origin: center;
+    transform-origin: center center;
 }
 
 .street-right {
-    right: -60px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%) rotate(90deg);
-    transform-origin: center;
+    transform-origin: center center;
 }
 
 .street-bottom {
-    bottom: -30px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
 }
