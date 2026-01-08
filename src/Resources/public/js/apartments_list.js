@@ -51,10 +51,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 return true;
             }
 
-            const status = document.getElementById('status').value;
-            const zimmer = document.getElementById('zimmer').value;
-            const bauetappe = document.getElementById('bauetappe').value;
-            const zeile = document.getElementById('zeile').value;
+            const statusEl = document.getElementById('status');
+            const zimmerEl = document.getElementById('zimmer');
+            const bauetappeEl = document.getElementById('bauetappe');
+            const zeileEl = document.getElementById('zeile');
+
+            const status = statusEl ? statusEl.value : '';
+            const zimmer = zimmerEl ? zimmerEl.value : '';
+            const bauetappe = bauetappeEl ? bauetappeEl.value : '';
+            const zeile = zeileEl ? zeileEl.value : '';
             // TODO: Wieder aktivieren wenn Bruttomiete-Spalte eingeblendet wird
             // const minPrice = parseInt(document.getElementById('minPrice').value);
             // const maxPrice = parseInt(document.getElementById('maxPrice').value);
