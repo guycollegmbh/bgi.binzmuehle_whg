@@ -37,7 +37,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .preview-image {
@@ -63,6 +63,36 @@
 
 .preview-image.has-image ~ .preview-placeholder {
     display: none;
+}
+
+/* ========== STRASSENNAMEN-LABELS ========== */
+.street-label {
+    position: absolute;
+    font-size: 14px;
+    font-weight: 600;
+    color: #90303e;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.street-left {
+    left: -60px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+}
+
+.street-right {
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: center;
+}
+
+.street-bottom {
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 #apartments-table tbody tr {
