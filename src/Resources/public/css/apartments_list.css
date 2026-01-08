@@ -77,21 +77,21 @@
 }
 
 .street-left {
-    left: -60px;
+    left: -45px;
     top: 50%;
     transform: rotate(-90deg);
     transform-origin: center center;
 }
 
 .street-right {
-    right: -60px;
+    right: -45px;
     top: 50%;
     transform: rotate(90deg);
     transform-origin: center center;
 }
 
 .street-bottom {
-    bottom: 10px;
+    bottom: -45px;
     left: 50%;
     transform: translateX(-50%);
 }
