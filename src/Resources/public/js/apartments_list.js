@@ -38,8 +38,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const zimmer = document.getElementById('zimmer').value;
             const bauetappe = document.getElementById('bauetappe').value;
             const zeile = document.getElementById('zeile').value;
-            const minPrice = parseInt(document.getElementById('minPrice').value);
-            const maxPrice = parseInt(document.getElementById('maxPrice').value);
+            // TODO: Wieder aktivieren wenn Bruttomiete-Spalte eingeblendet wird
+            // const minPrice = parseInt(document.getElementById('minPrice').value);
+            // const maxPrice = parseInt(document.getElementById('maxPrice').value);
+
+            // Spaltenindizes (aktuell):
+            // 0: Objektnummer
+            // 1: Bezeichnung
+            // 2: Bauetappe
+            // 3: Zeile (versteckt)
+            // 4: Adresse
+            // 5: Etage
+            // 6: Zimmer
+            // 7: Fläche
+            // 8: Status
+            // 9: Details
 
             if (bauetappe && searchData[2] !== bauetappe) {
                 return false;
@@ -53,16 +66,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
 
-            if (status && searchData[9].indexOf(status) === -1) {
+            if (status && searchData[8].indexOf(status) === -1) {
                 return false;
             }
 
+            // Preis-Filter entfernt, da Bruttomiete-Spalte ausgeblendet ist
+            // TODO: Wieder aktivieren wenn Bruttomiete-Spalte eingeblendet wird
+            /*
             if (searchData[8]) {
                 const price = parseFloat(searchData[8].replace(/[^\d.]/g, ''));
                 if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
                     return false;
                 }
             }
+            */
 
             return true;
         }
