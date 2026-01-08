@@ -72,7 +72,6 @@
 
 #apartments-table tbody tr:hover {
     background-color: #f0f7ff !important;
-    transform: translateX(3px);
 }
 
 .mod_apartments_list {
