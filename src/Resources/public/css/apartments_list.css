@@ -413,13 +413,115 @@ table.dataTable.display>tbody>tr:hover>* {
 @media (max-width: 1024px) {
     .preview-filter-container {
         grid-template-columns: 1fr;
+        gap: 20px;
+        position: relative;
+        padding-bottom: 10px;
     }
 
     .preview-column {
-        order: 1;
+        order: 2;
     }
 
     .filter-column {
-        order: 2;
+        order: 1;
+    }
+
+    .preview-image-wrapper {
+        min-height: 250px;
+    }
+
+    .preview-image {
+        max-height: 230px;
+    }
+
+    .mod_apartments_list {
+        padding: 10px;
+    }
+
+    .filter-section {
+        padding: 15px;
+    }
+
+    .table-container {
+        padding: 10px;
+        overflow-x: auto;
+    }
+
+    #apartments-table {
+        font-size: 12px;
+    }
+
+    #apartments-table thead th {
+        font-size: 12px;
+        padding: 8px 6px 8px 4px !important;
+    }
+
+    #apartments-table tbody td {
+        font-size: 12px;
+        padding: 6px 4px !important;
+    }
+
+    .btn-details {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+
+    .status-badge {
+        padding: 3px 8px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 768px) {
+    .preview-filter-container {
+        margin-bottom: 20px;
+    }
+
+    .preview-image-wrapper {
+        min-height: 200px;
+    }
+
+    .preview-image {
+        max-height: 180px;
+    }
+
+    #apartments-table {
+        font-size: 11px;
+    }
+
+    #apartments-table thead th,
+    #apartments-table tbody td {
+        font-size: 11px;
+        padding: 4px 2px !important;
+        white-space: nowrap;
+    }
+
+    /* Verstecke weniger wichtige Spalten auf kleinen Bildschirmen */
+    #apartments-table thead th:nth-child(2),
+    #apartments-table tbody td:nth-child(2) {
+        display: none;
+    }
+
+    #apartments-table thead th:nth-child(5),
+    #apartments-table tbody td:nth-child(5) {
+        display: none;
+    }
+
+    .btn-details {
+        padding: 3px 8px;
+        font-size: 11px;
+    }
+
+    .filter-group {
+        gap: 6px;
+    }
+
+    .filter-group label {
+        font-size: 13px;
+    }
+
+    .filter-group select {
+        font-size: 13px;
+        padding: 5px 8px;
     }
 }
