@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pageLength: 50,
         order: [[0, 'asc']],
         columnDefs: [
-            { orderable: false, targets: [1, 9, 10] }
+            { orderable: false, targets: [1, 8, 9] }
         ],
         dom: 'rtip',
         lengthChange: false,
