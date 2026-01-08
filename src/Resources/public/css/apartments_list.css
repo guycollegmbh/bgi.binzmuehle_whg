@@ -80,14 +80,16 @@
     left: 10px;
     top: 50%;
     transform: translateY(-50%) rotate(-90deg);
-    transform-origin: center center;
+    transform-origin: left center;
+    text-align: left;
 }
 
 .street-right {
     right: 10px;
     top: 50%;
     transform: translateY(-50%) rotate(90deg);
-    transform-origin: center center;
+    transform-origin: right center;
+    text-align: right;
 }
 
 .street-bottom {
