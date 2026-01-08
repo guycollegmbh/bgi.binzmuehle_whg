@@ -14,8 +14,6 @@
 .preview-column {
     background: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .filter-column {
@@ -35,7 +33,6 @@
 }
 
 .preview-image-wrapper {
-    border-radius: 8px;
     min-height: 400px;
     display: flex;
     align-items: center;
@@ -88,8 +85,6 @@
 .filter-section {
     background: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     height: 100%;
 }
 
@@ -267,8 +262,6 @@
 .table-container {
     background: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: relative;
 }
 
