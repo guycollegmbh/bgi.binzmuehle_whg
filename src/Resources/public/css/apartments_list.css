@@ -474,25 +474,54 @@ table.dataTable.display>tbody>tr:hover>* {
 
 @media (max-width: 768px) {
     .preview-filter-container {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+        position: relative;
     }
 
-    .preview-image-wrapper {
-        min-height: 200px;
+    .preview-column {
+        display: none;
     }
 
-    .preview-image {
-        max-height: 180px;
+    .filter-section {
+        padding: 15px;
+    }
+
+    .filter-section h2 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .btn-reset {
+        font-size: 13px;
+        padding: 8px 14px;
+        margin-top: 12px;
+    }
+
+    .table-container {
+        padding: 5px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     #apartments-table {
-        font-size: 11px;
+        font-size: 10px;
+        min-width: 100%;
     }
 
-    #apartments-table thead th,
+    #apartments-table thead {
+        position: static;
+    }
+
+    #apartments-table thead th {
+        font-size: 10px;
+        padding: 6px 3px !important;
+        white-space: nowrap;
+        position: static;
+    }
+
     #apartments-table tbody td {
-        font-size: 11px;
-        padding: 4px 2px !important;
+        font-size: 10px;
+        padding: 5px 3px !important;
         white-space: nowrap;
     }
 
@@ -502,18 +531,35 @@ table.dataTable.display>tbody>tr:hover>* {
         display: none;
     }
 
+    #apartments-table thead th:nth-child(3),
+    #apartments-table tbody td:nth-child(3) {
+        display: none;
+    }
+
     #apartments-table thead th:nth-child(5),
     #apartments-table tbody td:nth-child(5) {
         display: none;
     }
 
+    #apartments-table thead th:nth-child(6),
+    #apartments-table tbody td:nth-child(6) {
+        display: none;
+    }
+
     .btn-details {
-        padding: 3px 8px;
-        font-size: 11px;
+        padding: 4px 8px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .status-badge {
+        padding: 2px 6px;
+        font-size: 9px;
+        white-space: nowrap;
     }
 
     .filter-group {
-        gap: 6px;
+        gap: 5px;
     }
 
     .filter-group label {
@@ -522,6 +568,16 @@ table.dataTable.display>tbody>tr:hover>* {
 
     .filter-group select {
         font-size: 13px;
-        padding: 5px 8px;
+        padding: 6px 10px;
+    }
+
+    .dataTables_info {
+        font-size: 11px;
+        padding: 10px 5px;
+    }
+
+    .dataTables_paginate {
+        font-size: 11px;
+        padding: 10px 5px;
     }
 }
