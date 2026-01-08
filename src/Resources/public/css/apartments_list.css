@@ -280,6 +280,12 @@
     display: none !important;
 }
 
+#apartments-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
 #apartments-table thead th {
     font-weight: 600;
     font-size: 14px;
@@ -287,6 +293,7 @@
     text-align: right;
     border-bottom: 2px solid #ddd;
     color: #333 !important;
+    background: white;
 }
 
 table.dataTable thead>tr>th.sorting:before,
