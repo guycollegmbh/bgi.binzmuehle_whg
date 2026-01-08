@@ -72,7 +72,8 @@
                 </select>
             </div>
 
-            <div class="filter-group">
+            {# TODO SPÄTER WIEDER EINBLENDEN: Bauetappe-Filter - START #}
+            {# <div class="filter-group">
                 <label for="bauetappe">Bauetappe:</label>
                 <select name="bauetappe" id="bauetappe">
                     <option value="">Alle</option>
@@ -82,7 +83,8 @@
                         </option>
                     {% endfor %}
                 </select>
-            </div>
+            </div> #}
+            {# TODO SPÄTER WIEDER EINBLENDEN: Bauetappe-Filter - ENDE #}
 
             <div class="filter-group">
                 <label for="zeile">Zeile:</label>
@@ -133,7 +135,9 @@
                     {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - START #}
                     {# <th>Nebenkosten</th> #}
                     {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - ENDE #}
-                    <th>Bruttomiete</th>
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete - START #}
+                    {# <th>Bruttomiete</th> #}
+                    {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete - ENDE #}
                     <th>Status</th>
                     {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - START #}
                     {# <th>Grundriss</th> #}
@@ -160,7 +164,9 @@
                         {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - START #}
                         {# <td>{{ apartment.nebenkosten }}</td> #}
                         {# TODO SPÄTER WIEDER EINBLENDEN: Nebenkosten - ENDE #}
-                        <td>{{ apartment.bruttomietzins }}</td>
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete - START #}
+                        {# <td>{{ apartment.bruttomietzins }}</td> #}
+                        {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete - ENDE #}
                         <td>
                             <span class="status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">
                                 {{ apartment.status }}
