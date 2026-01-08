@@ -3,6 +3,23 @@
 /* Betrifft: Zeilen 383, 387, 409, 412-427, 438, 447-452, 456 */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // ========== Dynamische Top-Position für Table Header ========== //
+    function updateTableHeaderPosition() {
+        const previewContainer = document.querySelector('.preview-filter-container');
+        const tableHead = document.querySelector('#apartments-table thead');
+
+        if (previewContainer && tableHead) {
+            const containerHeight = previewContainer.offsetHeight;
+            tableHead.style.top = containerHeight + 'px';
+        }
+    }
+
+    // Initial setzen
+    updateTableHeaderPosition();
+
+    // Bei Fenstergrößenänderung neu berechnen
+    window.addEventListener('resize', updateTableHeaderPosition);
+
     // ========== Element-Referenzen ========== //
     // TODO: Später wieder aktivieren - Grundriss-Element
     // const previewGrundriss = document.getElementById('preview-grundriss');
