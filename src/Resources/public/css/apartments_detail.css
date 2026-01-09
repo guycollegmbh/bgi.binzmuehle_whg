@@ -86,7 +86,7 @@
 .title-with-status .status-badge {
     position: absolute;
     right: 0;
-    top: 6px;
+    top: 0;
     margin: 0;
 }
 
