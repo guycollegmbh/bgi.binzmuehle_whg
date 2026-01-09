@@ -77,39 +77,17 @@
 .detail-section.actions-section {
     display: flex;
     flex-direction: column;
-    gap: 15px;
 }
 
-.actions-section h3 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #90303e;
+.actions-section h2 {
+    margin-bottom: 20px;
 }
 
-.btn-apply {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    background: #90303e;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.2s;
-    border: 2px solid #90303e;
+.actions-section .btn-download {
+    margin-bottom: 15px;
 }
 
-.btn-apply:hover {
-    background: white;
-    color: #90303e;
-    border-color: #90303e;
-    text-decoration: none;
-}
-
-.detail-section:last-child {
+.actions-section .btn-download:last-of-type {
     margin-bottom: 0;
 }
 
