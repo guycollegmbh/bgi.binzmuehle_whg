@@ -7,53 +7,69 @@
     {% elseif apartment %}
         <div class="apartment-detail">
             <div class="detail-content">
-                <div class="detail-section">
+                <div class="top-section-wrapper">
+                    <div class="detail-section info-section">
 
-                    {% if apartment.status %}
-                        <div class="status-badge status-{{ apartment.status|lower }}">
-                            {{ apartment.status }}
-                        </div>
-                    {% endif %}
+                        {% if apartment.status %}
+                            <div class="status-badge status-{{ apartment.status|lower }}">
+                                {{ apartment.status }}
+                            </div>
+                        {% endif %}
 
-                    <h2>{{ apartment.bezeichnung }} - Objekt-Nr.: {{ apartment.objektnummer }}</h2>
-                    <dl class="info-list">
-                        {% if apartment.adresse %}
-                            <dt>Adresse:</dt>
-                            <dd>{{ apartment.adresse }}</dd>
-                        {% endif %}
-                        {% if apartment.bauetappe %}
-                            <dt>Bauetappe:</dt>
-                            <dd>{{ apartment.bauetappe }}</dd>
-                        {% endif %}
-                        {% if apartment.zeile %}
-                            <dt>Zeile:</dt>
-                            <dd>{{ apartment.zeile }}</dd>
-                        {% endif %}
-                        {% if apartment.etage %}
-                            <dt>Etage:</dt>
-                            <dd>{{ apartment.etage }}</dd>
-                        {% endif %}
-                        {% if apartment.zimmer %}
-                            <dt>Anzahl Zimmer:</dt>
-                            <dd>{{ apartment.zimmer }}</dd>
-                        {% endif %}
-                        {% if apartment.flaeche %}
-                            <dt>Wohnfläche:</dt>
-                            <dd>{{ apartment.flaeche }} m²</dd>
-                        {% endif %}
-                        {% if apartment.nettomietzins %}
-                            <dt>Nettomiete:</dt>
-                            <dd>CHF {{ apartment.nettomietzins }}</dd>
-                        {% endif %}
-                        {% if apartment.nebenkosten %}
-                            <dt>Nebenkosten:</dt>
-                            <dd>CHF {{ apartment.nebenkosten }}</dd>
-                        {% endif %}
-                        {% if apartment.bruttomietzins %}
-                            <dt class="total">Bruttomiete:</dt>
-                            <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
-                        {% endif %}
-                    </dl>
+                        <h2>{{ apartment.bezeichnung }} - Objekt-Nr.: {{ apartment.objektnummer }}</h2>
+                        <dl class="info-list">
+                            {% if apartment.adresse %}
+                                <dt>Adresse:</dt>
+                                <dd>{{ apartment.adresse }}</dd>
+                            {% endif %}
+                            {% if apartment.bauetappe %}
+                                <dt>Bauetappe:</dt>
+                                <dd>{{ apartment.bauetappe }}</dd>
+                            {% endif %}
+                            {% if apartment.zeile %}
+                                <dt>Zeile:</dt>
+                                <dd>{{ apartment.zeile }}</dd>
+                            {% endif %}
+                            {% if apartment.etage %}
+                                <dt>Etage:</dt>
+                                <dd>{{ apartment.etage }}</dd>
+                            {% endif %}
+                            {% if apartment.zimmer %}
+                                <dt>Anzahl Zimmer:</dt>
+                                <dd>{{ apartment.zimmer }}</dd>
+                            {% endif %}
+                            {% if apartment.flaeche %}
+                                <dt>Wohnfläche:</dt>
+                                <dd>{{ apartment.flaeche }} m²</dd>
+                            {% endif %}
+                            {% if apartment.nettomietzins %}
+                                <dt>Nettomiete:</dt>
+                                <dd>CHF {{ apartment.nettomietzins }}</dd>
+                            {% endif %}
+                            {% if apartment.nebenkosten %}
+                                <dt>Nebenkosten:</dt>
+                                <dd>CHF {{ apartment.nebenkosten }}</dd>
+                            {% endif %}
+                            {% if apartment.bruttomietzins %}
+                                <dt class="total">Bruttomiete:</dt>
+                                <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
+                            {% endif %}
+                        </dl>
+                    </div>
+
+                    <div class="detail-section actions-section">
+                        <h3>Download & Bewerbung</h3>
+
+                        <a href="{{ apartment.grundrisspdf_path }}" class="btn btn-download" download>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            Grundriss (PDF)
+                        </a>
+
+                        <a href="#" class="btn btn-apply">Jetzt bewerben</a>
+                    </div>
                 </div>
 
 
