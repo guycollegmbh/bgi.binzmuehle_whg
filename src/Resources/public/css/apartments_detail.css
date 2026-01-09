@@ -74,6 +74,23 @@
     margin-bottom: 0;
 }
 
+.title-with-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.title-with-status h2 {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.title-with-status .status-badge {
+    margin: 0;
+}
+
 .detail-section.actions-section {
     display: flex;
     flex-direction: column;
