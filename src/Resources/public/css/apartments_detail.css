@@ -86,7 +86,7 @@
 .title-with-status .status-badge {
     position: absolute;
     right: 0;
-    top: -14px;
+    top: 6px;
     margin: 0;
 }
 
@@ -170,6 +170,7 @@
     font-weight: 500;
     transition: all 0.2s;
     border: 1px solid #90303e;
+    text-align: center;
 }
 
 .btn-download:hover {
