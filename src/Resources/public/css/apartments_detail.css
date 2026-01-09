@@ -75,9 +75,7 @@
 }
 
 .title-with-status {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
     margin-bottom: 20px;
 }
 
@@ -88,6 +86,9 @@
 }
 
 .title-with-status .status-badge {
+    position: absolute;
+    right: 0;
+    top: -14px;
     margin: 0;
 }
 
