@@ -187,11 +187,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // const grundrissPath = $(this).data('grundriss');
         const etagePath = $(this).data('etage');
 
-        // Fade out - Start
-        // TODO: Später wieder aktivieren - Grundriss Fade-out
-        // previewGrundriss.style.opacity = '0.3';
-        //previewEtage.style.opacity = '0.3';
-
         setTimeout(function() {
             // ========== TODO: SPÄTER WIEDER AKTIVIEREN - GRUNDRISS-UPDATE - START ========== //
             /*
