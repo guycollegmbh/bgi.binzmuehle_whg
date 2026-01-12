@@ -78,26 +78,24 @@
 
 
                 {# ========== BILDERGALERIE ========== #}
-                {% if apartment.imagegrundriss_path or apartment.imageetage_path %}
-                    <div class="detail-section images-section">
-                        <h2>Pläne & Ansichten</h2>
-                        <div class="images-grid">
+                <div class="detail-section images-section">
+                    <h2>Pläne & Ansichten</h2>
+                    <div class="images-grid">
+                        <div class="image-item">
+                            <h3>Grundriss</h3>
                             {% if apartment.imagegrundriss_path %}
-                                <div class="image-item">
-                                    <h3>Grundriss</h3>
-                                    <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss {{ apartment.bezeichnung }}" loading="lazy">
-                                </div>
+                                <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss {{ apartment.bezeichnung }}" loading="lazy">
                             {% endif %}
+                        </div>
 
+                        <div class="image-item">
+                            <h3>Etagenplan</h3>
                             {% if apartment.imageetage_path %}
-                                <div class="image-item">
-                                    <h3>Etagenplan</h3>
-                                    <img src="{{ apartment.imageetage_path }}" alt="Etagenplan {{ apartment.bezeichnung }}" loading="lazy">
-                                </div>
+                                <img src="{{ apartment.imageetage_path }}" alt="Etagenplan {{ apartment.bezeichnung }}" loading="lazy">
                             {% endif %}
                         </div>
                     </div>
-                {% endif %}
+                </div>
             </div>
 
             <div class="detail-footer">
