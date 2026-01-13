@@ -174,7 +174,8 @@
 }
 
 .btn-download:hover,
-.btn-download:active {
+.btn-download:active,
+.btn-download:focus {
     background: white;
     color: #90303e;
     border-color: #90303e;
