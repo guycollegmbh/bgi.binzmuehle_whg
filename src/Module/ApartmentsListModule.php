@@ -17,9 +17,9 @@ class ApartmentsListModule extends Module
     {
         $db = Database::getInstance();
 
-        // Basis-Query - nur Wohnungen anzeigen, Bauetappe 2 ausblenden
-        $query = 'SELECT * FROM tl_apartments WHERE published = ? AND bezeichnung = ? AND bauetappe != ?';
-        $params = [1, 'Wohnung', '2'];
+        // Basis-Query - Wohnungen und Jokerzimmer anzeigen, Bauetappe 2 ausblenden
+        $query = 'SELECT * FROM tl_apartments WHERE published = ? AND (bezeichnung = ? OR bezeichnung = ?) AND bauetappe != ?';
+        $params = [1, 'Wohnung', 'Jokerzimmer', '2'];
 
         // Filter verarbeiten
         $where = [];
@@ -112,11 +112,11 @@ class ApartmentsListModule extends Module
             $apartments[] = $data;
         }
 
-        // Filter-Optionen - nur für Wohnungen, Bauetappe 2 ausblenden
-        $statusOptions = $db->execute('SELECT DISTINCT status FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' AND bauetappe != \'2\' ORDER BY status')->fetchAllAssoc();
-        $zimmerOptions = $db->execute('SELECT DISTINCT zimmer FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' AND bauetappe != \'2\' ORDER BY zimmer')->fetchAllAssoc();
-        $bauetappeOptions = $db->execute('SELECT DISTINCT bauetappe FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' AND bauetappe != \'2\' ORDER BY bauetappe')->fetchAllAssoc();
-        $zeileOptions = $db->execute('SELECT DISTINCT zeile FROM tl_apartments WHERE published = 1 AND bezeichnung = \'Wohnung\' AND bauetappe != \'2\' AND zeile != \'\' ORDER BY zeile')->fetchAllAssoc();
+        // Filter-Optionen - für Wohnungen und Jokerzimmer, Bauetappe 2 ausblenden
+        $statusOptions = $db->execute('SELECT DISTINCT status FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' ORDER BY status')->fetchAllAssoc();
+        $zimmerOptions = $db->execute('SELECT DISTINCT zimmer FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' ORDER BY zimmer')->fetchAllAssoc();
+        $bauetappeOptions = $db->execute('SELECT DISTINCT bauetappe FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' ORDER BY bauetappe')->fetchAllAssoc();
+        $zeileOptions = $db->execute('SELECT DISTINCT zeile FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND zeile != \'\' ORDER BY zeile')->fetchAllAssoc();
 
         // Template-Variablen
         $this->Template->apartments = $apartments;
