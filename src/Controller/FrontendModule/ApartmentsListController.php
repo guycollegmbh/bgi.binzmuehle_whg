@@ -15,10 +15,10 @@ class ApartmentsListController extends AbstractFrontendModuleController
 {
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
-        // Hole nur veröffentlichte Apartments mit Bezeichnung "Wohnung"
+        // Hole nur veröffentlichte Apartments mit Bezeichnung "Wohnung" oder "Jokerzimmer"
         $apartments = Database::getInstance()
-            ->prepare('SELECT * FROM tl_apartments WHERE published = ? AND bezeichnung = ? ORDER BY bauetappe, zeile, objektnummer')
-            ->execute(1, 'Wohnung');
+            ->prepare('SELECT * FROM tl_apartments WHERE published = ? AND (bezeichnung = ? OR bezeichnung = ?) ORDER BY bauetappe, zeile, objektnummer')
+            ->execute(1, 'Wohnung', 'Jokerzimmer');
 
         $apartmentsList = [];
         while ($apartments->next()) {
