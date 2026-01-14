@@ -528,64 +528,106 @@ table.dataTable.display>tbody>tr:hover>* {
     }
 
     .table-container {
-        padding: 5px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        padding: 10px;
+        overflow-x: hidden;
     }
 
     #apartments-table {
-        font-size: 10px;
-        min-width: 100%;
+        font-size: 13px;
+        width: 100% !important;
     }
 
     #apartments-table thead {
-        position: static;
+        display: none;
     }
 
-    #apartments-table thead th {
-        font-size: 10px;
-        padding: 6px 3px !important;
-        white-space: nowrap;
-        position: static;
+    #apartments-table tbody tr {
+        display: block;
+        background: #f9f9f9;
+        margin-bottom: 10px;
+        padding: 12px;
+        border-radius: 6px;
+        border-left: 4px solid #90303e;
     }
 
     #apartments-table tbody td {
-        font-size: 10px;
-        padding: 5px 3px !important;
-        white-space: nowrap;
+        display: block;
+        text-align: left !important;
+        padding: 4px 0 !important;
+        border: none !important;
+        white-space: normal;
     }
 
-    /* Verstecke weniger wichtige Spalten auf kleinen Bildschirmen */
-    #apartments-table thead th:nth-child(2),
+    #apartments-table tbody td:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #666;
+        display: inline-block;
+        width: 100px;
+        margin-right: 10px;
+    }
+
+    /* Verstecke weniger wichtige Spalten auf Mobile */
+    /* Bezeichnung */
     #apartments-table tbody td:nth-child(2) {
         display: none;
     }
-
-    #apartments-table thead th:nth-child(3),
+    /* Bauetappe */
     #apartments-table tbody td:nth-child(3) {
         display: none;
     }
-
-    #apartments-table thead th:nth-child(5),
+    /* Adresse */
     #apartments-table tbody td:nth-child(5) {
         display: none;
     }
-
-    #apartments-table thead th:nth-child(6),
+    /* Etage */
     #apartments-table tbody td:nth-child(6) {
         display: none;
     }
 
+    /* Objektnummer als Titel */
+    #apartments-table tbody td:first-child {
+        font-weight: 700;
+        font-size: 15px;
+        color: #90303e;
+        padding-bottom: 8px !important;
+        border-bottom: 1px solid #ddd !important;
+        margin-bottom: 8px;
+    }
+
+    #apartments-table tbody td:first-child:before {
+        display: none;
+    }
+
+    /* Status Badge anpassen */
+    #apartments-table tbody td:nth-child(9) {
+        padding-top: 8px !important;
+    }
+
+    #apartments-table tbody td:nth-child(9):before {
+        display: none;
+    }
+
+    /* Details Button */
+    #apartments-table tbody td:last-child {
+        padding-top: 10px !important;
+        text-align: center !important;
+    }
+
+    #apartments-table tbody td:last-child:before {
+        display: none;
+    }
+
     .btn-details {
-        padding: 4px 8px;
-        font-size: 10px;
-        white-space: nowrap;
+        padding: 8px 16px;
+        font-size: 13px;
+        width: 100%;
+        display: block;
     }
 
     .status-badge {
-        padding: 2px 6px;
-        font-size: 9px;
-        white-space: nowrap;
+        padding: 4px 10px;
+        font-size: 12px;
     }
 
     .filter-group {

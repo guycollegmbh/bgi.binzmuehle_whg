@@ -157,14 +157,14 @@
                     <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}"
                         data-etage="{{ apartment.imageetage_path|default('') }}"
                         class="apartment-row">
-                        <td>{{ apartment.objektnummer }}</td>
-                        <td>{{ apartment.bezeichnung }}</td>
-                        <td>{{ apartment.bauetappe }}</td>
-                        <td class="hidden-column">{{ apartment.zeile }}</td>
-                        <td>{{ apartment.adresse }}</td>
-                        <td>{{ apartment.etage }}</td>
-                        <td>{{ apartment.zimmer }}</td>
-                        <td>{{ apartment.flaeche }}</td>
+                        <td data-label="Objekt">{{ apartment.objektnummer }}</td>
+                        <td data-label="Bezeichnung">{{ apartment.bezeichnung }}</td>
+                        <td data-label="Bauetappe">{{ apartment.bauetappe }}</td>
+                        <td class="hidden-column" data-label="Zeile">{{ apartment.zeile }}</td>
+                        <td data-label="Adresse">{{ apartment.adresse }}</td>
+                        <td data-label="Etage">{{ apartment.etage }}</td>
+                        <td data-label="Zimmer">{{ apartment.zimmer }}</td>
+                        <td data-label="Fläche">{{ apartment.flaeche }} m²</td>
                         {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - START #}
                         {# <td>{{ apartment.nettomietzins }}</td> #}
                         {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - ENDE #}
@@ -174,7 +174,7 @@
                         {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete - START #}
                         {# <td>{{ apartment.bruttomietzins }}</td> #}
                         {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete - ENDE #}
-                        <td>
+                        <td data-label="Status">
                             <span class="status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">
                                 {{ apartment.status }}
                             </span>
@@ -188,7 +188,7 @@
                             {% endif %}
                         </td> #}
                         {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - ENDE #}
-                        <td class="text-center">
+                        <td data-label="" class="text-center">
                             <a href="wohnungen/details?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
                         </td>
                     </tr>
