@@ -633,12 +633,12 @@ table.dataTable.display>tbody>tr:hover>* {
     }
 
     .dataTables_info {
-        font-size: 11px;
+        font-size: 14px;
         padding: 10px 5px;
     }
 
     .dataTables_paginate {
-        font-size: 11px;
+        font-size: 14px;
         padding: 10px 5px;
     }
 }
