@@ -254,6 +254,15 @@
 }
 
 @media (max-width: 768px) {
+    .mod_apartments_detail {
+        padding: 10px;
+    }
+
+    .apartment-detail {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
     .top-section-wrapper {
         grid-template-columns: 1fr;
     }
@@ -278,5 +287,7 @@
 
     .detail-section {
         padding: 15px;
+        border-radius: 0;
+        box-shadow: none;
     }
 }
