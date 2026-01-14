@@ -567,24 +567,6 @@ table.dataTable.display>tbody>tr:hover>* {
         margin-right: 10px;
     }
 
-    /* Verstecke weniger wichtige Spalten auf Mobile */
-    /* Bezeichnung */
-    #apartments-table tbody td:nth-child(2) {
-        display: none;
-    }
-    /* Bauetappe */
-    #apartments-table tbody td:nth-child(3) {
-        display: none;
-    }
-    /* Adresse */
-    #apartments-table tbody td:nth-child(5) {
-        display: none;
-    }
-    /* Etage */
-    #apartments-table tbody td:nth-child(6) {
-        display: none;
-    }
-
     /* Objektnummer als Titel */
     #apartments-table tbody td:first-child {
         font-weight: 700;
