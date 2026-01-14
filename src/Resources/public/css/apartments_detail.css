@@ -82,6 +82,10 @@
     padding: 0;
 }
 
+.title-bezeichnung::after {
+    content: " - ";
+}
+
 .title-with-status .status-badge {
     position: absolute;
     right: 0;
@@ -286,6 +290,10 @@
 
     .title-bezeichnung {
         display: block;
+    }
+
+    .title-bezeichnung::after {
+        content: none;
     }
 
     .title-objektnummer {
