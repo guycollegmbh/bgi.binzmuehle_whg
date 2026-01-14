@@ -265,6 +265,7 @@
 
     .top-section-wrapper {
         grid-template-columns: 1fr;
+        margin-bottom: 0;
     }
 
     .info-list,
