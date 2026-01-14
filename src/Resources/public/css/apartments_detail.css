@@ -83,7 +83,7 @@
 }
 
 .title-bezeichnung::after {
-    content: " - ";
+    content: "\00a0-\00a0";
 }
 
 .title-with-status .status-badge {
