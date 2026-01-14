@@ -440,6 +440,11 @@ table.dataTable.display>tbody>tr:hover>* {
     text-align: center;
 }
 
+/* Mobile Status Badge - nur auf Mobile sichtbar */
+.mobile-status {
+    display: none;
+}
+
 @media (max-width: 1024px) {
     .preview-filter-container {
         grid-template-columns: 1fr;
@@ -547,7 +552,6 @@ table.dataTable.display>tbody>tr:hover>* {
         margin-bottom: 10px;
         padding: 12px;
         border-radius: 6px;
-        border-left: 4px solid #90303e;
     }
 
     #apartments-table tbody td {
@@ -567,7 +571,7 @@ table.dataTable.display>tbody>tr:hover>* {
         margin-right: 10px;
     }
 
-    /* Objektnummer als Titel */
+    /* Objektnummer als Titel mit Status rechts */
     #apartments-table tbody td:first-child {
         font-weight: 700;
         font-size: 15px;
@@ -575,19 +579,22 @@ table.dataTable.display>tbody>tr:hover>* {
         padding-bottom: 8px !important;
         border-bottom: 1px solid #ddd !important;
         margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     #apartments-table tbody td:first-child:before {
         display: none;
     }
 
-    /* Status Badge anpassen */
+    /* Status Badge in Objektnummer-Zeile - verstecke original, zeige mobile */
     #apartments-table tbody td:nth-child(9) {
-        padding-top: 8px !important;
+        display: none;
     }
 
-    #apartments-table tbody td:nth-child(9):before {
-        display: none;
+    .mobile-status {
+        display: inline-block;
     }
 
     /* Details Button */
