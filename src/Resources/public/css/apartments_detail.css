@@ -279,6 +279,22 @@
         font-size: 22px;
     }
 
+    .title-with-status h2 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title-bezeichnung {
+        display: block;
+    }
+
+    .title-objektnummer {
+        display: block;
+        font-size: 16px;
+        font-weight: 400;
+        margin-top: 5px;
+    }
+
     .images-grid {
         grid-template-columns: 1fr;
     }

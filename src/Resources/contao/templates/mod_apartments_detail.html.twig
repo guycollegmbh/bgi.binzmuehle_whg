@@ -10,7 +10,7 @@
                 <div class="top-section-wrapper">
                     <div class="detail-section info-section">
                         <div class="title-with-status">
-                            <h2>{{ apartment.bezeichnung }} - Objekt-Nr.: {{ apartment.objektnummer }}</h2>
+                            <h2><span class="title-bezeichnung">{{ apartment.bezeichnung }}</span><span class="title-objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</span></h2>
                             {% if apartment.status %}
                                 <div class="status-badge status-{{ apartment.status|lower }}">
                                     {{ apartment.status }}
