@@ -270,8 +270,9 @@
 
     .info-list,
     .costs-list {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: auto 1fr;
         gap: 8px 15px;
+        align-items: baseline;
     }
 
     .detail-header h1 {
