@@ -157,7 +157,7 @@
                     <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}"
                         data-etage="{{ apartment.imageetage_path|default('') }}"
                         class="apartment-row">
-                        <td data-label="Objekt">{{ apartment.objektnummer }}<span class="mobile-status status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">{{ apartment.status }}</span></td>
+                        <td data-label="Objekt">{{ apartment.bezeichnung }} - {{ apartment.objektnummer }}<span class="mobile-status status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">{{ apartment.status }}</span></td>
                         <td data-label="Bezeichnung">{{ apartment.bezeichnung }}</td>
                         <td data-label="Bauetappe">{{ apartment.bauetappe }}</td>
                         <td class="hidden-column" data-label="Zeile">{{ apartment.zeile }}</td>
