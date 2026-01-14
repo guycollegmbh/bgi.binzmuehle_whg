@@ -610,7 +610,7 @@ table.dataTable.display>tbody>tr:hover>* {
 
     .btn-details {
         padding: 8px 16px;
-        font-size: 13px;
+        font-size: 14px;
         width: 100%;
         display: block;
     }
@@ -625,11 +625,11 @@ table.dataTable.display>tbody>tr:hover>* {
     }
 
     .filter-group label {
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .filter-group select {
-        font-size: 13px;
+        font-size: 14px;
         padding: 6px 10px;
     }
 
