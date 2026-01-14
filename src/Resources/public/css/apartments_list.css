@@ -560,6 +560,7 @@ table.dataTable.display>tbody>tr:hover>* {
         padding: 4px 0 !important;
         border: none !important;
         white-space: normal;
+        font-size: 16px;
     }
 
     #apartments-table tbody td:before {
