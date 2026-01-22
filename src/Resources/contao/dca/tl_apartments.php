@@ -136,7 +136,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
             'sorting'   => true,
             'filter'    => true,
             'inputType' => 'select',
-            'options'   => ['Zeile 1', 'Zeile 2', 'Zeile 3'],
+            'options'   => ['Zeile 1', 'Zeile 2', 'Zeile 3', 'Zeile 4', 'Zeile 5'],
             'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
             'sql'       => ['type' => 'string', 'length' => 64, 'default' => ''],
         ],
