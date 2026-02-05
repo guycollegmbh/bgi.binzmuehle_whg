@@ -23,7 +23,7 @@ class FormApartmentSelect extends Widget
             $selected = ($option['value'] === $this->value) ? ' selected' : '';
             $strOptions .= sprintf(
                 '<option value="%s"%s>%s</option>',
-                self::specialcharsAttribute($option['value']),
+                self::specialchars($option['value']),
                 $selected,
                 self::specialchars($option['label'])
             );
@@ -37,6 +37,13 @@ class FormApartmentSelect extends Widget
             $this->getAttributes(),
             $strOptions
         );
+    }
+
+    public function parse($arrAttributes = null): string
+    {
+        $this->widget = $this->generate();
+
+        return parent::parse($arrAttributes);
     }
 
     protected function getApartmentOptions(): array
