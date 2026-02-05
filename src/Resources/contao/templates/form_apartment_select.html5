@@ -1,12 +1,12 @@
 <?php $this->extend('form_row'); ?>
 
 <style>
-.widget-select select optgroup {
+.widget-select select option.optgroup-label {
     color: #000;
     font-weight: bold;
     font-style: normal;
 }
-.widget-select select option {
+.widget-select select option:not(.optgroup-label) {
     font-weight: normal;
 }
 </style>

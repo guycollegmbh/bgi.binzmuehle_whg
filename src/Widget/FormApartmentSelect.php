@@ -21,19 +21,20 @@ class FormApartmentSelect extends Widget
         $strOptions = '<option value="">-</option>';
 
         foreach ($grouped as $group => $options) {
-            $strOptions .= sprintf('<optgroup label="%s">', StringUtil::specialchars($group));
+            $strOptions .= sprintf(
+                '<option disabled class="optgroup-label">── %s ──</option>',
+                StringUtil::specialchars($group)
+            );
 
             foreach ($options as $option) {
                 $selected = ($option['value'] === $this->value) ? ' selected' : '';
                 $strOptions .= sprintf(
-                    '<option value="%s"%s>%s</option>',
+                    '<option value="%s"%s>&nbsp;&nbsp;&nbsp;%s</option>',
                     StringUtil::specialchars($option['value']),
                     $selected,
                     StringUtil::specialchars($option['label'])
                 );
             }
-
-            $strOptions .= '</optgroup>';
         }
 
         return sprintf(
