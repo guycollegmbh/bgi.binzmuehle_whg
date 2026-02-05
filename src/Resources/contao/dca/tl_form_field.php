@@ -11,7 +11,7 @@ $GLOBALS['TL_DCA']['tl_form_field']['palettes']['apartment_select'] = '{type_leg
 $GLOBALS['TL_DCA']['tl_form_field']['fields']['apartment_bezeichnung'] = [
     'label'     => ['Objektbezeichnung', 'Wählen Sie den Objekttyp, der im Select angezeigt werden soll'],
     'inputType' => 'select',
-    'options'   => ['Keller', 'Jokerzimmer', 'Parkplatz IV', 'Parkplatz', 'Parkplatz IV E-Mob', 'Parkplatz E-Mob', 'Atelier', 'Moto Hallenplatz'],
+    'options'   => ['Parkplatz' => 'Parkplätze', 'Keller' => 'Keller', 'Jokerzimmer' => 'Jokerzimmer', 'Atelier' => 'Atelier', 'Moto Hallenplatz' => 'Moto Hallenplatz'],
     'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
     'sql'       => ['type' => 'string', 'length' => 255, 'default' => 'Parkplatz'],
 ];
