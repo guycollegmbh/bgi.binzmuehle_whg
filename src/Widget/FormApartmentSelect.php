@@ -16,18 +16,24 @@ class FormApartmentSelect extends Widget
 
     public function generate(): string
     {
-        $options = $this->getApartmentOptions();
+        $grouped = $this->getApartmentOptions();
 
         $strOptions = '<option value="">-</option>';
 
-        foreach ($options as $option) {
-            $selected = ($option['value'] === $this->value) ? ' selected' : '';
-            $strOptions .= sprintf(
-                '<option value="%s"%s>%s</option>',
-                StringUtil::specialchars($option['value']),
-                $selected,
-                StringUtil::specialchars($option['label'])
-            );
+        foreach ($grouped as $group => $options) {
+            $strOptions .= sprintf('<optgroup label="%s">', StringUtil::specialchars($group));
+
+            foreach ($options as $option) {
+                $selected = ($option['value'] === $this->value) ? ' selected' : '';
+                $strOptions .= sprintf(
+                    '<option value="%s"%s>%s</option>',
+                    StringUtil::specialchars($option['value']),
+                    $selected,
+                    StringUtil::specialchars($option['label'])
+                );
+            }
+
+            $strOptions .= '</optgroup>';
         }
 
         return sprintf(
@@ -49,21 +55,21 @@ class FormApartmentSelect extends Widget
 
     protected function getApartmentOptions(): array
     {
-        $options = [];
+        $grouped = [];
         $bezeichnung = $this->apartment_bezeichnung ?: 'Parkplatz';
 
         $result = Database::getInstance()
-            ->prepare("SELECT objektnummer, bezeichnung FROM tl_apartments WHERE published = ? AND bezeichnung LIKE ? ORDER BY objektnummer ASC")
+            ->prepare("SELECT objektnummer, bezeichnung FROM tl_apartments WHERE published = ? AND bezeichnung LIKE ? ORDER BY bezeichnung ASC, objektnummer ASC")
             ->execute(1, $bezeichnung . '%');
 
         while ($result->next()) {
-            $options[] = [
+            $grouped[$result->bezeichnung][] = [
                 'value' => $result->objektnummer,
-                'label' => $result->bezeichnung . ' - ' . $result->objektnummer,
+                'label' => $result->objektnummer,
             ];
         }
 
-        return $options;
+        return $grouped;
     }
 
     public function validate(): void
