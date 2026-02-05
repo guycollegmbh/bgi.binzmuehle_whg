@@ -1,5 +1,16 @@
 <?php $this->extend('form_row'); ?>
 
+<style>
+.widget-select select optgroup {
+    color: #000;
+    font-weight: bold;
+    font-style: normal;
+}
+.widget-select select option {
+    font-weight: normal;
+}
+</style>
+
 <?php $this->block('label'); ?>
   <?php if ($this->label): ?>
     <label for="ctrl_<?= $this->id ?>"<?php if ($this->class): ?> class="<?= $this->class ?>"<?php endif; ?>>
