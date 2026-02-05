@@ -69,7 +69,7 @@
                         </a>
 
                         {% if apartment.status|lower == 'frei' %}
-                            <a href="https://binzmuehle.guycolle.dev/testform?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}" class="btn btn-download btn-apply">
+                            <a href="https://binzmuehle.guycolle.dev/testform?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}&zeile={{ apartment.zeile }}" class="btn btn-download btn-apply">
                                 Jetzt bewerben
                             </a>
                         {% endif %}
