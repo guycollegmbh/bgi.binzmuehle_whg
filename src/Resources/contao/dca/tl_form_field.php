@@ -9,8 +9,9 @@ $GLOBALS['TL_FFL']['apartment_select'] = \Guycollegmbh\ApartmentsBundle\Widget\F
 $GLOBALS['TL_DCA']['tl_form_field']['palettes']['apartment_select'] = '{type_legend},type,name,label;{apartment_legend},apartment_bezeichnung;{expert_legend:hide},class,accesskey;{template_legend:hide},customTpl;{invisible_legend:hide},invisible';
 
 $GLOBALS['TL_DCA']['tl_form_field']['fields']['apartment_bezeichnung'] = [
-    'label'     => ['Objektbezeichnung', 'Geben Sie die Bezeichnung ein, z.B. Parkplatz, Keller, Atelier'],
-    'inputType' => 'text',
-    'eval'      => ['tl_class' => 'w50', 'maxlength' => 255],
+    'label'     => ['Objektbezeichnung', 'Wählen Sie den Objekttyp, der im Select angezeigt werden soll'],
+    'inputType' => 'select',
+    'options'   => ['Keller', 'Jokerzimmer', 'Parkplatz IV', 'Parkplatz', 'Parkplatz IV E-Mob', 'Parkplatz E-Mob', 'Atelier', 'Moto Hallenplatz'],
+    'eval'      => ['tl_class' => 'w50', 'includeBlankOption' => true],
     'sql'       => ['type' => 'string', 'length' => 255, 'default' => 'Parkplatz'],
 ];
