@@ -68,11 +68,11 @@
                             Grundriss (PDF)
                         </a>
 
-                        <!--{% if apartment.status|lower == 'frei' %}
-                            <a href="#" class="btn btn-download btn-apply">
+                        {% if apartment.status|lower == 'frei' %}
+                            <a href="https://binzmuehle.guycolle.dev/bewerbung?objektnummer={{ apartment.objektnummer }}" class="btn btn-download btn-apply">
                                 Jetzt bewerben
                             </a>
-                        {% endif %}-->
+                        {% endif %}
                     </div>
                 </div>
 
