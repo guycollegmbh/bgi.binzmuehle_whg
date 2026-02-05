@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Guycollegmbh\ApartmentsBundle\Widget;
 
 use Contao\Database;
+use Contao\StringUtil;
 use Contao\Widget;
 
 class FormApartmentSelect extends Widget
@@ -23,9 +24,9 @@ class FormApartmentSelect extends Widget
             $selected = ($option['value'] === $this->value) ? ' selected' : '';
             $strOptions .= sprintf(
                 '<option value="%s"%s>%s</option>',
-                self::specialchars($option['value']),
+                StringUtil::specialchars($option['value']),
                 $selected,
-                self::specialchars($option['label'])
+                StringUtil::specialchars($option['label'])
             );
         }
 
