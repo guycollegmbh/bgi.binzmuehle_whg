@@ -68,11 +68,11 @@
                             Grundriss (PDF)
                         </a>
 
-                        {# {% if apartment.status|lower == 'frei' %}
+                        {% if apartment.status|lower == 'frei' %}
                             <a href="/bewerben?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}&zeile={{ apartment.zeile|replace({'Zeile ': '', 'zeile ': ''}) }}&adresse={{ apartment.adresse|url_encode }}" class="btn btn-download btn-apply">
                                 Jetzt bewerben
                             </a>
-                        {% endif %} #}
+                        {% endif %}
                     </div>
                 </div>
 
