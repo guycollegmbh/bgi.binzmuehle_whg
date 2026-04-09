@@ -55,8 +55,8 @@
 - HTML-Element auf Formularseite: `{{whg_get::objektnummer}} - {{whg_get::adresse}} - {{whg_get::zeile}} - {{whg_get::etage}}`
 
 ## FormApartmentSelect Widget
-- Zeigt: `Objektnummer - Adresse - Etage` (leere Felder werden übersprungen)
-- Query: `SELECT objektnummer, bezeichnung, adresse, etage FROM tl_apartments`
+- Zeigt: `Objektnummer - Adresse - Etage - CHF Bruttomietzins` (leere Felder werden übersprungen)
+- Query: `SELECT objektnummer, bezeichnung, adresse, etage, bruttomietzins FROM tl_apartments`
 
 ## mp_forms Bug - GELÖST
 - **Ursache**: `inspiredminds/contao-fieldset-duplication` v2.2.0 hat einen Bug mit mp_forms v5
