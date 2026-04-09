@@ -72,7 +72,7 @@ class FormApartmentSelect extends Widget
                 $parts[] = $result->etage;
             }
             if ($result->bruttomietzins) {
-                $parts[] = 'CHF ' . $result->bruttomietzins;
+                $parts[] = 'CHF ' . $result->bruttomietzins . '.-';
             }
             $label = implode(' - ', $parts);
 
