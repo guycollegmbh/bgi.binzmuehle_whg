@@ -304,12 +304,15 @@ class ApartmentsImportController extends Backend
                     $cellIterator->setIterateOnlyExistingCells(false);
                     
                     $data = [];
+                    $colIndex = 0;
                     foreach ($cellIterator as $cell) {
-                        $data[] = $cell->getValue();
+                        // Bruttomietzins (Spalte 10) kann eine Formel sein - berechnet auslesen
+                        $data[] = ($colIndex === 10) ? $cell->getCalculatedValue() : $cell->getValue();
+                        $colIndex++;
                     }
-                    
+
                     $objektnummer = trim((string)($data[0] ?? ''));
-                    
+
                     if (empty($objektnummer)) {
                         // Prüfe ob die Zeile komplett leer ist
                         $hasData = false;
@@ -605,12 +608,15 @@ class ApartmentsImportController extends Backend
                     $cellIterator->setIterateOnlyExistingCells(false);
                     
                     $data = [];
+                    $colIndex = 0;
                     foreach ($cellIterator as $cell) {
-                        $data[] = $cell->getValue();
+                        // Bruttomietzins (Spalte 10) kann eine Formel sein - berechnet auslesen
+                        $data[] = ($colIndex === 10) ? $cell->getCalculatedValue() : $cell->getValue();
+                        $colIndex++;
                     }
-                    
+
                     $objektnummer = trim((string)($data[0] ?? ''));
-                    
+
                     if (empty($objektnummer)) {
                         $skipped++;
                         continue;
