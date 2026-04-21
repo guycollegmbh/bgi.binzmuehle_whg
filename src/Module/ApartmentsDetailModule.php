@@ -74,6 +74,14 @@ class ApartmentsDetailModule extends Module
             $apartmentData['grundrisspdf_name'] = $file ? $file->name : 'Grundriss';
         }
 
+        // CHF-Beträge mit Tausendertrennzeichen formatieren (Apostroph)
+        foreach (['nettomietzins', 'nebenkosten', 'bruttomietzins'] as $field) {
+            if (!empty($apartmentData[$field])) {
+                $numeric = (float) str_replace(["'", "'", ' '], '', $apartmentData[$field]);
+                $apartmentData[$field] = number_format($numeric, 0, '.', "'");
+            }
+        }
+
         $this->Template->apartment = $apartmentData;
         $this->Template->error = null;
     }
