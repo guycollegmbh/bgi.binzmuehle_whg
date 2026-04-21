@@ -162,19 +162,14 @@ class ApartmentsImportController extends Backend
             return 'updated';
         }
         
-        // Vergleiche UUIDs
+        // Vergleiche UUIDs - wenn unterschiedlich, immer aktualisieren
         if (bin2hex($currentUuid) === bin2hex($newFileInfo['uuid'])) {
             return 'unchanged';
         }
-        
-        // Vergleiche Timestamps - nur aktualisieren wenn neue Datei neuer ist
-        if ($newFileInfo['tstamp'] > $currentFileModel->tstamp) {
-            $db->prepare("UPDATE tl_apartments SET {$fieldName} = ? WHERE id = ?")
-                ->execute($newFileInfo['uuid'], $apartmentId);
-            return 'updated';
-        }
-        
-        return 'unchanged';
+
+        $db->prepare("UPDATE tl_apartments SET {$fieldName} = ? WHERE id = ?")
+            ->execute($newFileInfo['uuid'], $apartmentId);
+        return 'updated';
     }
     
     /**
