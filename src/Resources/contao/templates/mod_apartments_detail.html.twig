@@ -69,7 +69,7 @@
                         </a>
 
                         {% if apartment.status|lower == 'frei' and apartment.bezeichnung != 'Jokerzimmer' %}
-                            <a href="/bewerben?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}&zeile={{ apartment.zeile|replace({'Zeile ': '', 'zeile ': ''}) }}&adresse={{ apartment.adresse|url_encode }}&etage={{ apartment.etage|url_encode }}&bruttomiete={{ apartment.bruttomietzins|url_encode }}" class="btn btn-download btn-apply">
+                            <a href="/bewerben?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}&zeile={{ apartment.zeile|replace({'Zeile ': '', 'zeile ': ''}) }}&adresse={{ apartment.adresse|url_encode }}&etage={{ apartment.etage|url_encode }}&bruttomiete={{ apartment.bruttomietzins|url_encode }}" class="btn btn-download btn-apply" target="_blank" rel="noopener">
                                 Jetzt bewerben
                             </a>
                         {% endif %}
