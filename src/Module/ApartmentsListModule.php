@@ -109,6 +109,12 @@ class ApartmentsListModule extends Module
                 }
             }
 
+            // CHF-Betrag mit Tausendertrennzeichen formatieren
+            if (!empty($data['bruttomietzins'])) {
+                $numeric = (float) str_replace(["'", "'", ' '], '', $data['bruttomietzins']);
+                $data['bruttomietzins'] = number_format($numeric, 0, '.', "'");
+            }
+
             $apartments[] = $data;
         }
 
