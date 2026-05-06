@@ -107,7 +107,10 @@
                     <option value="">Alle</option>
                     {% for option in zeileOptions %}
                         <option value="{{ option.zeile }}" {% if currentZeile == option.zeile %}selected{% endif %}>
-                            {{ option.zeile }}
+                            {% if option.zeile == 'Zeile 1' %}Zeile 1: Kügeliloostrasse
+                            {% elseif option.zeile == 'Zeile 2' %}Zeile 2: Zelghalde
+                            {% elseif option.zeile == 'Zeile 3' %}Zeile 3: Zelghalde
+                            {% else %}{{ option.zeile }}{% endif %}
                         </option>
                     {% endfor %}
                 </select>
