@@ -25,6 +25,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // const previewGrundriss = document.getElementById('preview-grundriss');
     const previewEtage = document.getElementById('preview-etage');
 
+    // ========== Custom Sort: Etagen ========== //
+    const etageOrder = ['UG', 'EG', 'EG/1.OG', '1.OG', '2.OG', '3.OG', 'DG'];
+    $.fn.dataTable.ext.type.order['etage-pre'] = function(d) {
+        const idx = etageOrder.indexOf(d.trim());
+        return idx === -1 ? 99 : idx;
+    };
+
     // ========== DataTable initialisieren (MUSS ZUERST KOMMEN) ========== //
     const table = $('#apartments-table').DataTable({
         language: {
@@ -33,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
         pageLength: 50,
         order: [[0, 'asc']],
         columnDefs: [
-            { orderable: false, targets: [1, 9, 10] }
+            { orderable: false, targets: [1, 9, 10] },
+            { type: 'etage', targets: [5] }
         ],
         dom: 'rtip',
         lengthChange: false,
