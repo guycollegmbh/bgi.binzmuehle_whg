@@ -24,9 +24,10 @@ class ApartmentsListModule extends Module
         // Filter verarbeiten
         $where = [];
 
-        if (Input::get('status')) {
+        $statusFilter = Input::get('status') !== null ? Input::get('status') : 'Frei';
+        if ($statusFilter !== '') {
             $where[] = 'status = ?';
-            $params[] = Input::get('status');
+            $params[] = $statusFilter;
         }
 
         if (Input::get('zimmer')) {
@@ -139,7 +140,7 @@ class ApartmentsListModule extends Module
         $this->Template->zimmerOptions = $zimmerOptions;
         $this->Template->bauetappeOptions = $bauetappeOptions;
         $this->Template->zeileOptions = $zeileOptions;
-        $this->Template->currentStatus = Input::get('status');
+        $this->Template->currentStatus = Input::get('status') !== null ? Input::get('status') : 'Frei';
         $this->Template->currentZimmer = Input::get('zimmer');
         $this->Template->currentBauetappe = Input::get('bauetappe');
         $this->Template->currentZeile = Input::get('zeile');
