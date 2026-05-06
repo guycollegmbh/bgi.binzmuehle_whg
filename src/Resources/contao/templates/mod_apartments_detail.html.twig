@@ -7,99 +7,102 @@
     {% elseif apartment %}
         <div class="apartment-detail">
             <div class="detail-content">
-                <div class="top-section-wrapper">
-                    <div class="detail-section info-section">
-                        <div class="title-with-status">
-                            <h2><span class="title-bezeichnung">{{ apartment.bezeichnung }}</span><span class="title-objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</span></h2>
-                            {% if apartment.status %}
-                                <div class="status-badge status-{{ apartment.status|lower }}">
-                                    {{ apartment.status }}
-                                </div>
-                            {% endif %}
-                        </div>
-                        <dl class="info-list">
-                            {% if apartment.adresse %}
-                                <dt>Adresse:</dt>
-                                <dd>{{ apartment.adresse }}</dd>
-                            {% endif %}
-                            {% if apartment.bauetappe %}
-                                <dt>Bauetappe:</dt>
-                                <dd>{{ apartment.bauetappe }}</dd>
-                            {% endif %}
-                            {% if apartment.zeile %}
-                                <dt>Zeile:</dt>
-                                <dd>{{ apartment.zeile }}</dd>
-                            {% endif %}
-                            {% if apartment.etage %}
-                                <dt>Etage:</dt>
-                                <dd>{{ apartment.etage }}</dd>
-                            {% endif %}
-                            {% if apartment.zimmer %}
-                                <dt>Anzahl Zimmer:</dt>
-                                <dd>{{ apartment.zimmer }}</dd>
-                            {% endif %}
-                            {% if apartment.flaeche %}
-                                <dt>Wohnfläche:</dt>
-                                <dd>{{ apartment.flaeche }} m²</dd>
-                            {% endif %}
-                            {% if apartment.nettomietzins %}
-                                <dt>Nettomiete:</dt>
-                                <dd>CHF {{ apartment.nettomietzins }}</dd>
-                            {% endif %}
-                            {% if apartment.nebenkosten %}
-                                <dt>Nebenkosten:</dt>
-                                <dd>CHF {{ apartment.nebenkosten }}</dd>
-                            {% endif %}
-                            {% if apartment.bruttomietzins %}
-                                <dt class="total">Bruttomiete:</dt>
-                                <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
-                            {% endif %}
-                        </dl>
-                    </div>
 
-                    <div class="detail-section actions-section">
-                        <h2>Download & Bewerbung</h2>
+                {# ========== NEUES LAYOUT: 2 Spalten ========== #}
+                <div class="detail-two-col">
 
-                        <a href="{{ apartment.grundrisspdf_path }}" class="btn btn-download" download>
-                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                            </svg>
-                            Grundriss (PDF)
-                        </a>
-
-                        {% if apartment.status|lower == 'frei' and apartment.bezeichnung != 'Jokerzimmer' and app.user and 3 in app.user.groups %}
-                            <a href="/bewerben?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}&zeile={{ apartment.zeile|replace({'Zeile ': '', 'zeile ': ''}) }}&adresse={{ apartment.adresse|url_encode }}&etage={{ apartment.etage|url_encode }}&bruttomiete={{ apartment.bruttomietzins|url_encode }}&zimmer={{ apartment.zimmer|url_encode }}" class="btn btn-download btn-apply" target="_blank" rel="noopener">
-                                Jetzt bewerben
+                    {# LINKE SPALTE: Grundriss gross #}
+                    <div class="detail-col-left">
+                        {% if apartment.imagegrundriss_path %}
+                            <a href="{{ apartment.imagegrundriss_path }}" class="colorbox" data-lightbox="apartment-plans" title="Grundriss {{ apartment.bezeichnung }}">
+                                <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss {{ apartment.bezeichnung }}" class="detail-grundriss-img">
                             </a>
                         {% endif %}
                     </div>
-                </div>
 
+                    {# RECHTE SPALTE: Info, Lageplan, Buttons #}
+                    <div class="detail-col-right">
 
-                {# ========== BILDERGALERIE ========== #}
-                <div class="detail-section images-section">
-                    <h2>Pläne & Ansichten</h2>
-                    <div class="images-grid">
-                        <div class="image-item">
-                            <h3>Grundriss</h3>
-                            {% if apartment.imagegrundriss_path %}
-                                <a href="{{ apartment.imagegrundriss_path }}" class="colorbox" data-lightbox="apartment-plans" title="Grundriss {{ apartment.bezeichnung }}">
-                                    <img src="{{ apartment.imagegrundriss_path }}" alt="Grundriss {{ apartment.bezeichnung }}" loading="lazy">
+                        {# Wohnungsinfos #}
+                        <div class="detail-section info-section">
+                            <div class="title-with-status">
+                                <h2><span class="title-bezeichnung">{{ apartment.bezeichnung }}</span><span class="title-objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</span></h2>
+                                {% if apartment.status %}
+                                    <div class="status-badge status-{{ apartment.status|lower }}">
+                                        {{ apartment.status }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <dl class="info-list">
+                                {% if apartment.adresse %}
+                                    <dt>Adresse:</dt>
+                                    <dd>{{ apartment.adresse }}</dd>
+                                {% endif %}
+                                {% if apartment.bauetappe %}
+                                    <dt>Bauetappe:</dt>
+                                    <dd>{{ apartment.bauetappe }}</dd>
+                                {% endif %}
+                                {% if apartment.zeile %}
+                                    <dt>Zeile:</dt>
+                                    <dd>{{ apartment.zeile }}</dd>
+                                {% endif %}
+                                {% if apartment.etage %}
+                                    <dt>Etage:</dt>
+                                    <dd>{{ apartment.etage }}</dd>
+                                {% endif %}
+                                {% if apartment.zimmer %}
+                                    <dt>Anzahl Zimmer:</dt>
+                                    <dd>{{ apartment.zimmer }}</dd>
+                                {% endif %}
+                                {% if apartment.flaeche %}
+                                    <dt>Wohnfläche:</dt>
+                                    <dd>{{ apartment.flaeche }} m²</dd>
+                                {% endif %}
+                                {% if apartment.nettomietzins %}
+                                    <dt>Nettomiete:</dt>
+                                    <dd>CHF {{ apartment.nettomietzins }}</dd>
+                                {% endif %}
+                                {% if apartment.nebenkosten %}
+                                    <dt>Nebenkosten:</dt>
+                                    <dd>CHF {{ apartment.nebenkosten }}</dd>
+                                {% endif %}
+                                {% if apartment.bruttomietzins %}
+                                    <dt class="total">Bruttomiete:</dt>
+                                    <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
+                                {% endif %}
+                            </dl>
+                        </div>
+
+                        {# Lageplan #}
+                        {% if apartment.imageetage_path %}
+                            <div class="detail-section detail-lageplan">
+                                <h3>Lageplan</h3>
+                                <a href="{{ apartment.imageetage_path }}" class="colorbox" data-lightbox="apartment-plans" title="Lageplan {{ apartment.bezeichnung }}">
+                                    <img src="{{ apartment.imageetage_path }}" alt="Lageplan {{ apartment.bezeichnung }}" loading="lazy">
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        {# Buttons #}
+                        <div class="detail-section actions-section">
+                            <h3>Download & Bewerbung</h3>
+                            <a href="{{ apartment.grundrisspdf_path }}" class="btn btn-download" download>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                </svg>
+                                Grundriss (PDF)
+                            </a>
+                            {% if apartment.status|lower == 'frei' and apartment.bezeichnung != 'Jokerzimmer' and app.user and 3 in app.user.groups %}
+                                <a href="/bewerben?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}&zeile={{ apartment.zeile|replace({'Zeile ': '', 'zeile ': ''}) }}&adresse={{ apartment.adresse|url_encode }}&etage={{ apartment.etage|url_encode }}&bruttomiete={{ apartment.bruttomietzins|url_encode }}&zimmer={{ apartment.zimmer|url_encode }}" class="btn btn-download btn-apply" target="_blank" rel="noopener">
+                                    Jetzt bewerben
                                 </a>
                             {% endif %}
                         </div>
 
-                        <div class="image-item">
-                            <h3>Lageplan</h3>
-                            {% if apartment.imageetage_path %}
-                                <a href="{{ apartment.imageetage_path }}" class="colorbox" data-lightbox="apartment-plans" title="Etagenplan {{ apartment.bezeichnung }}">
-                                    <img src="{{ apartment.imageetage_path }}" alt="Etagenplan {{ apartment.bezeichnung }}" loading="lazy">
-                                </a>
-                            {% endif %}
-                        </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="detail-footer">

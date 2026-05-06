@@ -256,6 +256,49 @@
     color: #856404;
 }
 
+/* ========== NEUES 2-SPALTEN LAYOUT ========== */
+.detail-two-col {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 30px;
+    align-items: start;
+}
+
+.detail-col-left {
+    background: #f9f9f9;
+    padding: 20px;
+}
+
+.detail-grundriss-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: zoom-in;
+}
+
+.detail-col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detail-lageplan img {
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+}
+
+.detail-lageplan h3,
+.actions-section h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #90303e;
+    border-bottom: 2px solid #90303e;
+    padding-bottom: 8px;
+}
+/* ========== ENDE NEUES LAYOUT ========== */
+
 @media (max-width: 768px) {
     .mod_apartments_detail {
         padding: 10px;
@@ -265,6 +308,15 @@
         border-radius: 0;
         box-shadow: none;
         padding: 0;
+    }
+
+    .detail-two-col {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .detail-col-right {
+        gap: 15px;
     }
 
     .top-section-wrapper {
