@@ -116,29 +116,28 @@
                 </select>
             </div>
 
-            <div class="filter-group price-slider-group">
-                <label>Wohnungsgrösse:</label>
-                <div class="price-values">
-                    <span id="minAreaDisplay">{{ currentMinFlaeche }}</span> - <span id="maxAreaDisplay">{{ currentMaxFlaeche }}</span> m²
-                </div>
-                <div class="dual-range-wrapper">
-                    <input type="range" id="minArea" name="minArea" min="{{ minFlaeche }}" max="{{ maxFlaeche }}" step="1" value="{{ currentMinFlaeche }}" class="range-slider">
-                    <input type="range" id="maxArea" name="maxArea" min="{{ minFlaeche }}" max="{{ maxFlaeche }}" step="1" value="{{ currentMaxFlaeche }}" class="range-slider">
-                </div>
+            <div class="filter-group">
+                <label for="etage">Etage:</label>
+                <select name="etage" id="etage">
+                    <option value="">Alle</option>
+                    {% for option in etageOptions %}
+                        <option value="{{ option.etage }}" {% if currentEtage == option.etage %}selected{% endif %}>
+                            {{ option.etage }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
 
-            {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete Range-Slider - START #}
-            {# <div class="filter-group price-slider-group">
-                <label for="priceRange">Bruttomiete:</label>
+            <div class="filter-group price-slider-group">
+                <label>Bruttomiete:</label>
                 <div class="price-values">
-                    <span id="minPriceDisplay">0</span> - <span id="maxPriceDisplay">3500</span>
+                    CHF <span id="minPriceDisplay">{{ currentMinPreis }}</span> - <span id="maxPriceDisplay">{{ currentMaxPreis }}</span>
                 </div>
                 <div class="dual-range-wrapper">
-                    <input type="range" id="minPrice" name="minPrice" min="0" max="3500" step="50" value="0" class="range-slider">
-                    <input type="range" id="maxPrice" name="maxPrice" min="0" max="3500" step="50" value="3500" class="range-slider">
+                    <input type="range" id="minPrice" name="minPrice" min="{{ minPreis }}" max="{{ maxPreis }}" step="50" value="{{ currentMinPreis }}" class="range-slider">
+                    <input type="range" id="maxPrice" name="maxPrice" min="{{ minPreis }}" max="{{ maxPreis }}" step="50" value="{{ currentMaxPreis }}" class="range-slider">
                 </div>
-            </div> #}
-            {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete Range-Slider - ENDE #}
+            </div>
 
             <a href="/liste" class="btn-reset">Filter zurücksetzen</a>
         </form>

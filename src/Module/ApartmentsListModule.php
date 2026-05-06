@@ -50,6 +50,11 @@ class ApartmentsListModule extends Module
             $params[] = Input::get('flaeche');
         }
 
+        if (Input::get('etage')) {
+            $where[] = 'etage = ?';
+            $params[] = Input::get('etage');
+        }
+
         // Preisfilter (Bruttomietzins)
         if (Input::get('minPrice')) {
             $where[] = 'CAST(REPLACE(bruttomietzins, \',\', \'.\') AS DECIMAL(10,2)) >= ?';
@@ -129,10 +134,14 @@ class ApartmentsListModule extends Module
         $zimmerOptions = $db->execute('SELECT DISTINCT zimmer FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' ORDER BY zimmer')->fetchAllAssoc();
         $bauetappeOptions = $db->execute('SELECT DISTINCT bauetappe FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' ORDER BY bauetappe')->fetchAllAssoc();
         $zeileOptions = $db->execute('SELECT DISTINCT zeile FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND zeile != \'\' ORDER BY zeile')->fetchAllAssoc();
+        $etageOptions = $db->execute('SELECT DISTINCT etage FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND etage != \'\' ORDER BY FIELD(etage, \'UG\', \'EG\', \'EG/1.OG\', \'1.OG\', \'2.OG\', \'3.OG\', \'DG\')')->fetchAllAssoc();
         $flaechemOptions = $db->execute('SELECT DISTINCT flaeche FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND flaeche != \'\' ORDER BY CAST(flaeche AS DECIMAL(10,2))')->fetchAllAssoc();
         $flaeche = $db->execute('SELECT MIN(CAST(flaeche AS DECIMAL(10,2))) as min_flaeche, MAX(CAST(flaeche AS DECIMAL(10,2))) as max_flaeche FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND flaeche != \'\'')->fetchAssoc();
         $minFlaeche = (int) floor((float) ($flaeche['min_flaeche'] ?? 0));
         $maxFlaeche = (int) ceil((float) ($flaeche['max_flaeche'] ?? 300));
+        $preis = $db->execute('SELECT MIN(CAST(REPLACE(bruttomietzins, \'\'\'\', \'\') AS DECIMAL(10,2))) as min_preis, MAX(CAST(REPLACE(bruttomietzins, \'\'\'\', \'\') AS DECIMAL(10,2))) as max_preis FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND bruttomietzins != \'\'')->fetchAssoc();
+        $minPreis = (int) floor((float) ($preis['min_preis'] ?? 0));
+        $maxPreis = (int) ceil((float) ($preis['max_preis'] ?? 5000));
 
         // Template-Variablen
         $this->Template->apartments = $apartments;
@@ -144,11 +153,17 @@ class ApartmentsListModule extends Module
         $this->Template->currentZimmer = Input::get('zimmer');
         $this->Template->currentBauetappe = Input::get('bauetappe');
         $this->Template->currentZeile = Input::get('zeile');
+        $this->Template->etageOptions = $etageOptions;
+        $this->Template->currentEtage = Input::get('etage');
         $this->Template->flaechemOptions = $flaechemOptions;
         $this->Template->currentFlaeche = Input::get('flaeche');
         $this->Template->minFlaeche = $minFlaeche;
         $this->Template->maxFlaeche = $maxFlaeche;
         $this->Template->currentMinFlaeche = Input::get('minArea') ?: $minFlaeche;
         $this->Template->currentMaxFlaeche = Input::get('maxArea') ?: $maxFlaeche;
+        $this->Template->minPreis = $minPreis;
+        $this->Template->maxPreis = $maxPreis;
+        $this->Template->currentMinPreis = Input::get('minPrice') ?: $minPreis;
+        $this->Template->currentMaxPreis = Input::get('maxPrice') ?: $maxPreis;
     }
 }

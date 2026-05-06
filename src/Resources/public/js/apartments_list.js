@@ -55,11 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const zimmerEl = document.getElementById('zimmer');
             const bauetappeEl = document.getElementById('bauetappe');
             const zeileEl = document.getElementById('zeile');
+            const etageEl = document.getElementById('etage');
 
             const status = statusEl ? statusEl.value : '';
             const zimmer = zimmerEl ? zimmerEl.value : '';
             const bauetappe = bauetappeEl ? bauetappeEl.value : '';
             const zeile = zeileEl ? zeileEl.value : '';
+            const etage = etageEl ? etageEl.value : '';
             // TODO: Wieder aktivieren wenn Bruttomiete-Spalte eingeblendet wird
             // const minPrice = parseInt(document.getElementById('minPrice').value);
             // const maxPrice = parseInt(document.getElementById('maxPrice').value);
@@ -94,6 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
 
+            if (etage && searchData[5] !== etage) {
+                return false;
+            }
+
             if (status && searchData[9].indexOf(status) === -1) {
                 return false;
             }
@@ -101,6 +107,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (searchData[7]) {
                 const area = parseFloat(searchData[7].replace(/[^\d.]/g, ''));
                 if (!isNaN(area) && (area < minArea || area > maxArea)) {
+                    return false;
+                }
+            }
+
+            const minPriceEl = document.getElementById('minPrice');
+            const maxPriceEl = document.getElementById('maxPrice');
+            const minPrice = minPriceEl ? parseFloat(minPriceEl.value) : 0;
+            const maxPrice = maxPriceEl ? parseFloat(maxPriceEl.value) : 99999;
+
+            if (searchData[8]) {
+                const price = parseFloat(searchData[8].replace(/[^\d.]/g, ''));
+                if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
                     return false;
                 }
             }
