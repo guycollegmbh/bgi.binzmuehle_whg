@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
 
-            if (etage && searchData[5] !== etage) {
+            if (etage && searchData[5].trim() !== etage.trim()) {
                 return false;
             }
 
