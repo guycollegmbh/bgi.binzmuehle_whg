@@ -113,16 +113,15 @@
                 </select>
             </div>
 
-            <div class="filter-group">
-                <label for="flaeche">Wohnungsgrösse:</label>
-                <select name="flaeche" id="flaeche">
-                    <option value="">Alle</option>
-                    {% for option in flaechemOptions %}
-                        <option value="{{ option.flaeche }}" {% if currentFlaeche == option.flaeche %}selected{% endif %}>
-                            {{ option.flaeche }} m²
-                        </option>
-                    {% endfor %}
-                </select>
+            <div class="filter-group price-slider-group">
+                <label>Wohnungsgrösse:</label>
+                <div class="price-values">
+                    <span id="minAreaDisplay">{{ currentMinFlaeche }}</span> - <span id="maxAreaDisplay">{{ currentMaxFlaeche }}</span> m²
+                </div>
+                <div class="dual-range-wrapper">
+                    <input type="range" id="minArea" name="minArea" min="{{ minFlaeche }}" max="{{ maxFlaeche }}" step="1" value="{{ currentMinFlaeche }}" class="range-slider">
+                    <input type="range" id="maxArea" name="maxArea" min="{{ minFlaeche }}" max="{{ maxFlaeche }}" step="1" value="{{ currentMaxFlaeche }}" class="range-slider">
+                </div>
             </div>
 
             {# TODO SPÄTER WIEDER EINBLENDEN: Bruttomiete Range-Slider - START #}

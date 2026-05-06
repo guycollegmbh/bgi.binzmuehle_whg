@@ -171,6 +171,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ========== Area Range Slider ========== //
+    const minAreaSlider = document.getElementById('minArea');
+    const maxAreaSlider = document.getElementById('maxArea');
+    const minAreaDisplay = document.getElementById('minAreaDisplay');
+    const maxAreaDisplay = document.getElementById('maxAreaDisplay');
+
+    if (minAreaSlider && maxAreaSlider) {
+        let areaTimeout;
+
+        minAreaSlider.addEventListener('input', function() {
+            let minVal = parseInt(this.value);
+            let maxVal = parseInt(maxAreaSlider.value);
+
+            if (minVal >= maxVal) {
+                this.value = maxVal - 1;
+                minVal = maxVal - 1;
+            }
+
+            minAreaDisplay.textContent = minVal;
+
+            clearTimeout(areaTimeout);
+            areaTimeout = setTimeout(() => applyFilters(), 500);
+        });
+
+        maxAreaSlider.addEventListener('input', function() {
+            let minVal = parseInt(minAreaSlider.value);
+            let maxVal = parseInt(this.value);
+
+            if (maxVal <= minVal) {
+                this.value = minVal + 1;
+                maxVal = minVal + 1;
+            }
+
+            maxAreaDisplay.textContent = maxVal;
+
+            clearTimeout(areaTimeout);
+            areaTimeout = setTimeout(() => applyFilters(), 500);
+        });
+    }
+
     // ========== Default-Bilder ========== //
     // TODO: Später wieder aktivieren - Grundriss-Default
     // const defaultGrundriss = 'files/apartments/defaults/defaultgrundriss.png';
