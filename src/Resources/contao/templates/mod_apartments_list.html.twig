@@ -183,7 +183,7 @@
                         <td data-label="Bauetappe">{{ apartment.bauetappe }}</td>
                         <td class="hidden-column" data-label="Zeile">{{ apartment.zeile }}</td>
                         <td data-label="Adresse">{{ apartment.adresse }}</td>
-                        <td data-label="Etage">{{ apartment.etage }}</td>
+                        <td data-label="Etage" data-order="{{ {'UG': 0, 'EG': 1, 'EG/1.OG': 2, '1.OG': 3, '2.OG': 4, '3.OG': 5, 'DG': 6}[apartment.etage] ?? 9 }}">{{ apartment.etage }}</td>
                         <td data-label="Zimmer">{{ apartment.zimmer }}</td>
                         <td data-label="Fläche">{{ apartment.flaeche }} m²</td>
                         {# TODO SPÄTER WIEDER EINBLENDEN: Nettomiete - START #}
