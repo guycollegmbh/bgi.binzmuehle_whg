@@ -130,8 +130,8 @@ class ApartmentsListModule extends Module
         $zeileOptions = $db->execute('SELECT DISTINCT zeile FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND zeile != \'\' ORDER BY zeile')->fetchAllAssoc();
         $flaechemOptions = $db->execute('SELECT DISTINCT flaeche FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND flaeche != \'\' ORDER BY CAST(flaeche AS DECIMAL(10,2))')->fetchAllAssoc();
         $flaeche = $db->execute('SELECT MIN(CAST(flaeche AS DECIMAL(10,2))) as min_flaeche, MAX(CAST(flaeche AS DECIMAL(10,2))) as max_flaeche FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND flaeche != \'\'')->fetchAssoc();
-        $minFlaeche = (int) floor($flaeche['min_flaeche']);
-        $maxFlaeche = (int) ceil($flaeche['max_flaeche']);
+        $minFlaeche = (int) floor((float) ($flaeche['min_flaeche'] ?? 0));
+        $maxFlaeche = (int) ceil((float) ($flaeche['max_flaeche'] ?? 300));
 
         // Template-Variablen
         $this->Template->apartments = $apartments;
