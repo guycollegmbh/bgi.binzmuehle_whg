@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pageLength: 50,
         order: [[0, 'asc']],
         columnDefs: [
-            { orderable: false, targets: [1, 8, 9] }
+            { orderable: false, targets: [1, 9, 10] }
         ],
         dom: 'rtip',
         lengthChange: false,
@@ -73,8 +73,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // 5: Etage
             // 6: Zimmer
             // 7: Fläche
-            // 8: Status
-            // 9: Details
+            // 8: Bruttomiete
+            // 9: Status
+            // 10: Details
+
+            const minAreaEl = document.getElementById('minArea');
+            const maxAreaEl = document.getElementById('maxArea');
+            const minArea = minAreaEl ? parseFloat(minAreaEl.value) : 0;
+            const maxArea = maxAreaEl ? parseFloat(maxAreaEl.value) : 99999;
 
             if (bauetappe && searchData[2] !== bauetappe) {
                 return false;
@@ -88,20 +94,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
 
-            if (status && searchData[8].indexOf(status) === -1) {
+            if (status && searchData[9].indexOf(status) === -1) {
                 return false;
             }
 
-            // Preis-Filter entfernt, da Bruttomiete-Spalte ausgeblendet ist
-            // TODO: Wieder aktivieren wenn Bruttomiete-Spalte eingeblendet wird
-            /*
-            if (searchData[8]) {
-                const price = parseFloat(searchData[8].replace(/[^\d.]/g, ''));
-                if (!isNaN(price) && (price < minPrice || price > maxPrice)) {
+            if (searchData[7]) {
+                const area = parseFloat(searchData[7].replace(/[^\d.]/g, ''));
+                if (!isNaN(area) && (area < minArea || area > maxArea)) {
                     return false;
                 }
             }
-            */
 
             return true;
         }
