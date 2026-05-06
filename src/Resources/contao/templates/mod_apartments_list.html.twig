@@ -81,7 +81,7 @@
                     <option value="">Alle</option>
                     {% for option in zimmerOptions %}
                         <option value="{{ option.zimmer }}" {% if currentZimmer == option.zimmer %}selected{% endif %}>
-                            {{ option.zimmer }}
+                            {% if option.zimmer == '1' %}Jokerzimmer{% else %}{{ option.zimmer }}{% endif %}
                         </option>
                     {% endfor %}
                 </select>
@@ -108,6 +108,18 @@
                     {% for option in zeileOptions %}
                         <option value="{{ option.zeile }}" {% if currentZeile == option.zeile %}selected{% endif %}>
                             {{ option.zeile }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="flaeche">Wohnungsgrösse:</label>
+                <select name="flaeche" id="flaeche">
+                    <option value="">Alle</option>
+                    {% for option in flaechemOptions %}
+                        <option value="{{ option.flaeche }}" {% if currentFlaeche == option.flaeche %}selected{% endif %}>
+                            {{ option.flaeche }} m²
                         </option>
                     {% endfor %}
                 </select>

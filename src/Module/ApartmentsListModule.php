@@ -44,6 +44,11 @@ class ApartmentsListModule extends Module
             $params[] = Input::get('zeile');
         }
 
+        if (Input::get('flaeche')) {
+            $where[] = 'flaeche = ?';
+            $params[] = Input::get('flaeche');
+        }
+
         // Preisfilter (Bruttomietzins)
         if (Input::get('minPrice')) {
             $where[] = 'CAST(REPLACE(bruttomietzins, \',\', \'.\') AS DECIMAL(10,2)) >= ?';
@@ -123,6 +128,7 @@ class ApartmentsListModule extends Module
         $zimmerOptions = $db->execute('SELECT DISTINCT zimmer FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' ORDER BY zimmer')->fetchAllAssoc();
         $bauetappeOptions = $db->execute('SELECT DISTINCT bauetappe FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' ORDER BY bauetappe')->fetchAllAssoc();
         $zeileOptions = $db->execute('SELECT DISTINCT zeile FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND zeile != \'\' ORDER BY zeile')->fetchAllAssoc();
+        $flaechemOptions = $db->execute('SELECT DISTINCT flaeche FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND flaeche != \'\' ORDER BY CAST(flaeche AS DECIMAL(10,2))')->fetchAllAssoc();
 
         // Template-Variablen
         $this->Template->apartments = $apartments;
@@ -134,5 +140,7 @@ class ApartmentsListModule extends Module
         $this->Template->currentZimmer = Input::get('zimmer');
         $this->Template->currentBauetappe = Input::get('bauetappe');
         $this->Template->currentZeile = Input::get('zeile');
+        $this->Template->flaechemOptions = $flaechemOptions;
+        $this->Template->currentFlaeche = Input::get('flaeche');
     }
 }
