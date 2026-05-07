@@ -55,13 +55,6 @@
     padding: 20px;
 }
 
-.top-section-wrapper {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
 .detail-section {
     background: #f9f9f9;
     padding: 20px;
@@ -141,9 +134,9 @@
     color: #333;
 }
 
-.costs-section {
-    background: white;
-    border: 2px solid #90303e;
+.info-list .status-dd {
+    grid-column: 1 / -1;
+    padding-top: 5px;
 }
 
 .costs-list dt.total,
@@ -154,12 +147,6 @@
     padding-top: 15px;
     border-top: 2px solid #90303e;
     margin-top: 10px;
-}
-
-.download-section {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
 }
 
 .btn-download {
@@ -188,33 +175,6 @@
 .btn-download svg {
     width: 16px;
     height: 16px;
-}
-
-.images-section {
-    background: white;
-}
-
-.images-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.images-grid-single {
-    grid-template-columns: 1fr;
-    max-width: 50%;
-}
-
-.image-item h3 {
-    margin: 0 0 15px 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: #666;
-}
-
-.image-item img {
-    width: 100%;
-    height: auto;
 }
 
 .detail-footer {
