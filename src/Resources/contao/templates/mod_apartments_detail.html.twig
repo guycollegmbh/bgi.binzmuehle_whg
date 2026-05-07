@@ -76,9 +76,7 @@
                         {% if apartment.imageetage_path %}
                             <div class="detail-section detail-lageplan">
                                 <!--<h3>Lageplan</h3>-->
-                                <a href="{{ apartment.imageetage_path }}" class="colorbox" data-lightbox="apartment-plans" title="Lageplan {{ apartment.bezeichnung }}">
-                                    <img src="{{ apartment.imageetage_path }}" alt="Lageplan {{ apartment.bezeichnung }}" loading="lazy">
-                                </a>
+                                <img src="{{ apartment.imageetage_path }}" alt="Lageplan {{ apartment.bezeichnung }}" loading="lazy">
                             </div>
                         {% endif %}
 
