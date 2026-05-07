@@ -79,9 +79,6 @@
     content: "\00a0-\00a0";
 }
 
-.info-list .status-dd {
-    text-align: right;
-}
 
 .detail-section.actions-section {
     display: flex;
@@ -129,6 +126,7 @@
     margin: 0;
     font-size: 14px;
     color: #333;
+    text-align: right;
 }
 
 .costs-list dt.total,
