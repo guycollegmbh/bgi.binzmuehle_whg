@@ -79,11 +79,8 @@
     content: "\00a0-\00a0";
 }
 
-.title-with-status .status-badge {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 0;
+.info-list .status-dd {
+    text-align: right;
 }
 
 .detail-section.actions-section {
