@@ -65,9 +65,9 @@ class ApartmentsDetailModule extends Module
 
         if ($apartmentData['imageetagedetail']) {
             $file = FilesModel::findByUuid($apartmentData['imageetagedetail']);
-            $apartmentData['imageetage_path'] = $file ? $file->path : 'files/apartments/visualEtageDetails/defaultetagedetails.png';
+            $apartmentData['imageetage_path'] = $file ? $file->path : 'files/apartments/defaults/defaultetagedetails.png';
         } else {
-            $apartmentData['imageetage_path'] = 'files/apartments/visualEtageDetails/defaultetagedetails.png';
+            $apartmentData['imageetage_path'] = 'files/apartments/defaults/defaultetagedetails.png';
         }
 
         if ($apartmentData['grundrisspdf']) {
