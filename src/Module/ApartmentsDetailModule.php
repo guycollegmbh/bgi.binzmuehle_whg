@@ -63,11 +63,9 @@ class ApartmentsDetailModule extends Module
             $apartmentData['imagegrundriss_path'] = $file ? $file->path : null;
         }
 
-        // Lageplan Detail: bevorzugt aus visualEtageDetails, Fallback auf defaultetagedetails.png
-        $objektnrClean = preg_replace('/[^0-9.]/', '', $objektnummerUrl);
-        $detailEtagePath = 'files/apartments/visualEtageDetails/' . $objektnrClean . '.png';
-        if (file_exists(TL_ROOT . '/' . $detailEtagePath)) {
-            $apartmentData['imageetage_path'] = $detailEtagePath;
+        if ($apartmentData['imageetagedetail']) {
+            $file = FilesModel::findByUuid($apartmentData['imageetagedetail']);
+            $apartmentData['imageetage_path'] = $file ? $file->path : 'files/apartments/visualEtageDetails/defaultetagedetails.png';
         } else {
             $apartmentData['imageetage_path'] = 'files/apartments/visualEtageDetails/defaultetagedetails.png';
         }

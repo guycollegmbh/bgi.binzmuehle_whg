@@ -95,7 +95,7 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{images_legend},imagegrundriss,imageetage;{files_legend},grundrisspdf;{status_legend},status;{published_legend},published',
+        'default' => '{allgemein_legend},objektnummer,bezeichnung,bauetappe,zeile,adresse,etage,zimmer,flaeche;{kosten_legend},nettomietzins,nebenkosten,bruttomietzins;{images_legend},imagegrundriss,imageetage,imageetagedetail;{files_legend},grundrisspdf;{status_legend},status;{published_legend},published',
     ],
     'fields' => [
         'id' => [
@@ -228,6 +228,22 @@ $GLOBALS['TL_DCA']['tl_apartments'] = [
         ],
          'imageetage' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['imageetage'],
+            'inputType' => 'fileTree',
+            'eval'      => [
+                'fieldType'  => 'radio',
+                'filesOnly'  => true,
+                'extensions' => Config::get('validImageTypes'),
+                'tl_class'   => 'w50',
+            ],
+            'sql' => [
+                'type'    => 'binary',
+                'length'  => 16,
+                'notnull' => false,
+                'fixed'   => true,
+            ],
+        ],
+        'imageetagedetail' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_apartments']['imageetagedetail'],
             'inputType' => 'fileTree',
             'eval'      => [
                 'fieldType'  => 'radio',

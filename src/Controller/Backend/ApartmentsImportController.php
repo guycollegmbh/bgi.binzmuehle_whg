@@ -27,7 +27,7 @@ class ApartmentsImportController extends Backend
         $db = Database::getInstance();
         
         // Hole alle Apartments
-        $apartments = $db->execute('SELECT id, objektnummer, grundrisspdf, imagegrundriss, imageetage FROM tl_apartments');
+        $apartments = $db->execute('SELECT id, objektnummer, grundrisspdf, imagegrundriss, imageetage, imageetagedetail FROM tl_apartments');
         
         $pdfLinked = 0;
         $pdfUpdated = 0;
@@ -43,6 +43,11 @@ class ApartmentsImportController extends Backend
         $imgEtageUpdated = 0;
         $imgEtageUnchanged = 0;
         $imgEtageNotFound = 0;
+
+        $imgEtageDetailLinked = 0;
+        $imgEtageDetailUpdated = 0;
+        $imgEtageDetailUnchanged = 0;
+        $imgEtageDetailNotFound = 0;
         
         $total = $apartments->numRows;
         
@@ -97,6 +102,22 @@ class ApartmentsImportController extends Backend
                 case 'unchanged': $imgEtageUnchanged++; break;
                 case 'notfound': $imgEtageNotFound++; break;
             }
+
+            // 4. Bild Etage Detail synchronisieren
+            $result = $this->syncFileField(
+                $objektnummer,
+                $apartments->imageetagedetail,
+                'imageetagedetail',
+                $apartmentId,
+                'findImageEtageDetailByObjektnummer'
+            );
+
+            switch ($result) {
+                case 'linked': $imgEtageDetailLinked++; break;
+                case 'updated': $imgEtageDetailUpdated++; break;
+                case 'unchanged': $imgEtageDetailUnchanged++; break;
+                case 'notfound': $imgEtageDetailNotFound++; break;
+            }
         }
         
         // Detaillierte Message
@@ -115,6 +136,11 @@ class ApartmentsImportController extends Backend
         if ($imgEtageLinked + $imgEtageUpdated + $imgEtageUnchanged > 0 || $imgEtageNotFound > 0) {
             $messages[] = sprintf('Etagen-Bilder: %d verknüpft, %d aktualisiert, %d unverändert, %d nicht gefunden',
                 $imgEtageLinked, $imgEtageUpdated, $imgEtageUnchanged, $imgEtageNotFound);
+        }
+
+        if ($imgEtageDetailLinked + $imgEtageDetailUpdated + $imgEtageDetailUnchanged > 0 || $imgEtageDetailNotFound > 0) {
+            $messages[] = sprintf('Etagen-Detail-Bilder: %d verknüpft, %d aktualisiert, %d unverändert, %d nicht gefunden',
+                $imgEtageDetailLinked, $imgEtageDetailUpdated, $imgEtageDetailUnchanged, $imgEtageDetailNotFound);
         }
         
         if (empty($messages)) {
@@ -484,17 +510,17 @@ class ApartmentsImportController extends Backend
     {
         $cleanNummer = preg_replace('/[^0-9.]/', '', $objektnummer);
         $path = 'files/apartments/visualEtage/';
-        
+
         // Suche nach jpg, jpeg oder png
         $extensions = ['jpg', 'jpeg', 'png'];
-        
+
         foreach ($extensions as $ext) {
             $filePath = $path . $cleanNummer . '.' . $ext;
-            
+
             $db = Database::getInstance();
             $file = $db->prepare('SELECT uuid, tstamp FROM tl_files WHERE path = ?')
                 ->execute($filePath);
-            
+
             if ($file->numRows > 0) {
                 return [
                     'uuid' => $file->uuid,
@@ -503,7 +529,36 @@ class ApartmentsImportController extends Backend
                 ];
             }
         }
-        
+
+        return null;
+    }
+
+    /**
+     * Findet Etagen-Detail-Bild anhand Objektnummer (aus visualEtageDetails)
+     */
+    protected function findImageEtageDetailByObjektnummer($objektnummer)
+    {
+        $cleanNummer = preg_replace('/[^0-9.]/', '', $objektnummer);
+        $path = 'files/apartments/visualEtageDetails/';
+
+        $extensions = ['jpg', 'jpeg', 'png'];
+
+        foreach ($extensions as $ext) {
+            $filePath = $path . $cleanNummer . '.' . $ext;
+
+            $db = Database::getInstance();
+            $file = $db->prepare('SELECT uuid, tstamp FROM tl_files WHERE path = ?')
+                ->execute($filePath);
+
+            if ($file->numRows > 0) {
+                return [
+                    'uuid' => $file->uuid,
+                    'tstamp' => $file->tstamp,
+                    'path' => $filePath,
+                ];
+            }
+        }
+
         return null;
     }
     
