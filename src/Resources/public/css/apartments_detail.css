@@ -134,11 +134,6 @@
     color: #333;
 }
 
-.info-list .status-dd {
-    grid-column: 1 / -1;
-    padding-top: 5px;
-}
-
 .costs-list dt.total,
 .costs-list dd.total {
     font-size: 18px;

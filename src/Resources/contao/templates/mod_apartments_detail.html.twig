@@ -27,6 +27,9 @@
                         <div class="detail-section info-section">
                             <div class="title-with-status">
                                 <h2><span class="title-bezeichnung">{{ apartment.bezeichnung }}</span><span class="title-objektnummer">Objekt-Nr.: {{ apartment.objektnummer }}</span></h2>
+                                {% if apartment.status %}
+                                    <div class="status-badge status-{{ apartment.status|lower }}">{{ apartment.status }}</div>
+                                {% endif %}
                             </div>
                             <dl class="info-list">
                                 {% if apartment.adresse %}
@@ -64,9 +67,6 @@
                                 {% if apartment.bruttomietzins %}
                                     <dt class="total">Bruttomiete:</dt>
                                     <dd class="total">CHF {{ apartment.bruttomietzins }}</dd>
-                                {% endif %}
-                                {% if apartment.status %}
-                                    <dd class="status-dd"><span class="status-badge status-{{ apartment.status|lower }}">{{ apartment.status }}</span></dd>
                                 {% endif %}
                             </dl>
                         </div>

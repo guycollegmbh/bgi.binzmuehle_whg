@@ -145,8 +145,9 @@
 
 .filter-group {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
 
 .filter-group label {
@@ -154,6 +155,9 @@
     font-size: 14px;
     color: #555;
     margin-bottom: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
+    width: 80px;
 }
 
 .filter-group select {
@@ -161,7 +165,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
-    width: 100%;
+    flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -172,7 +176,13 @@
 }
 
 .price-slider-group {
+    flex-direction: column;
+    align-items: stretch;
     margin-top: 5px;
+}
+
+.price-slider-group label {
+    width: auto;
 }
 
 .price-values {
