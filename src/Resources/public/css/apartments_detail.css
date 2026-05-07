@@ -281,9 +281,8 @@
 }
 
 .detail-lageplan img {
-    width: 100%;
+    width: auto;
     height: auto;
-    cursor: zoom-in;
 }
 
 .detail-lageplan h3,
