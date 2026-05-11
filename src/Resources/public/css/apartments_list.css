@@ -636,11 +636,6 @@ table.dataTable.display>tbody>tr:hover>* {
         display: none;
     }
 
-    /* Status-Spalte ausblenden (in Objektnummer-Zeile bereits als mobile-status) */
-    #apartments-table tbody td:nth-child(10) {
-        display: none;
-    }
-
     .mobile-status {
         display: none;
     }
