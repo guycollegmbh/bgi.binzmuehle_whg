@@ -24,6 +24,17 @@
     text-align: center;
 }
 
+.geschoss-preview-box {
+    margin-bottom: 10px;
+}
+
+.geschoss-preview-box .preview-image {
+    max-height: 120px;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+}
+
 .preview-box h3 {
     margin: 0;
     font-size: 18px;

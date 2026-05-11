@@ -236,6 +236,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // TODO: Später wieder aktivieren - Grundriss-Default
     // const defaultGrundriss = 'files/apartments/defaults/defaultgrundriss.png';
     const defaultEtage = 'files/apartments/defaults/defaultetage.png';
+    const defaultGeschoss = 'files/apartments/defaults/defaultgeschoss.png';
+    const previewGeschoss = document.getElementById('preview-geschoss');
+
+    // Mapping Etage-Wert → Dateiname
+    const geschossMap = {
+        'EG':      'EG.png',
+        'DG':      'DG.png',
+        'UG':      'UG.png',
+        '1.OG':    '1OG.png',
+        '2.OG':    '2OG.png',
+        '3.OG':    '3OG.png',
+        'EG/1.OG': 'EG-1OG.png',
+        'EG/ 1.OG': 'EG-1OG.png',
+    };
 
     function imageExists(src) {
         // TODO: Später wieder hinzufügen - && src !== defaultGrundriss
@@ -247,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // TODO: Später wieder aktivieren - Grundriss-Pfad aus data-Attribut holen
         // const grundrissPath = $(this).data('grundriss');
         const etagePath = $(this).data('etage');
+        const geschossEtage = $(this).data('geschoss');
 
         setTimeout(function() {
             // ========== TODO: SPÄTER WIEDER AKTIVIEREN - GRUNDRISS-UPDATE - START ========== //
@@ -269,6 +284,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 previewEtage.classList.remove('has-image');
             }
 
+            // Geschoss-Bild aktualisieren
+            if (previewGeschoss) {
+                const geschossFile = geschossMap[geschossEtage];
+                previewGeschoss.src = geschossFile
+                    ? 'files/apartments/visualEtageGeschoss/' + geschossFile
+                    : defaultGeschoss;
+                previewGeschoss.style.opacity = '1';
+            }
+
             // Fade in - Ende
             // TODO: Später wieder aktivieren - Grundriss Fade-in
             // previewGrundriss.style.opacity = '1';
@@ -283,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // TODO: Später wieder aktivieren - Grundriss Fade-out
             // previewGrundriss.style.opacity = '0.3';
             previewEtage.style.opacity = '0.3';
+            if (previewGeschoss) previewGeschoss.style.opacity = '0.3';
 
             setTimeout(function() {
                 // Zurück zu Default-Bildern
@@ -292,6 +317,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 // TODO: Später wieder aktivieren - Grundriss has-image Klasse entfernen
                 // previewGrundriss.classList.remove('has-image');
                 previewEtage.classList.remove('has-image');
+
+                if (previewGeschoss) {
+                    previewGeschoss.src = defaultGeschoss;
+                    previewGeschoss.style.opacity = '1';
+                }
 
                 // Fade in - Ende
                 // TODO: Später wieder aktivieren - Grundriss Fade-in

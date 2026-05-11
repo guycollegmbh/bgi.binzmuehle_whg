@@ -58,8 +58,22 @@
             </div>
         </div>
 
-        {# ========== RECHTE SPALTE: FILTER ========== #}
+        {# ========== RECHTE SPALTE: GESCHOSS-VORSCHAU + FILTER ========== #}
         <div class="filter-column">
+
+            {# Geschoss-Vorschau #}
+            <div class="preview-box geschoss-preview-box">
+                <div class="preview-image-wrapper">
+                    <img id="preview-geschoss"
+                         src="files/apartments/defaults/defaultgeschoss.png"
+                         alt="Geschoss Vorschau"
+                         class="preview-image">
+                    <div class="preview-placeholder">
+                        <span>Bewegen Sie die Maus über eine Wohnung</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="filter-section">
         <form method="get" class="filter-form">
             <div class="filter-group">
@@ -176,6 +190,7 @@
                 {% for apartment in apartments %}
                     <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}"
                         data-etage="{{ apartment.imageetage_path|default('') }}"
+                        data-geschoss="{{ apartment.etage|default('') }}"
                         class="apartment-row">
                         <td data-label="Objekt">{{ apartment.objektnummer }}<span class="mobile-status status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">{{ apartment.status }}</span></td>
                         <td data-label="Bezeichnung">{{ apartment.bezeichnung }}</td>
