@@ -31,12 +31,12 @@
 }
 
 .geschoss-preview-box .preview-image-wrapper {
-    min-height: 150px;
+    min-height: 0;
 }
 
 .geschoss-preview-box .preview-image {
-    max-height: 150px;
-    width: auto;
+    width: 100%;
+    height: auto;
 }
 
 .preview-box h3 {
