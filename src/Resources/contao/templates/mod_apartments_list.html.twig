@@ -188,6 +188,7 @@
                     <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}"
                         data-etage="{{ apartment.imageetage_path|default('') }}"
                         data-geschoss="{{ apartment.etage|default('') }}"
+                        data-url="wohnungen/details?id={{ apartment.objektnummer_url }}"
                         class="apartment-row">
                         <td data-label="Objekt">{{ apartment.objektnummer }}<span class="mobile-status status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">{{ apartment.status }}</span></td>
                         <td data-label="Bezeichnung">{{ apartment.bezeichnung }}</td>

@@ -256,6 +256,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return src && src !== '' && src !== defaultEtage;
     }
 
+    // ========== Klick auf Tabellenzeile → Detailseite ========== //
+    $('#apartments-table tbody').on('click', 'tr', function(e) {
+        if ($(e.target).closest('a').length) return; // Klick auf Link normal lassen
+        const url = $(this).data('url');
+        if (url) window.location.href = url;
+    });
+
     // ========== Hover-Effekt für Tabellenzeilen ========== //
     $('#apartments-table tbody').on('mouseenter', 'tr', function() {
         // TODO: Später wieder aktivieren - Grundriss-Pfad aus data-Attribut holen

@@ -596,6 +596,7 @@ table.dataTable.display>tbody>tr:hover>* {
         background: #f9f9f9;
         margin-bottom: 10px;
         padding: 12px;
+        cursor: pointer;
     }
 
     #apartments-table tbody td {
