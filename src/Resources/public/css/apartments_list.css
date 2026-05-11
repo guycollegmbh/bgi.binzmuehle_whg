@@ -599,8 +599,10 @@ table.dataTable.display>tbody>tr:hover>* {
     }
 
     #apartments-table tbody td {
-        display: block;
-        text-align: left !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right !important;
         padding: 4px 0 !important;
         border: none !important;
         white-space: normal;
@@ -612,8 +614,9 @@ table.dataTable.display>tbody>tr:hover>* {
         font-weight: 600;
         color: #666;
         display: inline-block;
-        width: 100px;
+        flex-shrink: 0;
         margin-right: 10px;
+        text-align: left;
     }
 
     /* Objektnummer als Titel mit Status rechts */
@@ -633,13 +636,13 @@ table.dataTable.display>tbody>tr:hover>* {
         display: none;
     }
 
-    /* Status Badge in Objektnummer-Zeile - verstecke original, zeige mobile */
-    #apartments-table tbody td:nth-child(9) {
+    /* Status-Spalte ausblenden (in Objektnummer-Zeile bereits als mobile-status) */
+    #apartments-table tbody td:nth-child(10) {
         display: none;
     }
 
     .mobile-status {
-        display: inline-block;
+        display: none;
     }
 
     /* Details Button */
