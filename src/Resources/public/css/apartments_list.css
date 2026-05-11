@@ -25,14 +25,18 @@
 }
 
 .geschoss-preview-box {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    background: white;
+    padding: 10px;
+}
+
+.geschoss-preview-box .preview-image-wrapper {
+    min-height: 150px;
 }
 
 .geschoss-preview-box .preview-image {
-    max-height: 120px;
+    max-height: 150px;
     width: auto;
-    margin: 0 auto;
-    display: block;
 }
 
 .preview-box h3 {
