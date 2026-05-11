@@ -558,6 +558,10 @@ table.dataTable.display>tbody>tr:hover>* {
         display: none;
     }
 
+    .geschoss-preview-box {
+        display: none;
+    }
+
     .filter-section {
         padding: 15px;
     }
