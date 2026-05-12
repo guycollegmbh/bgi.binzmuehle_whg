@@ -132,6 +132,53 @@ document.addEventListener('DOMContentLoaded', function() {
         table.draw();
     }
 
+    // ========== Filter-State in sessionStorage speichern/laden ========== //
+    const STORAGE_KEY = 'apartments_filter';
+
+    function saveFilterState() {
+        const state = {};
+        filterSelects.forEach(select => {
+            state[select.id] = select.value;
+        });
+        const minPrice = document.getElementById('minPrice');
+        const maxPrice = document.getElementById('maxPrice');
+        if (minPrice) state.minPrice = minPrice.value;
+        if (maxPrice) state.maxPrice = maxPrice.value;
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function restoreFilterState() {
+        const stored = sessionStorage.getItem(STORAGE_KEY);
+        if (!stored) return;
+        const state = JSON.parse(stored);
+        filterSelects.forEach(select => {
+            if (state[select.id] !== undefined) {
+                select.value = state[select.id];
+            }
+        });
+        const minPrice = document.getElementById('minPrice');
+        const maxPrice = document.getElementById('maxPrice');
+        const minPriceDisplay = document.getElementById('minPriceDisplay');
+        const maxPriceDisplay = document.getElementById('maxPriceDisplay');
+        if (minPrice && state.minPrice) {
+            minPrice.value = state.minPrice;
+            if (minPriceDisplay) minPriceDisplay.textContent = state.minPrice;
+        }
+        if (maxPrice && state.maxPrice) {
+            maxPrice.value = state.maxPrice;
+            if (maxPriceDisplay) maxPriceDisplay.textContent = state.maxPrice;
+        }
+        applyFilters();
+    }
+
+    // Filter-State beim Verlassen der Seite speichern
+    window.addEventListener('beforeunload', saveFilterState);
+
+    // Filter-State beim Laden wiederherstellen (nur wenn von Detailseite zurück)
+    if (document.referrer.indexOf('wohnungen/details') !== -1) {
+        restoreFilterState();
+    }
+
     filterSelects.forEach(select => {
         select.addEventListener('change', function() {
             applyFilters();
