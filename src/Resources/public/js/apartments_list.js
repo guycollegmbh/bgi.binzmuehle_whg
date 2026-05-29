@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // TODO: Später wieder aktivieren - Grundriss-Element
     // const previewGrundriss = document.getElementById('preview-grundriss');
     const previewEtage = document.getElementById('preview-etage');
+    const previewEtageBase = document.getElementById('preview-etage-base');
 
     // ========== DataTable initialisieren (MUSS ZUERST KOMMEN) ========== //
     const table = $('#apartments-table').DataTable({
@@ -282,7 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========== Default-Bilder ========== //
     // TODO: Später wieder aktivieren - Grundriss-Default
     // const defaultGrundriss = 'files/apartments/defaults/defaultgrundriss.png';
-    const defaultEtage = 'files/apartments/defaults/defaultetage.png';
     const defaultGeschoss = 'files/apartments/defaults/defaultgeschoss.png';
     const previewGeschoss = document.getElementById('preview-geschoss');
 
@@ -299,8 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function imageExists(src) {
-        // TODO: Später wieder hinzufügen - && src !== defaultGrundriss
-        return src && src !== '' && src !== defaultEtage;
+        return src && src !== '';
     }
 
     // ========== Klick auf Tabellenzeile → Detailseite (nur Desktop) ========== //
@@ -332,12 +331,11 @@ document.addEventListener('DOMContentLoaded', function() {
             */
             // ========== TODO: SPÄTER WIEDER AKTIVIEREN - GRUNDRISS-UPDATE - ENDE ========== //
 
-            if (imageExists(etagePath)) {
+            if (imageExists(etagePath) && previewEtage) {
                 previewEtage.src = etagePath;
-                previewEtage.classList.add('has-image');
-            } else {
-                previewEtage.src = defaultEtage;
-                previewEtage.classList.remove('has-image');
+                previewEtage.style.display = 'block';
+            } else if (previewEtage) {
+                previewEtage.style.display = 'none';
             }
 
             // Geschoss-Bild aktualisieren
@@ -352,38 +350,22 @@ document.addEventListener('DOMContentLoaded', function() {
             // Fade in - Ende
             // TODO: Später wieder aktivieren - Grundriss Fade-in
             // previewGrundriss.style.opacity = '1';
-            previewEtage.style.opacity = '1';
         }, 150);
     });
 
     // ========== Bei Verlassen der Tabelle zu Default zurück ========== //
     $('#apartments-table').on('mouseleave', function() {
         setTimeout(function() {
-            // Fade out - Start
-            // TODO: Später wieder aktivieren - Grundriss Fade-out
-            // previewGrundriss.style.opacity = '0.3';
-            previewEtage.style.opacity = '0.3';
-            if (previewGeschoss) previewGeschoss.style.opacity = '0.3';
+            // Overlay ausblenden → Basis-Bild wieder sichtbar
+            if (previewEtage) {
+                previewEtage.style.display = 'none';
+                previewEtage.src = '';
+            }
 
-            setTimeout(function() {
-                // Zurück zu Default-Bildern
-                // TODO: Später wieder aktivieren - Grundriss zurücksetzen
-                // previewGrundriss.src = defaultGrundriss;
-                previewEtage.src = defaultEtage;
-                // TODO: Später wieder aktivieren - Grundriss has-image Klasse entfernen
-                // previewGrundriss.classList.remove('has-image');
-                previewEtage.classList.remove('has-image');
-
-                if (previewGeschoss) {
-                    previewGeschoss.src = defaultGeschoss;
-                    previewGeschoss.style.opacity = '1';
-                }
-
-                // Fade in - Ende
-                // TODO: Später wieder aktivieren - Grundriss Fade-in
-                // previewGrundriss.style.opacity = '1';
-                previewEtage.style.opacity = '1';
-            }, 150);
+            if (previewGeschoss) {
+                previewGeschoss.src = defaultGeschoss;
+                previewGeschoss.style.opacity = '1';
+            }
         }, 300);
     });
 });

@@ -96,6 +96,17 @@
     z-index: 3;
 }
 
+.preview-image-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: auto;
+    display: none;
+    z-index: 2;
+    pointer-events: none;
+}
+
 .street-label {
     position: absolute;
     font-size: 18px;
