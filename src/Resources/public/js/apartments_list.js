@@ -333,9 +333,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (imageExists(etagePath) && previewEtage) {
                 previewEtage.src = etagePath;
-                previewEtage.style.display = 'block';
+                previewEtage.classList.add('is-visible');
             } else if (previewEtage) {
-                previewEtage.style.display = 'none';
+                previewEtage.classList.remove('is-visible');
             }
 
             // Geschoss-Bild aktualisieren
@@ -358,8 +358,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
             // Overlay ausblenden → Basis-Bild wieder sichtbar
             if (previewEtage) {
-                previewEtage.style.display = 'none';
-                previewEtage.src = '';
+                previewEtage.classList.remove('is-visible');
             }
 
             if (previewGeschoss) {
