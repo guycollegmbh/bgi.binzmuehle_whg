@@ -135,56 +135,70 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ========== Filter-State in sessionStorage speichern/laden ========== //
     const STORAGE_KEY = 'apartments_filter';
+    const FROM_DETAIL_KEY = 'apartments_from_detail';
 
     function saveFilterState() {
-        const state = {};
-        filterSelects.forEach(select => {
-            state[select.id] = select.value;
-        });
-        const minPrice = document.getElementById('minPrice');
-        const maxPrice = document.getElementById('maxPrice');
-        if (minPrice) state.minPrice = minPrice.value;
-        if (maxPrice) state.maxPrice = maxPrice.value;
-        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        try {
+            const state = {};
+            filterSelects.forEach(select => {
+                state[select.id] = select.value;
+            });
+            const minPrice = document.getElementById('minPrice');
+            const maxPrice = document.getElementById('maxPrice');
+            if (minPrice) state.minPrice = minPrice.value;
+            if (maxPrice) state.maxPrice = maxPrice.value;
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch(e) {}
     }
 
     function restoreFilterState() {
-        const stored = sessionStorage.getItem(STORAGE_KEY);
-        if (!stored) return;
-        const state = JSON.parse(stored);
-        filterSelects.forEach(select => {
-            if (state[select.id] !== undefined) {
-                select.value = state[select.id];
+        try {
+            const stored = sessionStorage.getItem(STORAGE_KEY);
+            const fromDetail = sessionStorage.getItem(FROM_DETAIL_KEY);
+            if (!stored || !fromDetail) return;
+            sessionStorage.removeItem(FROM_DETAIL_KEY);
+            const state = JSON.parse(stored);
+            filterSelects.forEach(select => {
+                if (state[select.id] !== undefined) {
+                    select.value = state[select.id];
+                }
+            });
+            const minPrice = document.getElementById('minPrice');
+            const maxPrice = document.getElementById('maxPrice');
+            const minPriceDisplay = document.getElementById('minPriceDisplay');
+            const maxPriceDisplay = document.getElementById('maxPriceDisplay');
+            if (minPrice && state.minPrice) {
+                minPrice.value = state.minPrice;
+                if (minPriceDisplay) minPriceDisplay.textContent = state.minPrice;
             }
-        });
-        const minPrice = document.getElementById('minPrice');
-        const maxPrice = document.getElementById('maxPrice');
-        const minPriceDisplay = document.getElementById('minPriceDisplay');
-        const maxPriceDisplay = document.getElementById('maxPriceDisplay');
-        if (minPrice && state.minPrice) {
-            minPrice.value = state.minPrice;
-            if (minPriceDisplay) minPriceDisplay.textContent = state.minPrice;
-        }
-        if (maxPrice && state.maxPrice) {
-            maxPrice.value = state.maxPrice;
-            if (maxPriceDisplay) maxPriceDisplay.textContent = state.maxPrice;
-        }
-        applyFilters();
+            if (maxPrice && state.maxPrice) {
+                maxPrice.value = state.maxPrice;
+                if (maxPriceDisplay) maxPriceDisplay.textContent = state.maxPrice;
+            }
+            applyFilters();
+        } catch(e) {}
     }
 
-    // Filter-State beim Verlassen der Seite speichern
-    window.addEventListener('beforeunload', saveFilterState);
-
-    // Filter-State beim Laden wiederherstellen (nur wenn von Detailseite zurück)
-    if (document.referrer.indexOf('wohnungen/details') !== -1) {
-        restoreFilterState();
+    function navigateToDetail(url) {
+        try { sessionStorage.setItem(FROM_DETAIL_KEY, '1'); } catch(e) {}
+        saveFilterState();
+        window.location.href = url;
     }
 
+    // Filter-State bei jeder Änderung sofort speichern
     filterSelects.forEach(select => {
         select.addEventListener('change', function() {
             applyFilters();
+            saveFilterState();
         });
     });
+
+    // Fallback: beim Verlassen der Seite speichern (beforeunload + pagehide für iOS Safari)
+    window.addEventListener('beforeunload', saveFilterState);
+    window.addEventListener('pagehide', saveFilterState);
+
+    // Filter-State beim Laden wiederherstellen (via Flag, nicht document.referrer)
+    restoreFilterState();
 
     // ========== Price Range Slider ========== //
     // TODO: Wieder aktivieren wenn Bruttomiete Range-Slider eingeblendet wird
@@ -307,9 +321,16 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#apartments-table tbody').on('click', 'tr', function(e) {
             if ($(e.target).closest('a').length) return;
             const url = $(this).data('url');
-            if (url) window.location.href = url;
+            if (url) navigateToDetail(url);
         });
     }
+
+    // Details-Button: Flag setzen vor Navigation
+    $('#apartments-table').on('click', '.btn-details', function(e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+        if (url) navigateToDetail(url);
+    });
 
     // ========== Hover-Effekt für Tabellenzeilen ========== //
     $('#apartments-table tbody').on('mouseenter', 'tr', function() {
