@@ -134,7 +134,7 @@
 .street-right {
     right: -45px;
     top: 50%;
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
     transform-origin: center center;
 }
 
