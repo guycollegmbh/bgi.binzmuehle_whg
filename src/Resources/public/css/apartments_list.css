@@ -505,6 +505,12 @@ table.dataTable.display>tbody>tr:hover>* {
     display: none;
 }
 
+@media (max-height: 800px) {
+    .preview-filter-container {
+        position: relative;
+    }
+}
+
 @media (max-width: 1024px) {
     .preview-filter-container {
         grid-template-columns: 1fr;
