@@ -505,7 +505,7 @@ table.dataTable.display>tbody>tr:hover>* {
     display: none;
 }
 
-@media (max-height: 800px) {
+@media (max-height: 700px) {
     .preview-filter-container {
         position: relative;
     }

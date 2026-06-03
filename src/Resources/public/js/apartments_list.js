@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const tableHead = document.querySelector('#apartments-table thead');
 
         if (previewContainer && tableHead) {
-            if (window.innerHeight <= 800) {
+            if (window.innerHeight <= 700) {
                 tableHead.style.top = '0';
             } else {
                 tableHead.style.top = previewContainer.offsetHeight + 'px';
