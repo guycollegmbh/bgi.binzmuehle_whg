@@ -509,6 +509,11 @@ table.dataTable.display>tbody>tr:hover>* {
     .preview-filter-container {
         position: relative;
     }
+
+    #apartments-table thead {
+        position: relative;
+        top: auto;
+    }
 }
 
 @media (max-width: 1024px) {
