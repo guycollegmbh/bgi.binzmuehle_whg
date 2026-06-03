@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const tableHead = document.querySelector('#apartments-table thead');
 
         if (previewContainer && tableHead) {
-            const containerHeight = previewContainer.offsetHeight;
-            tableHead.style.top = containerHeight + 'px';
+            if (window.innerHeight <= 800) {
+                tableHead.style.top = '0';
+            } else {
+                tableHead.style.top = previewContainer.offsetHeight + 'px';
+            }
         }
     }
 
