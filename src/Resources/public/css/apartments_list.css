@@ -512,7 +512,7 @@ table.dataTable.display>tbody>tr:hover>* {
 
     #apartments-table thead {
         position: relative;
-        top: auto;
+        top: auto !important;
     }
 }
 
