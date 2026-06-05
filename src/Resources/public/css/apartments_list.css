@@ -84,6 +84,7 @@
 .lageplan-wrapper {
     position: relative;
     display: inline-block;
+    font-size: 0;
 }
 
 .lageplan-overlay {

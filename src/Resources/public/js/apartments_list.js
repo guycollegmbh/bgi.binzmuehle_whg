@@ -356,8 +356,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // ========== TODO: SPÄTER WIEDER AKTIVIEREN - GRUNDRISS-UPDATE - ENDE ========== //
 
             if (imageExists(etagePath) && previewEtage) {
-                previewEtage.src = etagePath;
-                previewEtage.classList.add('is-visible');
+                previewEtage.classList.remove('is-visible');
+                const showOverlay = () => previewEtage.classList.add('is-visible');
+                if (previewEtage.src.includes(etagePath) && previewEtage.complete && previewEtage.naturalWidth > 0) {
+                    showOverlay();
+                } else {
+                    previewEtage.onload = showOverlay;
+                    previewEtage.src = etagePath;
+                }
             } else if (previewEtage) {
                 previewEtage.classList.remove('is-visible');
             }
