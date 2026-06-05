@@ -30,7 +30,7 @@
 
             {# Lageplan - AKTIV #}
             <div class="preview-box">
-                <h3>Lageplan</h3>
+                <h3>Etagenplan</h3>
                 <div class="preview-image-wrapper">
                     {# Straßennamen-Labels #}
                     <div class="street-label street-left">Hürtstrasse</div>
@@ -40,19 +40,31 @@
                     <div class="lageplan-wrapper">
                         <img id="preview-etage-base"
                              src="files/apartments/defaults/defaultetage.png"
-                             alt="Lageplan Vorschau"
+                             alt="Etagenplan Vorschau"
                              class="preview-image">
                         <img id="preview-etage"
                              src=""
                              alt=""
                              class="preview-image-overlay">
                         <svg class="lageplan-overlay" viewBox="0 0 650 400" xmlns="http://www.w3.org/2000/svg">
-                            <text x="90"  y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Zeile 5</text>
-                            <text x="215" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Zeile 4</text>
-                            <text x="338" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Zeile 3</text>
-                            <text x="462" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Zeile 2</text>
-                            <text x="578" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Zeile 1</text>
-                            <text x="110" y="370" text-anchor="middle" font-size="16" font-weight="bold" fill="#e67e00">Zeile 4 und 5 ab 2029</text>
+                            <!-- Bauetappe 2 Header -->
+                            <text x="138" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#777">Bauetappe 2</text>
+
+                            <!-- Bauetappe 1 Header -->
+                            <text x="460" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#555">Bauetappe 1: Bezug Herbst 2027</text>
+
+                            <!-- Zeile Labels (alle) -->
+                            <text x="90"  y="38" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Zeile 5</text>
+                            <text x="215" y="38" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Zeile 4</text>
+                            <text x="338" y="38" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Zeile 3</text>
+                            <text x="462" y="38" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Zeile 2</text>
+                            <text x="578" y="38" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Zeile 1</text>
+
+                            <!-- Binderweg vertikal (Bauetappe 2) -->
+                            <text x="138" y="215" text-anchor="middle" font-size="13" font-weight="bold" fill="#777" transform="rotate(-90, 138, 215)">Binderweg</text>
+
+                            <!-- Zelghalde vertikal (Zeile 2/3) -->
+                            <text x="400" y="215" text-anchor="middle" font-size="13" font-weight="bold" fill="#777" transform="rotate(-90, 400, 215)">Zelghalde</text>
                         </svg>
                     </div>
                 </div>
