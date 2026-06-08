@@ -161,7 +161,7 @@ In `mod_apartments_list.html.twig` und `apartments_list.js` sind folgende Featur
 ## URL-Parameter (Bewerben-Link)
 
 ```
-/bewerben?objektnummer=XXX&zeile=X&adresse=XXX&etage=XXX&bruttomiete=XXX&zimmer=XXX
+/bewerben-informationen?objektnummer=XXX&zeile=X&adresse=XXX&etage=XXX&bruttomiete=XXX&zimmer=XXX
 ```
 
 - Nur sichtbar bei: `status == 'frei'` UND `bezeichnung != 'Jokerzimmer'` UND Frontend-Gruppe 3
