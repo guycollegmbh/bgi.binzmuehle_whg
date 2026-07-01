@@ -141,9 +141,7 @@ class ApartmentsListModule extends Module
         $maxFlaeche = (int) ceil((float) ($flaeche['max_flaeche'] ?? 300));
         $preis = $db->execute('SELECT MIN(CAST(REPLACE(bruttomietzins, \'\'\'\', \'\') AS DECIMAL(10,2))) as min_preis, MAX(CAST(REPLACE(bruttomietzins, \'\'\'\', \'\') AS DECIMAL(10,2))) as max_preis FROM tl_apartments WHERE published = 1 AND (bezeichnung = \'Wohnung\' OR bezeichnung = \'Jokerzimmer\') AND bauetappe != \'2\' AND bruttomietzins != \'\'')->fetchAssoc();
         $minPreis = (int) floor((float) ($preis['min_preis'] ?? 0));
-        $rawMaxPreis = (int) ceil((float) ($preis['max_preis'] ?? 5000));
-        // Round up to next valid step boundary (step=50 in slider) so the browser doesn't snap below the highest price
-        $maxPreis = $minPreis + (int) (ceil(($rawMaxPreis - $minPreis) / 50.0) * 50);
+        $maxPreis = (int) ceil((float) ($preis['max_preis'] ?? 5000));
 
         // Template-Variablen
         $this->Template->apartments = $apartments;
