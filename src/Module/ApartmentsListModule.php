@@ -24,7 +24,7 @@ class ApartmentsListModule extends Module
         // Filter verarbeiten
         $where = [];
 
-        $statusFilter = Input::get('status') !== null ? Input::get('status') : 'Frei';
+        $statusFilter = Input::get('status') !== null ? Input::get('status') : '';
         if ($statusFilter !== '') {
             $where[] = 'status = ?';
             $params[] = $statusFilter;

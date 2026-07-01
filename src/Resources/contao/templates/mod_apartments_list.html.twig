@@ -103,7 +103,7 @@
                 <select name="status" id="status">
                     <option value="">Alle</option>
                     {% for option in statusOptions %}
-                        <option value="{{ option.status }}" {% if (currentStatus == option.status) or (currentStatus is empty and option.status == 'Frei') %}selected{% endif %}>
+                        <option value="{{ option.status }}" {% if currentStatus == option.status %}selected{% endif %}>
                             {{ option.status }}
                         </option>
                     {% endfor %}
