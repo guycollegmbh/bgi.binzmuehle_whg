@@ -86,7 +86,7 @@ src/
 WHERE published = 1 AND (bezeichnung = 'Wohnung' OR bezeichnung = 'Jokerzimmer') AND bauetappe != '2'
 ```
 
-**Filter (GET-Parameter):** `status` (Default: `Frei`), `zimmer`, `bauetappe`, `zeile`, `etage`, `minPrice`, `maxPrice`, `minArea`, `maxArea`
+**Filter (GET-Parameter):** `status` (Default: leer = alle Status sichtbar), `zimmer`, `bauetappe`, `zeile`, `etage`, `minPrice`, `maxPrice`, `minArea`, `maxArea`
 
 **CHF-Formatierung:** Apostroph als Tausendertrennzeichen, z.B. `1'920`
 
@@ -165,6 +165,7 @@ In `mod_apartments_list.html.twig` und `apartments_list.js` sind folgende Featur
 ```
 
 - Nur sichtbar bei: `status == 'frei'` UND `bezeichnung != 'Jokerzimmer'` UND Frontend-Gruppe 3
+- Bei `status == 'Reserviert'`: Detailseite zugänglich, aber Bewerben-Button ausgeblendet
 - `objektnummer`: Sonderzeichen entfernt (nur Zahlen, Punkte)
 - `zeile`: `Zeile ` / `zeile ` Prefix entfernt
 - Alle anderen via `|url_encode`
