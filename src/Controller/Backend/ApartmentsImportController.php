@@ -291,8 +291,8 @@ class ApartmentsImportController extends Backend
             return null;
         }
         
-        $tempFile = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp/' . $tempFileName;
-        
+        $tempFile = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp/' . basename($tempFileName);
+
         if (!file_exists($tempFile)) {
             Message::addError('Temporäre Datei nicht gefunden.');
             return null;
@@ -628,8 +628,8 @@ class ApartmentsImportController extends Backend
             $selectedSheets = explode(',', $selectedSheets);
         }
         
-        $tempFile = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp/' . $tempFileName;
-        
+        $tempFile = System::getContainer()->getParameter('kernel.project_dir') . '/system/tmp/' . basename($tempFileName);
+
         if (!file_exists($tempFile)) {
             Message::addError('Temporäre Datei nicht gefunden.');
             return;

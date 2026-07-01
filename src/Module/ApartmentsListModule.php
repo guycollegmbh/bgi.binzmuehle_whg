@@ -57,12 +57,12 @@ class ApartmentsListModule extends Module
 
         // Preisfilter (Bruttomietzins)
         if (Input::get('minPrice')) {
-            $where[] = 'CAST(REPLACE(bruttomietzins, \',\', \'.\') AS DECIMAL(10,2)) >= ?';
+            $where[] = 'CAST(REPLACE(REPLACE(bruttomietzins, \'\'\'\', \'\'), \',\', \'.\') AS DECIMAL(10,2)) >= ?';
             $params[] = Input::get('minPrice');
         }
 
         if (Input::get('maxPrice')) {
-            $where[] = 'CAST(REPLACE(bruttomietzins, \',\', \'.\') AS DECIMAL(10,2)) <= ?';
+            $where[] = 'CAST(REPLACE(REPLACE(bruttomietzins, \'\'\'\', \'\'), \',\', \'.\') AS DECIMAL(10,2)) <= ?';
             $params[] = Input::get('maxPrice');
         }
 
