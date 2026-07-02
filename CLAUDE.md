@@ -213,6 +213,8 @@ Dateiname = bereinigte Objektnummer (nur Zahlen + Punkte, z.B. `30.1.2.png`)
 Zeigt: `Objektnummer - Adresse - Etage - CHF Bruttomietzins`  
 Gruppiert via `<option disabled>` mit `──` Trennlinie (kein `<optgroup>`)
 
+**Nur `status = 'Frei'` Objekte werden angezeigt** — Reservierte Objekte sind im Formular-Dropdown ausgeblendet (Stand 2026-07-02).
+
 **Bauetappe 2 – Jokerzimmer ausgeblendet:**
 ```php
 if (stripos($bezeichnung, 'Jokerzimmer') !== false) {
