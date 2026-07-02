@@ -59,8 +59,8 @@ class FormApartmentSelect extends Widget
         $grouped = [];
         $bezeichnung = $this->apartment_bezeichnung ?: 'Parkplatz';
 
-        $query = "SELECT objektnummer, bezeichnung, adresse, etage, bruttomietzins FROM tl_apartments WHERE published = ? AND bezeichnung LIKE ?";
-        $params = [1, $bezeichnung . '%'];
+        $query = "SELECT objektnummer, bezeichnung, adresse, etage, bruttomietzins FROM tl_apartments WHERE published = ? AND status = ? AND bezeichnung LIKE ?";
+        $params = [1, 'Frei', $bezeichnung . '%'];
 
         if (stripos($bezeichnung, 'Jokerzimmer') !== false) {
             $query .= " AND adresse NOT LIKE ?";

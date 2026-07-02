@@ -151,7 +151,7 @@ class ApartmentsListModule extends Module
         $this->Template->zimmerOptions = $zimmerOptions;
         $this->Template->bauetappeOptions = $bauetappeOptions;
         $this->Template->zeileOptions = $zeileOptions;
-        $this->Template->currentStatus = Input::get('status') !== null ? Input::get('status') : 'Frei';
+        $this->Template->currentStatus = Input::get('status') !== null ? Input::get('status') : '';
         $this->Template->currentZimmer = Input::get('zimmer');
         $this->Template->currentBauetappe = Input::get('bauetappe');
         $this->Template->currentZeile = Input::get('zeile');
