@@ -8,6 +8,7 @@ use Contao\Database;
 use Contao\Module;
 use Contao\FilesModel;
 use Contao\Input;
+use Contao\PageModel;
 
 class ApartmentsListModule extends Module
 {
@@ -167,5 +168,15 @@ class ApartmentsListModule extends Module
         $this->Template->maxPreis = $maxPreis;
         $this->Template->currentMinPreis = Input::get('minPrice') ?: $minPreis;
         $this->Template->currentMaxPreis = Input::get('maxPrice') ?: $maxPreis;
+
+        // Detail-URL aus jumpTo generieren, Fallback auf bisherigen Pfad
+        $detailUrl = 'wohnungen/details';
+        if ($this->jumpTo) {
+            $page = PageModel::findById($this->jumpTo);
+            if ($page) {
+                $detailUrl = $page->getFrontendUrl();
+            }
+        }
+        $this->Template->detail_url = $detailUrl;
     }
 }

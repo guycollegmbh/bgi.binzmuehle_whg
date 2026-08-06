@@ -86,5 +86,6 @@ class ApartmentsDetailModule extends Module
 
         $this->Template->apartment = $apartmentData;
         $this->Template->error = null;
+        $this->Template->hide_bewerben = (bool) $this->hide_bewerben;
     }
 }

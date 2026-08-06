@@ -88,7 +88,7 @@
                                 </svg>
                                 Grundriss (PDF)
                             </a>
-                            {% if apartment.status|lower == 'frei' and apartment.bezeichnung != 'Jokerzimmer' and app.user and 3 in app.user.groups %}
+                            {% if not hide_bewerben and apartment.status|lower == 'frei' and apartment.bezeichnung != 'Jokerzimmer' and app.user and 3 in app.user.groups %}
                                 <a href="/bewerben-informationen?objektnummer={{ apartment.objektnummer|replace({'(': '', ')': '', ' ': '', '/': '', '\\': '', '&': '', '#': '', '?': '', '!': '', '+': '', ',': '', ';': '', ':': '', '@': '', '=': '', '%': '', '$': '', '\'': '', '"': ''}) }}&zeile={{ apartment.zeile|replace({'Zeile ': '', 'zeile ': ''}) }}&adresse={{ apartment.adresse|url_encode }}&etage={{ apartment.etage|url_encode }}&bruttomiete={{ apartment.bruttomietzins|url_encode }}&zimmer={{ apartment.zimmer|url_encode }}" class="btn btn-download btn-apply" target="_blank" rel="noopener">
                                     Jetzt bewerben
                                 </a>

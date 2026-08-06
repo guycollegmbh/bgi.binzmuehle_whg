@@ -213,7 +213,7 @@
                     <tr data-grundriss="{{ apartment.imagegrundriss_path|default('') }}"
                         data-etage="{{ apartment.imageetage_path|default('') }}"
                         data-geschoss="{{ apartment.etage|default('') }}"
-                        data-url="wohnungen/details?id={{ apartment.objektnummer_url }}"
+                        data-url="{{ detail_url }}?id={{ apartment.objektnummer_url }}"
                         class="apartment-row">
                         <td data-label="Objekt">{{ apartment.objektnummer }}<span class="mobile-status status-badge status-{{ apartment.status|lower|replace({' ': '-'}) }}">{{ apartment.status }}</span></td>
                         <td data-label="Bezeichnung">{{ apartment.bezeichnung }}</td>
@@ -245,7 +245,7 @@
                         </td> #}
                         {# TODO SPÄTER WIEDER EINBLENDEN: Grundriss PDF - ENDE #}
                         <td data-label="" class="text-center">
-                            <a href="wohnungen/details?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
+                            <a href="{{ detail_url }}?id={{ apartment.objektnummer_url }}" class="btn-details">Details</a>
                         </td>
                     </tr>
                 {% endfor %}
