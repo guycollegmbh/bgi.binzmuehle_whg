@@ -14,3 +14,5 @@ $GLOBALS['TL_LANG']['MOD']['apartments'][1] = 'Modul zur Verwaltung von Wohnunge
 $GLOBALS['TL_LANG']['FMD']['apartments'] = 'Wohnungen';
 $GLOBALS['TL_LANG']['FMD']['apartments_list'] = ['Wohnungsliste', 'Zeigt eine Liste aller Wohnungen an'];
 $GLOBALS['TL_LANG']['FMD']['apartments_detail'] = ['Wohnungsdetails', 'Zeigt die Details einer einzelnen Wohnung an'];
+
+$GLOBALS['TL_LANG']['tl_module']['hide_bewerben'] = ['Bewerben-Button ausblenden', 'Blendet den Bewerben-Button auf der Detailseite aus (z.B. für die öffentliche Version).'];
