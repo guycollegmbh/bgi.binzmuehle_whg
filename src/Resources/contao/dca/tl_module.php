@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['apartments_list'] = '{title_legend},name,headline,type,hide_bewerben,jumpTo;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['apartments_list'] = '{title_legend},name,headline,type,jumpTo;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['apartments_detail'] = '{title_legend},name,headline,type,hide_bewerben;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['hide_bewerben'] = [
