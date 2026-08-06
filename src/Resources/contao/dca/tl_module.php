@@ -10,3 +10,5 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hide_bewerben'] = [
     'eval' => ['tl_class' => 'w50 m12'],
     'sql' => ['type' => 'boolean', 'default' => false],
 ];
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['jumpTo']['eval']['tl_class'] = 'clr';
